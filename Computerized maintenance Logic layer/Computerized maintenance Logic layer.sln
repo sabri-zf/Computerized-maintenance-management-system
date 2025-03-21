@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35728.132
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Computerized maintenance Logic layer", "Computerized maintenance Logic layer.csproj", "{86FEE813-9251-494B-972C-C83E8DE9B670}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "computrized maintenance Data Access", "..\computrized maintenance Data Access\computrized maintenance Data Access.csproj", "{BC2B5D58-2AA6-493D-9994-5D1194440320}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test Data Of CMMS", "..\Test Data Of CMMS\Test Data Of CMMS.csproj", "{A1F4FF42-8E29-4E8A-8390-59D14FC4F78B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{86FEE813-9251-494B-972C-C83E8DE9B670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86FEE813-9251-494B-972C-C83E8DE9B670}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86FEE813-9251-494B-972C-C83E8DE9B670}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86FEE813-9251-494B-972C-C83E8DE9B670}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC2B5D58-2AA6-493D-9994-5D1194440320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC2B5D58-2AA6-493D-9994-5D1194440320}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC2B5D58-2AA6-493D-9994-5D1194440320}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC2B5D58-2AA6-493D-9994-5D1194440320}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1F4FF42-8E29-4E8A-8390-59D14FC4F78B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1F4FF42-8E29-4E8A-8390-59D14FC4F78B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1F4FF42-8E29-4E8A-8390-59D14FC4F78B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1F4FF42-8E29-4E8A-8390-59D14FC4F78B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

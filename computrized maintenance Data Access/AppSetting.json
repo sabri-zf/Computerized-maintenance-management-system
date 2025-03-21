@@ -1,0 +1,3 @@
+{
+    "ConnectionStr": "server=.;DataBase=CMMS;user id=sa;password=sa123456;TrustServerCertificate=true;"
+}
