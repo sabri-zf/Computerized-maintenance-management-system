@@ -38,26 +38,38 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             this.Dto = peopleDto;
         }
 
-        protected virtual bool AddNewPerson()
+
+        public static ClsPepole? Find(int? PersonID)
+        {
+            PersonDto personDto = new PersonDto();
+
+            if(DataAccessPeople.Find(PersonID,ref personDto))
+            {
+                return new ClsPepole(personDto,CRUDmode.Mode_Save.Update);
+            }
+
+            return null;
+        }
+        protected virtual bool AddNew()
         {
             this.PersonID = DataAccessPeople.AddNewPerson(Dto);
 
             return(this.PersonID.HasValue && this.PersonID > 0 );
         }
 
-        protected virtual  bool UpdatePerson()
+        protected virtual  bool Update()
         {
            return DataAccessPeople.UpdatePerson(Dto);
         }
 
-        public static bool DeletePerson(int? ID)
+        public static bool Delete(int? ID)
         {
             return DataAccessPeople.DeletePerson(ID);
         }
 
-        public virtual bool DeletePerson()
+        public virtual bool Delete()
         {
-            return DeletePerson(this.PersonID);
+            return Delete(this.PersonID);
         }
        
 
@@ -81,13 +93,13 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             return await DataAccessPeople.GetPeopleAsync();
         }
 
-        public bool Save()
+        public virtual bool Save()
         {
             switch ( _eMode)
             {
                 case CRUDmode.Mode_Save.AddNew:
 
-                    if (AddNewPerson())
+                    if (AddNew())
                     {
                         _eMode = CRUDmode.Mode_Save.Update;
                         return true;
@@ -96,7 +108,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
                         return false;
                     }
                 case CRUDmode.Mode_Save.Update:
-                    return UpdatePerson();
+                    return Update();
             }
 
             return false;

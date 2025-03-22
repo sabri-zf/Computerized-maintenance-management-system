@@ -2,7 +2,6 @@
 {
     public interface Iperson
     {
-         bool Delete();
         bool Save();
     }
 }

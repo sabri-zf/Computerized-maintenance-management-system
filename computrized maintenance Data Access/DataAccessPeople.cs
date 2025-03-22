@@ -5,13 +5,55 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using System.Data.Common;
 namespace computrized_maintenance_Data_Access
 {
     public class DataAccessPeople
     {
        
         // using Deapper to excuted my database result set 
+        
+        public static bool Find(int? PersonID,ref PersonDto Dto)
+        {
+            if (PersonID < 0 || !(PersonID.HasValue)) return false;
 
+            bool IsFound = false;
+            using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
+            {
+                try
+                {
+                    DynamicParameters PersonParam = new DynamicParameters();
+                    PersonParam.Add("@PersonID", PersonID);
+
+                    string query = @"Select * From People where PersonID = @PersonID";
+
+                    connection.Open();
+                    var result = connection.Query<PersonDto>(query, PersonParam, commandType: CommandType.Text).SingleOrDefault();
+
+                    if (result != null)
+                    {
+                        Dto = result;                               
+                        IsFound = true;
+                    }
+                    else
+                    {
+                        IsFound = false;
+                    }    
+                }
+                catch (SqlException e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw;
+                }
+
+                return IsFound;
+            }
+        }
         public static async Task<List<PersonDto>> GetPeopleAsync()
         {
             //List<PersonDto>? people = new List<PersonDto>();
@@ -59,7 +101,7 @@ namespace computrized_maintenance_Data_Access
         }
 
 
-        public static int? AddNewPerson(PersonDto person)
+        public static int? AddNewPerson(PersonDto? person)
         {
             if (person == null) return null;
 
@@ -95,7 +137,7 @@ namespace computrized_maintenance_Data_Access
         }
 
 
-        public static bool UpdatePerson(PersonDto person)
+        public static bool UpdatePerson(PersonDto? person)
         {
             if (person == null) return false;
 

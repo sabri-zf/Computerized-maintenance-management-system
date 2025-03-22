@@ -26,12 +26,12 @@ namespace computrized_maintenance_Data_Access.DTO
         }
 
         public int PersonID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
         public DateTime BirthDay { get; set; }
-        public string Addrees { get; set; }
+        public string? Addrees { get; set; }
 
     }
 }
