@@ -25,7 +25,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public string? Address {  get; set; }
 
         
-        public ClsPepole(PersonDto peopleDto, CRUDmode.Mode_Save eMode = CRUDmode.Mode_Save.AddNew)
+        protected ClsPepole(PersonDto? peopleDto, CRUDmode.Mode_Save eMode = CRUDmode.Mode_Save.AddNew)
         { 
             _eMode = eMode;
             this.PersonID = peopleDto.PersonID;

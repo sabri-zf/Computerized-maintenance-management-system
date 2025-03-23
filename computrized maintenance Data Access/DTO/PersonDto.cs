@@ -25,7 +25,7 @@ namespace computrized_maintenance_Data_Access.DTO
             return sb.ToString();
         }
 
-        public int PersonID { get; set; }
+        public int? PersonID { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Email { get; set; }

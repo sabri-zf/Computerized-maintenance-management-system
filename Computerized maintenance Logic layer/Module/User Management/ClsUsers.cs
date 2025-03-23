@@ -19,7 +19,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public short? Permisson {  get; set; }
         public bool IsActive { get; set; }
         public DateTime? CreatedAt { get; set; }
-        public UserDto Dto { get; set; }
+        public UserDto? dto { get; set; }
 
         
 
@@ -33,15 +33,15 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             this.Permisson = userDto.permission;
             this.IsActive = userDto.IsActive;
             this.CreatedAt = userDto.createAt;
-            this.Dto = userDto;
+            this.dto = userDto;
 
             this._eMode = mode;
-            this.Role = null;
+            this.Role = Role.Find(RoleID);
 
 
         }
 
-        public static ClsUsers? Find (int UserID)
+        public static ClsUsers? FindUser (int? UserID)
         {
             var UserDto = new UserDto();
 
@@ -62,13 +62,13 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         protected  bool AddNewUser()
         {
-            this.UserID = DataAccessUser.AddNewUser(Dto);
+            this.UserID = DataAccessUser.AddNewUser(dto);
             return (UserID.HasValue && UserID > 0);
         }
 
         protected  bool UpdateUser()
         {
-            return DataAccessUser.UpdateUser(Dto);   
+            return DataAccessUser.UpdateUser(dto);   
         }
 
         public static bool Delete(int? UserID,int? PersonID)
