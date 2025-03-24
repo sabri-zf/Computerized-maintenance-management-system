@@ -2,6 +2,7 @@
 using computrized_maintenance_Data_Access.Misc;
 using Dapper;
 using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,7 +16,7 @@ namespace computrized_maintenance_Data_Access
     {
 
 
-        public static bool Find(int UserID,ref UserDto dto)
+        public static bool Find(int? UserID,ref UserDto dto)
         {
             if (UserID < 0) return false;
 
@@ -196,6 +197,36 @@ namespace computrized_maintenance_Data_Access
             }
 
             return ListUsers;
+        }
+
+        public static int? GetPersonID(int? UserID)
+        {
+            if (UserID == null || UserID < 1) return null;
+
+            int? PersonID = null;
+            using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
+            {
+                try
+                {
+                    DynamicParameters Userparam = new DynamicParameters();
+                    Userparam.Add("@UserID", UserID);
+                    Userparam.Add("@PersonID", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                    if (connection.Execute("Sp_GetPesonIDFromUsers", Userparam, commandType: CommandType.StoredProcedure) > 0)
+                    {
+                        PersonID = Userparam.Get<int>("@PersonID");
+                    };
+
+
+
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw;
+                }
+            }
+            return PersonID;
         }
 
     }

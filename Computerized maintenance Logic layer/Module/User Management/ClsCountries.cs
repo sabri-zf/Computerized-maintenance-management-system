@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Computerized_maintenance_Logic_layer.Module.User_Management
 {
-    public class ClsDepartments
+    public class ClsCountries
     {
-        public int DepartmentID { get; private set; }
-        public string DepartmentName { get;set; }
+        public int CountryID { get; set; }
+        public string? CountryName { get; set; }
     }
 }

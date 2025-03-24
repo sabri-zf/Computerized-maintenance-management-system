@@ -26,11 +26,11 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             _mode = CRUDmode.Mode_Save.AddNew;
         }
 
-        private ClsAdmins(int? AdminID , int ? UserID, CRUDmode.Mode_Save Mode = CRUDmode.Mode_Save.AddNew)
+        private ClsAdmins(int? adminID , int ? userID, CRUDmode.Mode_Save Mode = CRUDmode.Mode_Save.AddNew)
         {
-            this.AdminID = AdminID;
-            this.UserID = UserID;
-            this.Users = null;
+            this.AdminID = adminID;
+            this.UserID = userID;
+            this.Users = ClsUsers.FindUser(UserID);
             this._mode = Mode;
         }
 
