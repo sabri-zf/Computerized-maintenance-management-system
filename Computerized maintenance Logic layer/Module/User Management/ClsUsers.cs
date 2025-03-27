@@ -33,11 +33,12 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             this.Permisson = userDto.permission;
             this.IsActive = userDto.IsActive;
             this.CreatedAt = userDto.createAt;
+
             this.dto = userDto;
-
             this._eMode = mode;
-            this.Role = Role.Find(RoleID);
 
+            if(this._eMode == CRUDmode.Mode_Save.Update)
+            this.Role = Role.Find(RoleID);
 
         }
 

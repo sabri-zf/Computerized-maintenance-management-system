@@ -15,16 +15,21 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         {
             this.ManagerID = dto.ManagerID;
             this.UserID = dto.UserID;
-            this.Users = ClsUsers.FindUser(UserID);
             this.DepartmentID = dto.DepartmentID;
             //Department = department;
             this.ManagedBy = dto.ManagedBy;
             //Manager = manager;
             this.CreatedByAdmin = dto.CreatedByAdmin;
-            this.Admin = ClsAdmins.Find(CreatedByAdmin);
 
             this.ManagerDto = dto; 
             this._Mode = Mode;
+
+            if (this._Mode == CRUDmode.Mode_Save.Update)
+            {
+                this.Admin = ClsAdmins.Find(CreatedByAdmin);
+                this.Users = ClsUsers.FindUser(UserID);
+                this.Department = ClsDepartments.Find(this.DepartmentID);
+            }
         }
 
 

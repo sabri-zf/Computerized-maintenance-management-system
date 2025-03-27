@@ -24,6 +24,11 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             this.DTO = null;
 
             _mode = CRUDmode.Mode_Save.AddNew;
+
+            if(_mode == CRUDmode.Mode_Save.Update)
+            {
+                this.Users  = ClsUsers.FindUser(this.UserID);
+            }
         }
 
         private ClsAdmins(int? adminID , int ? userID, CRUDmode.Mode_Save Mode = CRUDmode.Mode_Save.AddNew)
