@@ -2,13 +2,7 @@
 using computrized_maintenance_Data_Access.Misc;
 using Dapper;
 using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace computrized_maintenance_Data_Access
 {
@@ -50,11 +44,11 @@ namespace computrized_maintenance_Data_Access
         }
 
 
-        public static int? AddNewTechnician(TechnicianDto dto)
+        public static int AddNewTechnician(TechnicianDto dto)
         {
-            if(dto == null) return null;
+            if(dto == null) return -1;
 
-            int? TechID = null;
+            int TechID = -1;
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
                 try
@@ -106,6 +100,61 @@ namespace computrized_maintenance_Data_Access
                 }
             }
             return IsUpdateted;
+        }
+
+        public static bool DeleteTechnician(int ID)
+        {
+            if(ID< 1) return false;
+
+            bool HasBeenDeleted = false;
+            using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
+            {
+                try
+                {
+
+                    var TechParam = new DynamicParameters();
+                    TechParam.Add("@TechnicianID", ID);
+
+                    connection.Open();
+                    HasBeenDeleted = connection.Execute("Sp_DeleteThechnician", TechParam, commandType: CommandType.StoredProcedure) > 0;
+
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+
+                return HasBeenDeleted;
+            }
+        }
+
+
+        public static List<TechnicianViewDto>? GetAll()
+        {
+
+            IEnumerable<TechnicianViewDto>? TechList= new List<TechnicianViewDto>();
+
+            using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
+            {
+
+                try
+                {
+
+                    var Result = connection.Query<TechnicianViewDto>("Sp_GetAllTechnicians", commandType: CommandType.StoredProcedure);
+
+                    if (Result != null)
+                    {
+                        TechList = Result;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+
+            return TechList.ToList();
         }
     }
 }

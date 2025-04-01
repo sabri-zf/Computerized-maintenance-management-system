@@ -1,4 +1,5 @@
 ﻿using Computerized_maintenance_Logic_layer.Module.User_Management.Enums;
+using computrized_maintenance_Data_Access;
 using computrized_maintenance_Data_Access.DTO;
 using System.Xml.Linq;
 
@@ -12,39 +13,49 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public ClsUsers? User { get; set; }
         public int DepartmentID { get; set; }
         public ClsDepartments? Department { get; set; }
-        public int ManagedBy { get; set; }
+        public int ManagedByID { get; set; }
         public ClsManagers? ManagerBy { get; set; }
         public int CreatedByAdmin { get; set; }
         public ClsAdmins? AdminCreated { get; set; }
+
+        public TechnicianDto Dto { get; set; }
 
         public ClsTechnicians(TechnicianDto Dto, CRUDmode.Mode_Save Mode = CRUDmode.Mode_Save.AddNew)
         {
             this.TechnicianID = Dto.TechnicianID;
             this.UserID = Dto.UserID;
             this.DepartmentID = Dto.DepartmentID;
-            this.ManagedBy = Dto.ManagedBy;
+            this.ManagedByID = Dto.ManagedBy;
             this.CreatedByAdmin = Dto.CreatedByAdmin;
+            this.Dto = Dto;
 
             this._mode = Mode;
             if(_mode == CRUDmode.Mode_Save.Update)
             {
                 this.User = ClsUsers.FindUser(this.UserID);
                 this.Department = null;
-                this.ManagerBy = ManagerBy.Find(this.ManagedBy);
+                this.ManagerBy = ManagerBy.Find(this.ManagedByID);
                 this.AdminCreated = ClsAdmins.Find(this.CreatedByAdmin);
             }
 
         }
 
 
-        public ClsTechnicians? Find(int? ID)
+        public static ClsTechnicians? Find(int? ID)
         {
+            TechnicianDto technicianDto  = new TechnicianDto();
+
+            if(DataAccessTechnician.Find(ID, ref technicianDto))
+            {
+                return new ClsTechnicians(technicianDto);
+            }
+
             return null;
         }
 
-        public static bool Delete (int? ID)
+        public static bool Delete (int ID)
         {
-            return false; 
+            return DataAccessTechnician.DeleteTechnician(ID); 
         }
 
         public bool Delete()
@@ -54,12 +65,14 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         private bool Update()
         {
-            return false;
+            return DataAccessTechnician.UpdateTechnician(Dto);
         }
 
         private bool AddNew()
         {
-            return false;
+            this.TechnicianID = DataAccessTechnician.AddNewTechnician(this.Dto);
+
+            return (this.TechnicianID > 0);
         }
 
         public bool Save()
@@ -74,15 +87,15 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
                     }
                     return false;
                 case CRUDmode.Mode_Save.Update:
-                    return true;
+                    return Update();
             }
             return false;
         }
 
 
-        public IEnumerable<TechnicianDto>? GetAllTechnicians()
+        public List<TechnicianViewDto>? GetAllTechnicians()
         {
-            return null;
+            return DataAccessTechnician.GetAll();
         }
     }
 }
