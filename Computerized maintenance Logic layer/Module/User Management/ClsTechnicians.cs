@@ -1,13 +1,12 @@
 ﻿using Computerized_maintenance_Logic_layer.Module.User_Management.Enums;
 using computrized_maintenance_Data_Access;
 using computrized_maintenance_Data_Access.DTO;
-using System.Xml.Linq;
 
 namespace Computerized_maintenance_Logic_layer.Module.User_Management
 {
     public class ClsTechnicians
     {
-        public CRUDmode.Mode_Save _mode;
+        public Mode_Save _mode;
         public int TechnicianID { get; private set; }
         public int UserID { get; set; }
         public ClsUsers? User { get; set; }
@@ -20,7 +19,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         public TechnicianDto Dto { get; set; }
 
-        public ClsTechnicians(TechnicianDto Dto, CRUDmode.Mode_Save Mode = CRUDmode.Mode_Save.AddNew)
+        public ClsTechnicians(TechnicianDto Dto, Mode_Save Mode = Mode_Save.AddNew)
         {
             this.TechnicianID = Dto.TechnicianID;
             this.UserID = Dto.UserID;
@@ -30,11 +29,11 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             this.Dto = Dto;
 
             this._mode = Mode;
-            if(_mode == CRUDmode.Mode_Save.Update)
+            if(_mode == Mode_Save.Update)
             {
                 this.User = ClsUsers.FindUser(this.UserID);
                 this.Department = null;
-                this.ManagerBy = ManagerBy.Find(this.ManagedByID);
+                this.ManagerBy = ClsManagers.Find(this.ManagedByID);
                 this.AdminCreated = ClsAdmins.Find(this.CreatedByAdmin);
             }
 
@@ -79,14 +78,14 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         {
             switch (this._mode)
             {
-                case CRUDmode.Mode_Save.AddNew:
+                case Mode_Save.AddNew:
                     if (AddNew())
                     {
-                        _mode = CRUDmode.Mode_Save.Update;
+                        _mode = Mode_Save.Update;
                         return true;
                     }
                     return false;
-                case CRUDmode.Mode_Save.Update:
+                case Mode_Save.Update:
                     return Update();
             }
             return false;
