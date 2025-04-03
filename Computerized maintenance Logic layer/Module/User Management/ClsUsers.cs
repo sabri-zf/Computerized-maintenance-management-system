@@ -11,7 +11,8 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 {
     public class ClsUsers : ClsPepole
     {
-        public  int? UserID {  get; private set; }
+        private Mode_Save _eMode;
+        public  int UserID {  get; private set; }
         public string? UserName { get;  set; }
         public string? Password { get;  set; }
         public int? RoleID { get;set; }
@@ -19,12 +20,12 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public short? Permisson {  get; set; }
         public bool IsActive { get; set; }
         public DateTime? CreatedAt { get; set; }
-        public UserDto? dto { get; set; }
+        public UserDto dto { get; set; }
 
         
 
 
-        public ClsUsers(PersonDto? personDto,UserDto userDto,CRUDmode.Mode_Save mode= CRUDmode.Mode_Save.AddNew) :base(personDto,mode)
+        public ClsUsers(PersonDto? personDto,UserDto userDto,Mode_Save mode = Mode_Save.AddNew) :base(personDto,mode)
         {
             this.UserID = userDto.UserID;
             this.UserName = userDto.UserName;
@@ -37,7 +38,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             this.dto = userDto;
             this._eMode = mode;
 
-            if(this._eMode == CRUDmode.Mode_Save.Update)
+            if(this._eMode == Mode_Save.Update)
             this.Role = Role.Find(RoleID);
 
         }
@@ -52,7 +53,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
                 if (personDto != null)
                 {
-                    return new ClsUsers(personDto, UserDto, CRUDmode.Mode_Save.Update);
+                    return new ClsUsers(personDto, UserDto, Mode_Save.Update);
                 }
 
             }
@@ -63,8 +64,9 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         protected  bool AddNewUser()
         {
+            this.dto.personID = base.PersonID;
             this.UserID = DataAccessUser.AddNewUser(dto);
-            return (UserID.HasValue && UserID > 0);
+            return (UserID > 0);
         }
 
         protected  bool UpdateUser()
@@ -96,19 +98,19 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             switch (this._eMode)
             {
 
-                case CRUDmode.Mode_Save.AddNew:
+                case Mode_Save.AddNew:
                     if (base.Save())
                     {
                         if (AddNewUser())
                         {
-                            _eMode = CRUDmode.Mode_Save.Update;
+                            _eMode = Mode_Save.Update;
                             return true;
                         }
 
                     }
                     return false;
 
-                case CRUDmode.Mode_Save.Update:
+                case Mode_Save.Update:
 
                     if (base.Save())
                     {

@@ -8,9 +8,9 @@ namespace computrized_maintenance_Data_Access.DTO
 {
     public class ManagerDto
     {
-        public int? ManagerID { get; private set; }
-        public int? UserID { get; set; }
-        public int? DepartmentID { get; set; }
+        public int ManagerID { get; private set; }
+        public int UserID { get; set; }
+        public int DepartmentID { get; set; }
         public int? ManagedBy { get; set; }
         public int CreatedByAdmin { get; set; }
     }

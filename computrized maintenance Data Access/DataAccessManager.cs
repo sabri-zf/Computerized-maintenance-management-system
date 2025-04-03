@@ -120,7 +120,7 @@ namespace computrized_maintenance_Data_Access
 
                     DynamicParameters Managerparam = new DynamicParameters();
                     Managerparam.Add("@ManagerID", managerDto.ManagerID);
-                    Managerparam.Add("@ManagerID", managerDto.UserID);
+                    Managerparam.Add("@UserID", managerDto.UserID);
                     Managerparam.Add("@PersonID", personID);
 
                     connection.Open();
@@ -136,6 +136,31 @@ namespace computrized_maintenance_Data_Access
             return IsDeletedManager;
         }
 
+        public static bool IsExistManager(int ID)
+        {
+            if (ID < 0) return false;
+
+            bool IsExist = false;
+            using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
+            {
+                try
+                {
+                    var ManagerParam = new DynamicParameters();
+                    ManagerParam.Add("@ManagerID", ID);
+
+                    connection.Open();
+                    string Query = "Select Found = 1 from Managers where ManagerID = @ManagerID";
+                    IsExist = connection.ExecuteScalar<byte>(Query, ManagerParam, commandType: CommandType.Text) == 1;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw;
+                }
+            }
+
+            return IsExist;
+        }
         public static IEnumerable<ManagerViewDto>? GetAllManager()
         {
             IEnumerable<ManagerViewDto>? list = null;

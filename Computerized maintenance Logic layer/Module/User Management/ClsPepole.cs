@@ -9,7 +9,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
     {
        public  PersonDto? Dto {  get; set; }
 
-        protected CRUDmode.Mode_Save _eMode;
+        protected Mode_Save _eMode;
         public  int? PersonID { get; private set; }
 
         public string? First_Name { get;set; }
@@ -25,7 +25,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public string? Address {  get; set; }
 
         
-        protected ClsPepole(PersonDto? peopleDto, CRUDmode.Mode_Save eMode = CRUDmode.Mode_Save.AddNew)
+        protected ClsPepole(PersonDto? peopleDto, Mode_Save eMode = Mode_Save.AddNew)
         { 
             _eMode = eMode;
             this.PersonID = peopleDto.PersonID;
@@ -45,7 +45,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
             if(DataAccessPeople.Find(PersonID,ref personDto))
             {
-                return new ClsPepole(personDto,CRUDmode.Mode_Save.Update);
+                return new ClsPepole(personDto,Mode_Save.Update);
             }
 
             return null;
@@ -97,17 +97,17 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         {
             switch ( _eMode)
             {
-                case CRUDmode.Mode_Save.AddNew:
+                case Mode_Save.AddNew:
 
                     if (AddNew())
                     {
-                        _eMode = CRUDmode.Mode_Save.Update;
+                        _eMode = Mode_Save.Update;
                         return true;
                     }else
                     {
                         return false;
                     }
-                case CRUDmode.Mode_Save.Update:
+                case Mode_Save.Update:
                     return Update();
             }
 

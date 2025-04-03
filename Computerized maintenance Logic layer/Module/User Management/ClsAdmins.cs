@@ -11,40 +11,35 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 {
     public class ClsAdmins
     {
-        private CRUDmode.Mode_Save _mode;
-        public int? AdminID { get; private set; }
+        private Mode_Save _mode;
+        public int AdminID { get; private set; }
         public  int? UserID { get;  set; }
         public ClsUsers? Users { get; set; }
 
         public AdminDto? DTO { get; set; }
         public ClsAdmins() 
         {
-            this.AdminID = null;
+            this.AdminID = -1;
             this.UserID = null;
             this.DTO = null;
 
-            _mode = CRUDmode.Mode_Save.AddNew;
-
-            if(_mode == CRUDmode.Mode_Save.Update)
-            {
-                this.Users  = ClsUsers.FindUser(this.UserID);
-            }
+            _mode = Mode_Save.AddNew;
         }
 
-        private ClsAdmins(int? adminID , int ? userID, CRUDmode.Mode_Save Mode = CRUDmode.Mode_Save.AddNew)
+        private ClsAdmins(int adminID , int ? userID)
         {
             this.AdminID = adminID;
             this.UserID = userID;
             this.Users = ClsUsers.FindUser(UserID);
-            this._mode = Mode;
+            this._mode = Mode_Save.Update;
         }
 
         public static ClsAdmins? Find(int ID)
         {
             var Dto = new AdminDto();
-            if(DataAccessAdmin.FindByID(ID, Dto))
+            if(DataAccessAdmin.FindByID(ID, ref Dto))
             {
-                new ClsAdmins(ID, Dto.UserID, CRUDmode.Mode_Save.Update);
+               return new ClsAdmins(ID, Dto.UserID);
             }
 
             return null;
@@ -54,7 +49,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         {
             this.AdminID = DataAccessAdmin.AddNewAdmin(this.DTO);
 
-            return (this.AdminID.HasValue && this.AdminID > 0);
+            return (this.AdminID > 0);
         }
 
         public static bool DeleteAdmin(int? ID)
@@ -71,10 +66,10 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         {
             switch (_mode)
             {
-                case CRUDmode.Mode_Save.AddNew:
+                case Mode_Save.AddNew:
                     if (AddnewAdmin())
                     {
-                        this._mode = CRUDmode.Mode_Save.Update;
+                        this._mode = Mode_Save.Update;
                         return true;
                     }
                  return false;
@@ -83,11 +78,20 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             return false;
         }
 
-        public List<AdminViewDto>? GetAllAdmin()
+        public static bool IsExistAdmin(int AdminID)
+        {
+            return DataAccessAdmin.IsExistAdmin(AdminID);
+        }
+
+        public bool IsExistAdmin()
+        {
+            return IsExistAdmin(this.AdminID);
+        }
+
+        public static List<AdminViewDto>? GetAllAdmin()
         {
             return DataAccessAdmin.GetAllAdmins();
         }
-
 
     }
 }

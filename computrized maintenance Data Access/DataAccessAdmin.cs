@@ -10,7 +10,7 @@ namespace computrized_maintenance_Data_Access
     {
 
 
-        public static bool FindByID(int ID,AdminDto admin)
+        public static bool FindByID(int ID,ref AdminDto admin)
         {
             if(ID < 1) return false;
 
@@ -32,7 +32,7 @@ namespace computrized_maintenance_Data_Access
                         IsFound = false;
                     }else
                     {
-                        admin = (AdminDto)Result;
+                        admin = Result;
                         IsFound = true;
                     }
 
