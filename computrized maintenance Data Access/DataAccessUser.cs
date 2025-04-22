@@ -15,7 +15,7 @@ namespace computrized_maintenance_Data_Access
     public  class DataAccessUser
     {
 
-
+        //CRUD Opration Start
         public static bool Find(int? UserID,ref UserDto dto)
         {
             if (UserID < 0) return false;
@@ -94,7 +94,6 @@ namespace computrized_maintenance_Data_Access
 
             return PersonID;
         }
-
 
         public static bool UpdateUser(UserDto userDto)
         {
@@ -198,6 +197,7 @@ namespace computrized_maintenance_Data_Access
 
             return ListUsers;
         }
+        //CRUD Opration End
 
         public static int? GetPersonID(int? UserID)
         {
@@ -229,5 +229,63 @@ namespace computrized_maintenance_Data_Access
             return PersonID;
         }
 
+        public static bool ResetPassword(int UserId,string Password)
+        {
+            if(UserId < 1) return false;
+
+            bool Isrested = false;
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
+                {
+
+                    var userParam = new DynamicParameters();
+                    userParam.Add("@UserID", UserId);
+                    userParam.Add("@Password", Password);
+
+                    connection.Open();
+                    Isrested = connection.Execute("Sp_ResetPassword", userParam, commandType: CommandType.StoredProcedure) > 0;
+                }
+
+            }catch(SqlException Sx)
+            {
+                Console.WriteLine(Sx.Message);
+                throw ;
+            }
+            
+            return Isrested;
+        }
+
+
+        public static bool VerifyLogin(string UserName, string Password)
+        {
+
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password)) return false;
+
+            bool IsValidAccount = false;
+            try
+            {
+
+                using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
+                {
+                    var userParam = new DynamicParameters();
+                    userParam.Add("@Username", UserName);
+                    userParam.Add("@Password", Password);
+
+                    connection.Open();
+
+                    IsValidAccount = connection.ExecuteScalar<byte>("Sp_Verify_Exist_User_Login"
+                        , param: userParam, commandType: CommandType.StoredProcedure) == 1;
+                }
+
+            }
+            catch (SqlException Sx)
+            {
+                Console.WriteLine(Sx.Message);
+                throw;
+            }
+
+            return IsValidAccount;
+        }
     }
 }
