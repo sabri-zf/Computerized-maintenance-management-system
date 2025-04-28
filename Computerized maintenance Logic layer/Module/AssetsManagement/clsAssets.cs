@@ -61,7 +61,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
 
         public async Task<clsAssets?> FindAsync(int ID)
         {
-            var Assets = await _Context.Assets.FirstOrDefaultAsync(x => x.ID == ID);
+            var Assets = await _Context.Assets.AsNoTracking().FirstOrDefaultAsync(x => x.ID == ID);
 
             if(Assets is Asset)
             {
@@ -76,7 +76,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
 
         public clsAssets? Find(int ID)
         {
-            var Assets =  _Context.Assets.FirstOrDefault(x => x.ID == ID);
+            var Assets =  _Context.Assets.AsNoTracking().FirstOrDefault(x => x.ID == ID);
 
             if (Assets is Asset)
             {

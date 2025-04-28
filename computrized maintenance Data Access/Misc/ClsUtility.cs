@@ -1,4 +1,5 @@
 ﻿using computrized_maintenance_Data_Access.Data;
+using computrized_maintenance_Data_Access.Helper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,10 +13,8 @@ namespace computrized_maintenance_Data_Access.Misc
 {
     public class ClsUtility
     {
-        public readonly static string? ConnectionString = new ConfigurationBuilder()
-                                               .AddJsonFile("AppSetting.json")
-                                               .Build()
-                                               .GetSection("ConnectionStr").Value;
+        public readonly static string? ConnectionString = Configure.Instance
+                                                          .ConfigurationObtainSection("ConnectionStr");
 
 
         /// <summary>
