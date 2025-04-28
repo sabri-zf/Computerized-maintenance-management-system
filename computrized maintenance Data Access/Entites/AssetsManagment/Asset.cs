@@ -31,5 +31,16 @@ namespace computrized_maintenance_Data_Access.Entites.AssetsManagment
         public virtual Location Location { get; set; } = null!;
         public virtual Category Category { get; set; }= null!;
         public virtual ICollection<AssetImage> AssetImages { get; set; }= new List<AssetImage>();
+
+
+        public override string ToString()
+        {
+            return $"Asset ID       : {this.ID}\n"+
+                   $"Asset Name     : {this.AssetName}\n"+
+                   $"Purchase Cost  : {this.PurchaseCost}\n" +
+                   $"Purchase Date  : {this.PurchaseDate}\n"+
+                   $"Assets Status  : {this.AssetStatus} \n"+
+                   $"Create By User : {this.CreateByUser}";
+        }
     }
 }

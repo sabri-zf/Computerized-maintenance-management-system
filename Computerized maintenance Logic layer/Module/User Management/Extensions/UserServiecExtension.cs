@@ -5,7 +5,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management.Extensions
 {
     public static class UserServiecExtension
     {
-        public static bool ResetPassword(this ClsUsers? User, string NewPassword)
+        public static bool Reset_Password(this ClsUsers? User, string NewPassword)
         {
             if (User != null || !string.IsNullOrEmpty(NewPassword))
             {
@@ -16,7 +16,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management.Extensions
             return false;
         }
 
-        public static bool VerfiyUserLogin(string Username, string Password)
+        public static bool Verfiy_User_Login(string Username, string Password)
         {
             if (!string.IsNullOrEmpty(Username) || !string.IsNullOrEmpty(Password))
             {
@@ -24,6 +24,11 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management.Extensions
             }
 
             return false;
+        }
+
+        public static bool Check_Validation_UserName_And_Password(string Username, string Password)
+        {
+            return DataAccessUser.IsUserNameAndPasswordValid(Username, Password);
         }
     }
 }

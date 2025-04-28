@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Computerized_maintenance_Logic_layer.Module.User_Management.DTO
+namespace Computerized_maintenance_Logic_layer.Module.DTO
 {
     public class Userdto
     {

@@ -11,8 +11,4 @@
     <ProjectReference Include="..\computrized maintenance Data Access\computrized maintenance Data Access.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Module\User Management\DTO\" />
-  </ItemGroup>
-
 </Project>

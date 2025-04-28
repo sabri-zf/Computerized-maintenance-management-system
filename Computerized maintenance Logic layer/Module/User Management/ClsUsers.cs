@@ -20,12 +20,12 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public short? Permisson {  get; set; }
         public bool IsActive { get; set; }
         public DateTime? CreatedAt { get; set; }
-        public UserDto dto { get; set; }
+        public Userdto_DataAccess dto { get; set; }
 
         
 
 
-        public ClsUsers(PersonDto? personDto,UserDto userDto,Mode_Save mode = Mode_Save.AddNew) :base(personDto,mode)
+        public ClsUsers(PersonDto? personDto,Userdto_DataAccess userDto,Mode_Save mode = Mode_Save.AddNew) :base(personDto,mode)
         {
             this.UserID = userDto.UserID;
             this.UserName = userDto.UserName;
@@ -45,9 +45,28 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         public static ClsUsers? FindUser (int? UserID)
         {
-            var UserDto = new UserDto();
+            var UserDto = new Userdto_DataAccess();
 
             if (DataAccessUser.Find(UserID, ref UserDto))
+            {
+                PersonDto? personDto = ClsPepole.Find(UserDto.personID)?.Dto;
+
+                if (personDto != null)
+                {
+                    return new ClsUsers(personDto, UserDto, Mode_Save.Update);
+                }
+
+            }
+
+            return null;
+
+        }
+
+        public static ClsUsers? FindUser(string UserName)
+        {
+            var UserDto = new Userdto_DataAccess();
+
+            if (DataAccessUser.Find_By_UserName(UserName, ref UserDto))
             {
                 PersonDto? personDto = ClsPepole.Find(UserDto.personID)?.Dto;
 

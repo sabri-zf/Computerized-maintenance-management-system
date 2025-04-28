@@ -16,7 +16,7 @@ namespace computrized_maintenance_Data_Access
     {
 
         //CRUD Opration Start
-        public static bool Find(int? UserID,ref UserDto dto)
+        public static bool Find(int? UserID,ref Userdto_DataAccess dto)
         {
             if (UserID < 0) return false;
 
@@ -32,7 +32,7 @@ namespace computrized_maintenance_Data_Access
                     connection.Open();
 
                     string sql = @"select * from Users where UserID = @UserID";
-                    var result = connection.Query<UserDto>(sql,UserParam,commandType: CommandType.Text).SingleOrDefault();
+                    var result = connection.Query<Userdto_DataAccess>(sql,UserParam,commandType: CommandType.Text).SingleOrDefault();
 
                     if (result != null)
                     {
@@ -52,7 +52,45 @@ namespace computrized_maintenance_Data_Access
             return IsFound;
         }
 
-        public static int AddNewUser(UserDto userDto)
+        public static bool Find_By_UserName(string UserName, ref Userdto_DataAccess dto)
+        {
+            if (string.IsNullOrEmpty(UserName)) return false;
+
+            bool IsFound = false;
+            using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
+            {
+                try
+                {
+
+                    DynamicParameters UserParam = new DynamicParameters();
+                    UserParam.Add("@UserName", UserName);
+
+                    connection.Open();
+
+                    string sql = @"select * from Users where UserName = @UserName";
+                    var result = connection.Query<Userdto_DataAccess>(sql, UserParam, commandType: CommandType.Text).FirstOrDefault();
+
+                    if (result != null)
+                    {
+                        dto = result;
+                        IsFound = true;
+                    }
+
+
+                }
+                catch (SqlException ex)
+                {
+                    //login Exception error
+                    Console.WriteLine(ex.Message);
+                    IsFound = false;
+                    throw;
+                }
+            }
+            return IsFound;
+        }
+
+
+        public static int AddNewUser(Userdto_DataAccess userDto)
         {
             if (userDto == null) return -1;
 
@@ -95,7 +133,7 @@ namespace computrized_maintenance_Data_Access
             return PersonID;
         }
 
-        public static bool UpdateUser(UserDto userDto)
+        public static bool UpdateUser(Userdto_DataAccess userDto)
         {
             if (userDto == null ) return false;
 
@@ -286,6 +324,35 @@ namespace computrized_maintenance_Data_Access
             }
 
             return IsValidAccount;
+        }
+
+
+        public static bool IsUserNameAndPasswordValid(string UserName , string Password)
+        {
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password)) return false ;
+
+
+            bool IsValid = false;
+
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
+                {
+                    var userParam = new DynamicParameters();
+                    userParam.Add("@UserName", UserName);
+                    userParam.Add("@Password", Password);
+
+                    string Query = "select top 1 UserID from Users where UserName =@Username and Password =@Password";
+                    IsValid = connection.ExecuteScalar<int>(Query, param: userParam, commandType: CommandType.Text) > 0;
+                }
+            }
+            catch (SqlException Sx)
+            {
+                Console.WriteLine(Sx.Message);
+                throw;
+            }
+
+            return IsValid;
         }
     }
 }

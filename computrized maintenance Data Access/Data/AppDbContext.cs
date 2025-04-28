@@ -1,4 +1,5 @@
-﻿using computrized_maintenance_Data_Access.Misc;
+﻿using computrized_maintenance_Data_Access.Entites.AssetsManagment;
+using computrized_maintenance_Data_Access.Misc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,16 +13,19 @@ namespace computrized_maintenance_Data_Access.Data
     public class AppDbContext:DbContext
     {
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public AppDbContext(DbContextOptions optionsBuilder) : base(optionsBuilder)
         {
-            base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseSqlServer(ClsUtility.ConnectionString,
-                o => 
-                o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
-                )
-                .LogTo(Console.WriteLine,LogLevel.Information);
         }
+
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    base.OnConfiguring(optionsBuilder);
+
+        //    optionsBuilder.UseSqlServer(ClsUtility.ConnectionString)
+        //        .LogTo(Console.WriteLine,LogLevel.Information);
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,5 +33,9 @@ namespace computrized_maintenance_Data_Access.Data
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
+
+
+        public DbSet<Asset> Assets { get; set; }
+        public DbSet<Category> Categories {  get; set; }
     }
 }
