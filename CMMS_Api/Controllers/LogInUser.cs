@@ -2,12 +2,12 @@
 using CMMS_Api.Helper;
 using Computerized_maintenance_Logic_layer.Module.User_Management;
 using computrized_maintenance_Data_Access.DTO;
-using Computerized_maintenance_Logic_layer.Module.User_Management.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Computerized_maintenance_Logic_layer.Module.DTO;
 
 namespace CMMS_Api.Controllers
 {
