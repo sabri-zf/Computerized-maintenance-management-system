@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace computrized_maintenance_Data_Access.DTO
 {
-    public class CountryDto
+    public class CountryTableDto
     {
         public int CountryID { get; set; }
         public string? CountryName { get; set; }

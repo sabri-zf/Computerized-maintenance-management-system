@@ -7,25 +7,19 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 {
     public class ClsPepole:Iperson
     {
-       public  PersonDto? Dto {  get; set; }
+       public  PersonTableDto? Dto {  get; set; }
 
         protected Mode_Save _eMode;
         public  int? PersonID { get; private set; }
-
-        public string? First_Name { get;set; }
-
+        public string? First_Name { get; set; }
         public string? Last_Name { get; set; }
-
         public string? Email { get; set; }
-
         public string? Phone { get; set; }
+        public DateTime? BithDay { get; set; }
+        public string? Address { get; set; }
 
-        public DateTime? BithDay {  get; set; } 
-        
-        public string? Address {  get; set; }
 
-        
-        protected ClsPepole(PersonDto? peopleDto, Mode_Save eMode = Mode_Save.AddNew)
+        protected ClsPepole(PersonTableDto? peopleDto, Mode_Save eMode = Mode_Save.AddNew)
         { 
             _eMode = eMode;
             this.PersonID = peopleDto.PersonID;
@@ -34,14 +28,39 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             this.Email = peopleDto.Email;
             this.Phone = peopleDto.Phone;
             this.BithDay = peopleDto.BirthDay;
-            this.Address = peopleDto.Email;
+            this.Address = peopleDto.Addrees;
             this.Dto = peopleDto;
         }
+
+        protected ClsPepole(string first_Name, string last_Name, string email, string phone, DateTime bithDay, string address,Mode_Save mode)
+        {
+            this.First_Name = first_Name;
+            this.Last_Name = last_Name;
+            this.Email = email;
+            this.Phone = phone;
+            this.BithDay = bithDay;
+            this.Address = address;
+
+            this.Dto = new PersonTableDto();
+            this.Dto.FirstName = first_Name;
+            this.Dto.LastName = last_Name;
+            this.Dto.Email = email;
+            this.Dto.Phone = phone;
+            this.Dto.BirthDay = bithDay;
+            this.Dto.Addrees = address;
+
+           _eMode = mode;
+        }
+
+
+        //protected ClsPepole(string FirstName ,string LastName ,string Email ,string Phone ,DateTime BirthDay ,string Address) 
+        //{
+        //}
 
 
         public static ClsPepole? Find(int? PersonID)
         {
-            PersonDto personDto = new PersonDto();
+            PersonTableDto personDto = new PersonTableDto();
 
             if(DataAccessPeople.Find(PersonID,ref personDto))
             {
@@ -73,22 +92,22 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         }
        
 
-        public static bool IsExist(int? ID)
+       public static bool IsExistPerson(int? ID)
         {
             return DataAccessPeople.IsExistPerson(ID);
         }
 
         public virtual bool IsExist()
         {
-            return IsExist(this.PersonID);
+            return IsExistPerson(this.PersonID);
         }
 
-        public static List<PersonDto> GetAllPeople()
+        public static List<PersonTableDto> GetAllPeople()
         {
             return DataAccessPeople.GetPeople();
         }
 
-        public static async Task<List<PersonDto>> GetAllPeopleAsync()
+        public static async Task<List<PersonTableDto>> GetAllPeopleAsync()
         {
             return await DataAccessPeople.GetPeopleAsync();
         }

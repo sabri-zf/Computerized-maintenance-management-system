@@ -16,7 +16,7 @@ namespace computrized_maintenance_Data_Access
     {
 
         //CRUD Opration Start
-        public static bool Find(int? UserID,ref Userdto_DataAccess dto)
+        public static bool Find(int? UserID,ref UserTabledto dto)
         {
             if (UserID < 0) return false;
 
@@ -32,7 +32,7 @@ namespace computrized_maintenance_Data_Access
                     connection.Open();
 
                     string sql = @"select * from Users where UserID = @UserID";
-                    var result = connection.Query<Userdto_DataAccess>(sql,UserParam,commandType: CommandType.Text).SingleOrDefault();
+                    var result = connection.Query<UserTabledto>(sql,UserParam,commandType: CommandType.Text).SingleOrDefault();
 
                     if (result != null)
                     {
@@ -52,7 +52,7 @@ namespace computrized_maintenance_Data_Access
             return IsFound;
         }
 
-        public static bool Find_By_UserName(string UserName, ref Userdto_DataAccess dto)
+        public static bool Find_By_UserName(string UserName, ref UserTabledto dto)
         {
             if (string.IsNullOrEmpty(UserName)) return false;
 
@@ -68,7 +68,7 @@ namespace computrized_maintenance_Data_Access
                     connection.Open();
 
                     string sql = @"select * from Users where UserName = @UserName";
-                    var result = connection.Query<Userdto_DataAccess>(sql, UserParam, commandType: CommandType.Text).FirstOrDefault();
+                    var result = connection.Query<UserTabledto>(sql, UserParam, commandType: CommandType.Text).FirstOrDefault();
 
                     if (result != null)
                     {
@@ -90,11 +90,11 @@ namespace computrized_maintenance_Data_Access
         }
 
 
-        public static int AddNewUser(Userdto_DataAccess userDto)
+        public static int AddNewUser(UserTabledto userDto)
         {
             if (userDto == null) return -1;
 
-            int PersonID = -1;
+            int UserID = -1;
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
                 try
@@ -113,7 +113,7 @@ namespace computrized_maintenance_Data_Access
                     connection.Open();
                     if (connection.Execute("Sp_AddNewUser", UserParam, commandType: CommandType.StoredProcedure) > 0)
                     {
-                        PersonID = UserParam.Get<int>("@UserID");
+                        UserID = UserParam.Get<int>("@UserID");
                     }
 
 
@@ -130,10 +130,10 @@ namespace computrized_maintenance_Data_Access
                 }
             }
 
-            return PersonID;
+            return UserID;
         }
 
-        public static bool UpdateUser(Userdto_DataAccess userDto)
+        public static bool UpdateUser(UserTabledto userDto)
         {
             if (userDto == null ) return false;
 
@@ -184,9 +184,12 @@ namespace computrized_maintenance_Data_Access
                     DynamicParameters UserParam = new DynamicParameters();
                     UserParam.Add("@UserID", UserID);
                     UserParam.Add("@PersonID", PersonID);
+                    UserParam.Add("ReturnValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+
 
                     connection.Open ();
                     IsDeleteSuccess = connection.Execute("Sp_DeleteUser", UserParam, commandType: CommandType.StoredProcedure) > 0;
+                    //IsDeleteSuccess = UserParam.Get<int>("ReturnValue") > 0;
                 }
                 catch (SqlException ex)
                 {
@@ -202,10 +205,10 @@ namespace computrized_maintenance_Data_Access
             return IsDeleteSuccess;
         }
 
-        public static List<UserViewDto> GetAllUsers()
+        public static List<UserTableViewDto> GetAllUsers()
         {
 
-            List<UserViewDto > ListUsers = new List<UserViewDto>();
+            List<UserTableViewDto > ListUsers = new List<UserTableViewDto>();
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
                 try
@@ -213,7 +216,7 @@ namespace computrized_maintenance_Data_Access
 
                     string queyr = @"select * from GetAll_Users()";
 
-                    var Result = connection.Query<UserViewDto>(queyr, commandType: CommandType.Text);
+                    var Result = connection.Query<UserTableViewDto>(queyr, commandType: CommandType.Text);
 
                     if (Result != null)
                     {
@@ -235,7 +238,42 @@ namespace computrized_maintenance_Data_Access
 
             return ListUsers;
         }
-        //CRUD Opration End
+       
+          public static bool IsExistUser(int? UserID)
+        {
+            if(UserID < 1 || UserID is null) return false;
+
+            bool IsExist = false;
+            try
+            {
+
+                using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
+                {
+                    var UserParam = new DynamicParameters();
+
+                    UserParam.Add(name: "@UserID", value: UserID, dbType: DbType.Int32, direction: ParameterDirection.Input);
+
+                    string query = "SELECT Find= 1 FROM Users WHERE UserID =@UserID";
+
+                    connection.Open();
+
+                    IsExist = connection.ExecuteScalar<byte>(query, param: UserParam, commandType: CommandType.Text) > 0;
+                }
+
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"Error Database : {ex.Message}");
+                //add object To Save Loging on Data Base to catch her in future
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error Server : {ex.Message}");
+                //add object To Save Loging on Data Base to catch her in future
+            }
+
+            return IsExist;
+        }
 
         public static int? GetPersonID(int? UserID)
         {
@@ -249,11 +287,15 @@ namespace computrized_maintenance_Data_Access
                     DynamicParameters Userparam = new DynamicParameters();
                     Userparam.Add("@UserID", UserID);
                     Userparam.Add("@PersonID", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                    Userparam.Add("ReturnValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
-                    if (connection.Execute("Sp_GetPesonIDFromUsers", Userparam, commandType: CommandType.StoredProcedure) > 0)
+                    connection.Open ();
+                    connection.Execute("dbo.Sp_GetPesonIDFromUsers", Userparam, commandType: CommandType.StoredProcedure);
+
+                    if (Userparam.Get<int>("ReturnValue") > 0)
                     {
                         PersonID = Userparam.Get<int>("@PersonID");
-                    };
+                    }
 
 
 

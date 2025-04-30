@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace computrized_maintenance_Data_Access.DTO
 {
-    public class RoleDto
+    public class DepartmentTableDto
     {
-
-        public int? RoleID { get; set; }
-        public string? RoleName { get; set; }
+        public int? DepartmentID { get; set; }
+        public string? DepartmentName { get; set; }
     }
 }

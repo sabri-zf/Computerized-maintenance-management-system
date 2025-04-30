@@ -3,14 +3,19 @@ using computrized_maintenance_Data_Access;
 
 namespace Computerized_maintenance_Logic_layer.Module.User_Management.Extensions
 {
-    public static class UserServiecExtension
+    public class UserService
     {
-        public static bool Reset_Password(this ClsUsers? User, string NewPassword)
+        private UserService() { }
+        public static int? GetPersonIdOfUser(int UserID)
         {
-            if (User != null || !string.IsNullOrEmpty(NewPassword))
+            return DataAccessUser.GetPersonID(UserID);
+        }
+        public static bool Reset_Password(int UserID,string NewPassword)
+        {
+            if ( !string.IsNullOrEmpty(NewPassword))
             {
                 string HashValue = Security.HashEncrypt(NewPassword);
-                return DataAccessUser.ResetPassword(User!.UserID, HashValue);
+                return DataAccessUser.ResetPassword(UserID, HashValue);
             }
 
             return false;

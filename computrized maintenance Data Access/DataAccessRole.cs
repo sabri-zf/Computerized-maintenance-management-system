@@ -15,7 +15,7 @@ namespace computrized_maintenance_Data_Access
     {
 
 
-        public static bool Find(int? id, ref RoleDto dto)
+        public static bool Find(int? id, ref RoleTableDto dto)
         {
 
             if (id < 1 || id is null) return false;
@@ -31,7 +31,7 @@ namespace computrized_maintenance_Data_Access
 
 
                     Connection.Open();
-                    RoleDto? Result = Connection.Query<RoleDto>("Sp_GetRoleById",RoleParam,commandType: CommandType.StoredProcedure).SingleOrDefault();
+                    RoleTableDto? Result = Connection.Query<RoleTableDto>("Sp_GetRoleById",RoleParam,commandType: CommandType.StoredProcedure).SingleOrDefault();
 
                     if (Result != null)
                     {
@@ -80,16 +80,16 @@ namespace computrized_maintenance_Data_Access
             }
         }
 
-        public static List<RoleDto> GetAllRoles()
+        public static List<RoleTableDto> GetAllRoles()
         {
-            List<RoleDto> List = new List<RoleDto>();
+            List<RoleTableDto> List = new List<RoleTableDto>();
 
             using (IDbConnection Connection = new SqlConnection(ClsUtility.ConnectionString))
             {
                 try
                 {
 
-                    var Result = Connection.Query<RoleDto>("Sp_GetAllRoles",commandType:CommandType.StoredProcedure);
+                    var Result = Connection.Query<RoleTableDto>("Sp_GetAllRoles",commandType:CommandType.StoredProcedure);
 
                     if (Result != null)
                     {

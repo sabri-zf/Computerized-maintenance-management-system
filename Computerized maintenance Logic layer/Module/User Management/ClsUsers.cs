@@ -1,9 +1,12 @@
-﻿using Computerized_maintenance_Logic_layer.Module.User_Management.Enums;
+﻿using Computerized_maintenance_Logic_layer.Module.Tools;
+using Computerized_maintenance_Logic_layer.Module.User_Management.Enums;
 using computrized_maintenance_Data_Access;
 using computrized_maintenance_Data_Access.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,15 +20,15 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public string? Password { get;  set; }
         public int? RoleID { get;set; }
         public ClsRoles? Role { get; set; }
-        public short? Permisson {  get; set; }
+        public short Permisson {  get; set; }
         public bool IsActive { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public Userdto_DataAccess dto { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public UserTabledto dto { get; set; }
 
         
 
 
-        public ClsUsers(PersonDto? personDto,Userdto_DataAccess userDto,Mode_Save mode = Mode_Save.AddNew) :base(personDto,mode)
+        public ClsUsers(PersonTableDto? personDto,UserTabledto userDto,Mode_Save mode = Mode_Save.AddNew) :base(personDto,mode)
         {
             this.UserID = userDto.UserID;
             this.UserName = userDto.UserName;
@@ -39,17 +42,39 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             this._eMode = mode;
 
             if(this._eMode == Mode_Save.Update)
-            this.Role = Role.Find(RoleID);
+            this.Role = Role!.Find(RoleID);
+
+        }
+
+        public ClsUsers(UserWriteData userWrite,Mode_Save mode = Mode_Save.AddNew)
+            :base(userWrite.FirstName!, userWrite.LastName!, userWrite.Email!, userWrite.Phone!, userWrite.BirthDay, userWrite.Addrees!, mode)
+        {
+            this.UserName = userWrite.UserName;
+            this.Password = userWrite.Password;
+            this.RoleID = userWrite.RoleID;
+            this.Permisson = userWrite.permission;
+            this.IsActive = userWrite.IsActive;
+            this.CreatedAt = userWrite.createAt;
+
+            this.dto = new UserTabledto();
+            this.dto.UserName = userWrite.UserName;
+            this.dto.Password = userWrite.Password;
+            this.dto.RoleID = userWrite.RoleID;
+            this.dto.permission = userWrite.permission;
+            this.dto.IsActive = userWrite.IsActive;
+            this.dto.createAt = userWrite.createAt;
+
+            this._eMode = mode;
 
         }
 
         public static ClsUsers? FindUser (int? UserID)
         {
-            var UserDto = new Userdto_DataAccess();
+            var UserDto = new UserTabledto();
 
             if (DataAccessUser.Find(UserID, ref UserDto))
             {
-                PersonDto? personDto = ClsPepole.Find(UserDto.personID)?.Dto;
+                PersonTableDto? personDto = ClsPepole.Find(UserDto.personID)?.Dto;
 
                 if (personDto != null)
                 {
@@ -64,11 +89,11 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         public static ClsUsers? FindUser(string UserName)
         {
-            var UserDto = new Userdto_DataAccess();
+            var UserDto = new UserTabledto();
 
             if (DataAccessUser.Find_By_UserName(UserName, ref UserDto))
             {
-                PersonDto? personDto = ClsPepole.Find(UserDto.personID)?.Dto;
+                PersonTableDto? personDto = ClsPepole.Find(UserDto.personID)?.Dto;
 
                 if (personDto != null)
                 {
@@ -81,9 +106,13 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         }
 
+
+
         protected  bool AddNewUser()
         {
             this.dto.personID = base.PersonID;
+            this.dto.Password = Security.HashEncrypt(this.Password);
+
             this.UserID = DataAccessUser.AddNewUser(dto);
             return (UserID > 0);
         }
@@ -93,22 +122,48 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             return DataAccessUser.UpdateUser(dto);   
         }
 
-        public static bool Delete(int? UserID,int? PersonID)
+        public static bool DeleteUser(int? UserID,int? PersonID)
         {
             return DataAccessUser.DeleteUser(UserID, PersonID);
         }
 
         public override bool Delete()
         {
-            return Delete(this.UserID, this.PersonID);
+            return DeleteUser(this.UserID, this.PersonID);
         }
 
+        /// <summary>
+        /// checking about User Exist on system or not 
+        /// </summary>
+        /// <param name="Userid">ID Matched User Id on system</param>
+        /// <returns>return : true if exist , otherwise false</returns>
+        public static bool IsExistUser(int? Userid)
+        {
+            return DataAccessUser.IsExistUser(Userid);
+        }
 
-        public static List<UserViewDto> GetAllUsers()
+        /// <summary>
+        /// checking about User Exist on system or not 
+        /// </summary>
+        /// <returns>return : true if exist , otherwise false</returns>
+        public override bool IsExist()
+        {
+            return IsExistUser(this.UserID);
+        }
+
+        /// <summary>
+        /// Get all user to view details 
+        /// </summary>
+        /// <returns>return : collection of user data</returns>
+        public static List<UserTableViewDto> GetAllUsers()
         {
             return DataAccessUser.GetAllUsers();
         }
 
+        /// <summary>
+        /// to save  new user or update, according to situation
+        /// </summary>
+        /// <returns>return : true if Added or updated is has been successed ,otherwise false</returns>
         public override bool Save()
         {
                     // Consentrate about check save Person First of all and if return True go on  check secend Condition

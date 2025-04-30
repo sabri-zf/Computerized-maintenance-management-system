@@ -13,7 +13,7 @@ namespace computrized_maintenance_Data_Access
        
         // using Deapper to excuted my database result set 
         
-        public static bool Find(int? PersonID,ref PersonDto Dto)
+        public static bool Find(int? PersonID,ref PersonTableDto Dto)
         {
             if (PersonID < 0 || !(PersonID.HasValue)) return false;
 
@@ -28,7 +28,7 @@ namespace computrized_maintenance_Data_Access
                     string query = @"Select * From People where PersonID = @PersonID";
 
                     connection.Open();
-                    var result = connection.Query<PersonDto>(query, PersonParam, commandType: CommandType.Text).SingleOrDefault();
+                    var result = connection.Query<PersonTableDto>(query, PersonParam, commandType: CommandType.Text).SingleOrDefault();
 
                     if (result != null)
                     {
@@ -54,11 +54,11 @@ namespace computrized_maintenance_Data_Access
                 return IsFound;
             }
         }
-        public static async Task<List<PersonDto>> GetPeopleAsync()
+        public static async Task<List<PersonTableDto>> GetPeopleAsync()
         {
             //List<PersonDto>? people = new List<PersonDto>();
 
-            IEnumerable<PersonDto> people;
+            IEnumerable<PersonTableDto> people;
 
             using (SqlConnection connection = new SqlConnection(connectionString: ClsUtility.ConnectionString))
             {
@@ -66,7 +66,7 @@ namespace computrized_maintenance_Data_Access
                 {
                     string ExecuteStoreProcedure = "Sp_GetAllPeople";
 
-                    people = await connection.QueryAsync<PersonDto>(ExecuteStoreProcedure, commandType: System.Data.CommandType.StoredProcedure);
+                    people = await connection.QueryAsync<PersonTableDto>(ExecuteStoreProcedure, commandType: System.Data.CommandType.StoredProcedure);
                 }
                 catch (Exception ex)
                 {
@@ -78,9 +78,9 @@ namespace computrized_maintenance_Data_Access
             return people.ToList();
         }
 
-        public static List<PersonDto> GetPeople()
+        public static List<PersonTableDto> GetPeople()
         {
-            IEnumerable<PersonDto> people;
+            IEnumerable<PersonTableDto> people;
 
             using (SqlConnection connection = new SqlConnection(connectionString: ClsUtility.ConnectionString))
             {
@@ -88,7 +88,7 @@ namespace computrized_maintenance_Data_Access
                 {
                     string ExecuteStoreProcedure = "Sp_GetAllPeople";
 
-                    people = connection.Query<PersonDto>(ExecuteStoreProcedure, commandType: System.Data.CommandType.StoredProcedure);
+                    people = connection.Query<PersonTableDto>(ExecuteStoreProcedure, commandType: System.Data.CommandType.StoredProcedure);
                 }
                 catch (Exception ex)
                 {
@@ -101,7 +101,7 @@ namespace computrized_maintenance_Data_Access
         }
 
 
-        public static int? AddNewPerson(PersonDto? person)
+        public static int? AddNewPerson(PersonTableDto? person)
         {
             if (person == null) return null;
 
@@ -137,7 +137,7 @@ namespace computrized_maintenance_Data_Access
         }
 
 
-        public static bool UpdatePerson(PersonDto? person)
+        public static bool UpdatePerson(PersonTableDto? person)
         {
             if (person == null) return false;
 

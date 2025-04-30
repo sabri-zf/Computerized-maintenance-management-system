@@ -8,7 +8,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         public static ClsRoles? Find(this ClsRoles role,int? ID)
         {
-            RoleDto roleDto = new RoleDto();
+            RoleTableDto roleDto = new RoleTableDto();
             if (DataAccessRole.Find(ID,ref roleDto))
             {
                return new ClsRoles(roleDto);
@@ -22,7 +22,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             return DataAccessRole.RoleName(role.RoleID);
         }
 
-        public static List<RoleDto> GetAllRoles(this ClsRoles role)
+        public static List<RoleTableDto> GetAllRoles(this ClsRoles role)
         {
             return DataAccessRole.GetAllRoles();
         }

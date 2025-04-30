@@ -13,7 +13,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public int? RoleID { get; private set; }
         public string? RoleName { get;}
 
-        public ClsRoles(RoleDto? dto)
+        public ClsRoles(RoleTableDto? dto)
         {
             this.RoleID = dto.RoleID;
             this.RoleName = dto.RoleName;

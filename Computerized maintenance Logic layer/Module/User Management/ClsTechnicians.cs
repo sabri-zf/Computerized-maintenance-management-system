@@ -17,9 +17,9 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public int CreatedByAdmin { get; set; }
         public ClsAdmins? AdminCreated { get; set; }
 
-        public TechnicianDto Dto { get; set; }
+        public TechnicianTableDto Dto { get; set; }
 
-        public ClsTechnicians(TechnicianDto Dto, Mode_Save Mode = Mode_Save.AddNew)
+        public ClsTechnicians(TechnicianTableDto Dto, Mode_Save Mode = Mode_Save.AddNew)
         {
             this.TechnicianID = Dto.TechnicianID;
             this.UserID = Dto.UserID;
@@ -42,7 +42,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         public static ClsTechnicians? Find(int? ID)
         {
-            TechnicianDto technicianDto  = new TechnicianDto();
+            TechnicianTableDto technicianDto  = new TechnicianTableDto();
 
             if(DataAccessTechnician.Find(ID, ref technicianDto))
             {
@@ -92,7 +92,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         }
 
 
-        public List<TechnicianViewDto>? GetAllTechnicians()
+        public List<TechnicianTableViewDto>? GetAllTechnicians()
         {
             return DataAccessTechnician.GetAll();
         }

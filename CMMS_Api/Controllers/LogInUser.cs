@@ -24,7 +24,7 @@ namespace CMMS_Api.Controllers
 
         // add permission 
 
-        public ActionResult<UserLoginDto> LoginUser(Userdto userDto)
+        public ActionResult<UserLoginDto> LoginUser(UserLogindto userDto)
         {
             if (userDto is null) return NotFound("Invalid Data");
 

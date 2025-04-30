@@ -9,7 +9,7 @@ namespace computrized_maintenance_Data_Access
     public class DataAccessTechnician
     {
 
-        public static bool Find(int? ID, ref TechnicianDto dto)
+        public static bool Find(int? ID, ref TechnicianTableDto dto)
         {
 
             if (ID is null || ID < 1) return false;
@@ -24,7 +24,7 @@ namespace computrized_maintenance_Data_Access
                     TechnicianParam.Add("@TechnincianID", ID);
 
                     connection.Open();
-                    var Result = connection.Query<TechnicianDto>("Sp_FindByTechnicianID", TechnicianParam, commandType: CommandType.StoredProcedure).SingleOrDefault();
+                    var Result = connection.Query<TechnicianTableDto>("Sp_FindByTechnicianID", TechnicianParam, commandType: CommandType.StoredProcedure).SingleOrDefault();
 
                     if (Result != null)
                     {
@@ -44,7 +44,7 @@ namespace computrized_maintenance_Data_Access
         }
 
 
-        public static int AddNewTechnician(TechnicianDto dto)
+        public static int AddNewTechnician(TechnicianTableDto dto)
         {
             if(dto == null) return -1;
 
@@ -76,7 +76,7 @@ namespace computrized_maintenance_Data_Access
             return TechID;
         }
 
-        public static bool UpdateTechnician(TechnicianDto dto)
+        public static bool UpdateTechnician(TechnicianTableDto dto)
         {
             if (dto == null ) return false;
 
@@ -129,10 +129,10 @@ namespace computrized_maintenance_Data_Access
         }
 
 
-        public static List<TechnicianViewDto>? GetAll()
+        public static List<TechnicianTableViewDto>? GetAll()
         {
 
-            IEnumerable<TechnicianViewDto>? TechList= new List<TechnicianViewDto>();
+            IEnumerable<TechnicianTableViewDto>? TechList= new List<TechnicianTableViewDto>();
 
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
@@ -140,7 +140,7 @@ namespace computrized_maintenance_Data_Access
                 try
                 {
 
-                    var Result = connection.Query<TechnicianViewDto>("Sp_GetAllTechnicians", commandType: CommandType.StoredProcedure);
+                    var Result = connection.Query<TechnicianTableViewDto>("Sp_GetAllTechnicians", commandType: CommandType.StoredProcedure);
 
                     if (Result != null)
                     {

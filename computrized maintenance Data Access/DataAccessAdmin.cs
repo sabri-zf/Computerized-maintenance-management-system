@@ -10,7 +10,7 @@ namespace computrized_maintenance_Data_Access
     {
 
 
-        public static bool FindByID(int ID,ref AdminDto admin)
+        public static bool FindByID(int ID,ref AdminTableDto admin)
         {
             if(ID < 1) return false;
 
@@ -25,7 +25,7 @@ namespace computrized_maintenance_Data_Access
                     AdminIDparam.Add("@AdminID", ID);
 
                     connection.Open();
-                    var Result = connection.Query<AdminDto>("Sp_FindByAdminID",AdminIDparam,commandType: CommandType.StoredProcedure).SingleOrDefault();
+                    var Result = connection.Query<AdminTableDto>("Sp_FindByAdminID",AdminIDparam,commandType: CommandType.StoredProcedure).SingleOrDefault();
 
                     if(Result is null)
                     {
@@ -48,7 +48,7 @@ namespace computrized_maintenance_Data_Access
             return IsFound;
         }
 
-        public static int AddNewAdmin(AdminDto admin)
+        public static int AddNewAdmin(AdminTableDto admin)
         {
             if (admin == null) return -1;
 
@@ -144,7 +144,7 @@ namespace computrized_maintenance_Data_Access
             return IsExist;
         }
 
-        public static List<AdminViewDto>? GetAllAdmins()
+        public static List<AdminTableViewDto>? GetAllAdmins()
         {
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
@@ -154,7 +154,7 @@ namespace computrized_maintenance_Data_Access
                     string querey = @"select * From GetAll_Adimns()";
 
                     connection.Open();
-                    var Result =  connection.Query<AdminViewDto>(querey,null,commandType: CommandType.Text).ToList();
+                    var Result =  connection.Query<AdminTableViewDto>(querey,null,commandType: CommandType.Text).ToList();
 
                     if(Result != null)
                     {

@@ -7,7 +7,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
     public class ClsManagers
     {
         private Mode_Save _Mode;
-        public ClsManagers(ManagerDto dto, Mode_Save Mode = Mode_Save.AddNew)
+        public ClsManagers(ManagerTableDto dto, Mode_Save Mode = Mode_Save.AddNew)
         {
             this.ManagerID = dto.ManagerID;
             this.UserID = dto.UserID;
@@ -29,7 +29,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         public static ClsManagers? Find(int? ID)
         {
-            ManagerDto dto = new ManagerDto();
+            ManagerTableDto dto = new ManagerTableDto();
 
             if (DataAccessManager.Find(ID, ref dto))
             {
@@ -68,7 +68,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             return false;
         }
 
-        public static bool DeleteManager(ManagerDto managerDto)
+        public static bool DeleteManager(ManagerTableDto managerDto)
         {
             return DataAccessManager.DeleteManager(managerDto);
         }
@@ -81,7 +81,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         {
             return DataAccessManager.IsExistManager(ID);
         }
-        public static IEnumerable<ManagerViewDto>? GetAllManager()
+        public static IEnumerable<ManagerTableViewDto>? GetAllManager()
         {
             return DataAccessManager.GetAllManager();
         }
@@ -96,6 +96,6 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public ClsManagers? Managed { get; set; }
         public int CreatedByAdmin { get; set; }
         public ClsAdmins? Admin { get; set; }
-        public ManagerDto ManagerDto { get; set; }
+        public ManagerTableDto ManagerDto { get; set; }
     }
 }

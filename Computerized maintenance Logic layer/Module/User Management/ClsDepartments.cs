@@ -9,7 +9,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public string? DepartmentName { get;set; }
 
 
-        private ClsDepartments(DepartmentDto dto)
+        private ClsDepartments(DepartmentTableDto dto)
         {
             this.DepartmentID = dto.DepartmentID;
             this.DepartmentName = dto.DepartmentName;
@@ -17,7 +17,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         public static ClsDepartments? Find(int? ID)
         {
-            DepartmentDto dto = new DepartmentDto();
+            DepartmentTableDto dto = new DepartmentTableDto();
 
             if (DataAccesDepartment.Find(ID, ref dto))
             {
@@ -30,7 +30,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             return DataAccesDepartment.GetDepartmentName(departmentID);
         } 
 
-        public IEnumerable<DepartmentDto>? GetAll()
+        public IEnumerable<DepartmentTableDto>? GetAll()
         {
             return DataAccesDepartment.GetAll();
         }

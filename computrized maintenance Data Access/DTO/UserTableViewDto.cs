@@ -1,6 +1,6 @@
 ﻿namespace computrized_maintenance_Data_Access.DTO
 {
-    public class UserViewDto
+    public class UserTableViewDto
     {
 
         public int UserId { get; set; }

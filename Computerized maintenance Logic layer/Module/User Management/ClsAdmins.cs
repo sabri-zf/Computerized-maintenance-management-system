@@ -16,7 +16,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public  int? UserID { get;  set; }
         public ClsUsers? Users { get; set; }
 
-        public AdminDto? DTO { get; set; }
+        public AdminTableDto? DTO { get; set; }
         public ClsAdmins() 
         {
             this.AdminID = -1;
@@ -36,7 +36,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         public static ClsAdmins? Find(int ID)
         {
-            var Dto = new AdminDto();
+            var Dto = new AdminTableDto();
             if(DataAccessAdmin.FindByID(ID, ref Dto))
             {
                return new ClsAdmins(ID, Dto.UserID);
@@ -88,7 +88,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             return IsExistAdmin(this.AdminID);
         }
 
-        public static List<AdminViewDto>? GetAllAdmin()
+        public static List<AdminTableViewDto>? GetAllAdmin()
         {
             return DataAccessAdmin.GetAllAdmins();
         }

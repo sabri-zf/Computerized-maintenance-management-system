@@ -15,7 +15,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public string? CountryName { get; set; }
 
 
-        ClsCountries(CountryDto dto)
+        ClsCountries(CountryTableDto dto)
         {
             this.CountryID = dto.CountryID;
             this.CountryName = dto.CountryName;
@@ -23,7 +23,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         public static ClsCountries? Find(int? ID)
         {
-            CountryDto dto = new CountryDto();
+            CountryTableDto dto = new CountryTableDto();
 
             if(DataAccessCountry.Find(ID,ref dto))
             {
@@ -42,7 +42,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             return GetCountryName(this.CountryID);
         }
 
-        public static IEnumerable<CountryDto>? GetAllCountry()
+        public static IEnumerable<CountryTableDto>? GetAllCountry()
         {
             return DataAccessCountry.GetAll();
         }

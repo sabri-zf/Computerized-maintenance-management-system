@@ -13,7 +13,7 @@ namespace computrized_maintenance_Data_Access
 {
     public class DataAccessManager
     {
-        public static bool Find(int? ID , ref ManagerDto dto)
+        public static bool Find(int? ID , ref ManagerTableDto dto)
         {
             if (ID < 1 || ID is null) return false;
 
@@ -26,7 +26,7 @@ namespace computrized_maintenance_Data_Access
                     DynamicParameters ManagerParam = new DynamicParameters();
                     ManagerParam.Add("@ManagerID", ID);
 
-                    var Result = connection.Query<ManagerDto>("Sp_FindManagerByID", ManagerParam, commandType: CommandType.StoredProcedure).SingleOrDefault();
+                    var Result = connection.Query<ManagerTableDto>("Sp_FindManagerByID", ManagerParam, commandType: CommandType.StoredProcedure).SingleOrDefault();
 
                     if (Result != null)
                     {
@@ -44,7 +44,7 @@ namespace computrized_maintenance_Data_Access
             return IsFound;
         }
 
-        public static int? AddNewManager(ManagerDto dto)
+        public static int? AddNewManager(ManagerTableDto dto)
         {
             if (dto == null) return null;
 
@@ -78,7 +78,7 @@ namespace computrized_maintenance_Data_Access
             return ManagerId;
         }
 
-        public static bool UpdateManger(ManagerDto dto)
+        public static bool UpdateManger(ManagerTableDto dto)
         {
             if (dto == null) return false;
 
@@ -105,7 +105,7 @@ namespace computrized_maintenance_Data_Access
             return IsUpdateManager;
         }
 
-        public static bool DeleteManager(ManagerDto managerDto)
+        public static bool DeleteManager(ManagerTableDto managerDto)
         {
             if(managerDto == null) return false;
 
@@ -161,9 +161,9 @@ namespace computrized_maintenance_Data_Access
 
             return IsExist;
         }
-        public static IEnumerable<ManagerViewDto>? GetAllManager()
+        public static IEnumerable<ManagerTableViewDto>? GetAllManager()
         {
-            IEnumerable<ManagerViewDto>? list = null;
+            IEnumerable<ManagerTableViewDto>? list = null;
 
 
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
@@ -172,7 +172,7 @@ namespace computrized_maintenance_Data_Access
                 {
                     string Query = @" Select * from GetAll_Managers();";
 
-                    var Result = connection.Query<ManagerViewDto>(Query,commandType: CommandType.Text);
+                    var Result = connection.Query<ManagerTableViewDto>(Query,commandType: CommandType.Text);
 
                     if(Result != null)
                     {
