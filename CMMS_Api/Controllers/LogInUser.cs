@@ -1,7 +1,6 @@
 ﻿using CMMS_Api.DTO;
 using CMMS_Api.Helper;
 using Computerized_maintenance_Logic_layer.Module.User_Management;
-using computrized_maintenance_Data_Access.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -24,7 +23,7 @@ namespace CMMS_Api.Controllers
 
         // add permission 
 
-        public ActionResult<UserLoginDto> LoginUser(UserLogindto userDto)
+        public ActionResult<Api_UserLoginDto> LoginUser(UserLogindto userDto)
         {
             if (userDto is null) return NotFound("Invalid Data");
 
@@ -62,7 +61,7 @@ namespace CMMS_Api.Controllers
 
               
 
-            return Ok(new UserLoginDto{ UserName = UserInfo.UserName, Token = produc_Token});
+            return Ok(new Api_UserLoginDto{ UserName = UserInfo.UserName, Token = produc_Token});
         }
     }
 }

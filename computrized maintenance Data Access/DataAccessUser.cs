@@ -297,8 +297,6 @@ namespace computrized_maintenance_Data_Access
                         PersonID = Userparam.Get<int>("@PersonID");
                     }
 
-
-
                 }
                 catch (SqlException ex)
                 {

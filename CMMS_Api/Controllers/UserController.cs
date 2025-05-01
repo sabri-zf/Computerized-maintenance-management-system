@@ -1,17 +1,13 @@
 ﻿using CMMS_Api.DTO;
-using CMMS_Api.Helper;
-using Computerized_maintenance_Logic_layer.Module.DTO;
 using Computerized_maintenance_Logic_layer.Module.User_Management;
 using Computerized_maintenance_Logic_layer.Module.User_Management.Extensions;
 using computrized_maintenance_Data_Access.DTO;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Http.HttpResults;
+using computrized_maintenance_Data_Access.DTO.DtoWrite;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMMS_Api.Controllers
 {
-    [Route("/Users/")]
+    [Route("api.Users/")]
     [ApiController]
     //[Authorize]
     public class UserController:ControllerBase
@@ -40,7 +36,7 @@ namespace CMMS_Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        public ActionResult<ApiUserDto> GetUserByID(int? id)
+        public ActionResult<Api_UserDto> GetUserByID(int? id)
         {
             if (id is null || id <= 0) return BadRequest($"Error : Invlid ID ({id})");
 
@@ -55,16 +51,19 @@ namespace CMMS_Api.Controllers
             }
 
 
-            ApiUserDto apiUser = new()
+            Api_UserDto apiUser = new()
             {
-                UserID = FindUser.UserID,
-                personID = FindUser.PersonID,
+                UserId = FindUser.UserID,
                 UserName = FindUser.UserName,
-                Password = FindUser.Password,
-                RoleID = FindUser.RoleID,
-                IsActive = FindUser.IsActive,
-                permission = FindUser.Permisson,
-                createAt = FindUser.CreatedAt,
+                FirstName = FindUser.First_Name,
+                LastName = FindUser.Last_Name,
+                Email = FindUser.Email,
+                Phone = FindUser.Phone,
+                Address = FindUser.Address,
+                BirthDay = FindUser.BithDay,
+                RoleName = FindUser.Role?.RoleName,
+                Permission = FindUser.Permisson,
+                IsActive = FindUser.IsActive
             };
 
             return Ok(apiUser);
@@ -76,7 +75,7 @@ namespace CMMS_Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        public ActionResult<ApiUserDto> AddNewUser(UserWriteData userWrite)
+        public ActionResult<Api_UserDto> AddNewUser(UserWriteData userWrite)
         {
             if (userWrite is not UserWriteData)
             {
@@ -90,19 +89,7 @@ namespace CMMS_Api.Controllers
                return StatusCode(500, "Server : Error has been occurred ,User Not Saved");
             }
 
-            ApiUserDto apiUser = new()
-            {
-                UserID = User.UserID,
-                personID = User.PersonID,
-                UserName = User.UserName,
-                Password = User.Password,
-                RoleID = User.RoleID,
-                IsActive = User.IsActive,
-                permission = User.Permisson,
-                createAt = User.CreatedAt,
-            };
-
-            return Created();
+            return Ok($"Add new User id ({User.UserID}) Hass been Successful ");
         }
 
 
@@ -112,7 +99,7 @@ namespace CMMS_Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        public ActionResult<ApiUserDto> UpdateUser(int id, UserWriteData userWrite)
+        public ActionResult UpdateUser(int id, UserWriteData userWrite)
         {
             if (id <= 0) return BadRequest("Error : Invalid Request");
 

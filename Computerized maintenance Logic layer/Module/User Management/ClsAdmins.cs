@@ -21,7 +21,8 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         {
             this.AdminID = -1;
             this.UserID = null;
-            this.DTO = null;
+            this.DTO = new ();
+            //this.Users = new ClsUsers();
 
             _mode = Mode_Save.AddNew;
         }
@@ -47,6 +48,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
 
         private bool AddnewAdmin()
         {
+            this.DTO.UserID = this.Users.UserID;
             this.AdminID = DataAccessAdmin.AddNewAdmin(this.DTO);
 
             return (this.AdminID > 0);
@@ -66,6 +68,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         {
             switch (_mode)
             {
+                
                 case Mode_Save.AddNew:
                     if (AddnewAdmin())
                     {

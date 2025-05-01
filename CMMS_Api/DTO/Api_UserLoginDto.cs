@@ -1,6 +1,6 @@
 ﻿namespace CMMS_Api.DTO
 {
-    public class UserLoginDto
+    public class Api_UserLoginDto
     {
         public string UserName { get; set; }
         public string DateLogin => DateTime.Now.ToString();

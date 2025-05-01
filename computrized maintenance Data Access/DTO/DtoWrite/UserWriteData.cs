@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace computrized_maintenance_Data_Access.DTO
+namespace computrized_maintenance_Data_Access.DTO.DtoWrite
 {
     public class UserWriteData
     {
