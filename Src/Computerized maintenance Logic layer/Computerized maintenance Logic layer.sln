@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35728.132
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Computerized maintenance Logic layer", "Computerized maintenance Logic layer.csproj", "{86FEE813-9251-494B-972C-C83E8DE9B670}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "computrized maintenance Data Access", "..\computrized maintenance Data Access\computrized maintenance Data Access.csproj", "{BC2B5D58-2AA6-493D-9994-5D1194440320}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test Data Of CMMS", "..\Test Data Of CMMS\Test Data Of CMMS.csproj", "{A1F4FF42-8E29-4E8A-8390-59D14FC4F78B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMMS_Api", "..\CMMS_Api\CMMS_Api.csproj", "{4CBDF629-96BB-4488-96D4-6FE1FE88665E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{793D4F7F-9C4A-44CD-8AD4-3D76F1010E79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Computerized maintenance Logic layer_Test", "..\Computerized maintenance Logic layer_Test\Computerized maintenance Logic layer_Test.csproj", "{639E317F-40B4-4BFA-B624-271FB9CAF21A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{86FEE813-9251-494B-972C-C83E8DE9B670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86FEE813-9251-494B-972C-C83E8DE9B670}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86FEE813-9251-494B-972C-C83E8DE9B670}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86FEE813-9251-494B-972C-C83E8DE9B670}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC2B5D58-2AA6-493D-9994-5D1194440320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC2B5D58-2AA6-493D-9994-5D1194440320}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC2B5D58-2AA6-493D-9994-5D1194440320}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC2B5D58-2AA6-493D-9994-5D1194440320}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1F4FF42-8E29-4E8A-8390-59D14FC4F78B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1F4FF42-8E29-4E8A-8390-59D14FC4F78B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1F4FF42-8E29-4E8A-8390-59D14FC4F78B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1F4FF42-8E29-4E8A-8390-59D14FC4F78B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CBDF629-96BB-4488-96D4-6FE1FE88665E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CBDF629-96BB-4488-96D4-6FE1FE88665E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CBDF629-96BB-4488-96D4-6FE1FE88665E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CBDF629-96BB-4488-96D4-6FE1FE88665E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{639E317F-40B4-4BFA-B624-271FB9CAF21A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{639E317F-40B4-4BFA-B624-271FB9CAF21A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{639E317F-40B4-4BFA-B624-271FB9CAF21A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{639E317F-40B4-4BFA-B624-271FB9CAF21A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{86FEE813-9251-494B-972C-C83E8DE9B670} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{BC2B5D58-2AA6-493D-9994-5D1194440320} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{A1F4FF42-8E29-4E8A-8390-59D14FC4F78B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{4CBDF629-96BB-4488-96D4-6FE1FE88665E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{639E317F-40B4-4BFA-B624-271FB9CAF21A} = {793D4F7F-9C4A-44CD-8AD4-3D76F1010E79}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A7939FB0-489E-429F-A987-D108364BBC55}
+	EndGlobalSection
+EndGlobal
