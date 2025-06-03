@@ -369,30 +369,7 @@ namespace computrized_maintenance_Data_Access
 
         public static bool IsUserNameAndPasswordValid(string UserName , string Password)
         {
-            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password)) return false ;
-
-
-            bool IsValid = false;
-
-            try
-            {
-                using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
-                {
-                    var userParam = new DynamicParameters();
-                    userParam.Add("@UserName", UserName);
-                    userParam.Add("@Password", Password);
-
-                    string Query = "select top 1 UserID from Users where UserName =@Username and Password =@Password";
-                    IsValid = connection.ExecuteScalar<int>(Query, param: userParam, commandType: CommandType.Text) > 0;
-                }
-            }
-            catch (SqlException Sx)
-            {
-                Console.WriteLine(Sx.Message);
-                throw;
-            }
-
-            return IsValid;
+           return VerifyLogin(UserName, Password);
         }
     }
 }

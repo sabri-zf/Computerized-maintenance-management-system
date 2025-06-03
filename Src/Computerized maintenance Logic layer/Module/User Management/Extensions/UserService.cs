@@ -8,11 +8,13 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management.Extensions
         private UserService() { }
         public static int? GetPersonIdOfUser(int UserID)
         {
+            if(UserID < 1) return null;
+
             return DataAccessUser.GetPersonID(UserID);
         }
         public static bool Reset_Password(int UserID,string NewPassword)
         {
-            if ( !string.IsNullOrEmpty(NewPassword))
+            if (UserID > 0 && !string.IsNullOrEmpty(NewPassword))
             {
                 string HashValue = Security.HashEncrypt(NewPassword);
                 return DataAccessUser.ResetPassword(UserID, HashValue);
@@ -21,7 +23,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management.Extensions
             return false;
         }
 
-        public static bool Verfiy_User_Login(string Username, string Password)
+        public static bool Verfiy_User_Login(string? Username, string? Password)
         {
             if (!string.IsNullOrEmpty(Username) || !string.IsNullOrEmpty(Password))
             {
