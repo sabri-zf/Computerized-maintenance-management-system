@@ -17,7 +17,7 @@ namespace computrized_maintenance_Data_Access.Entites.AssetsManagment
         public  DateTime PurchaseDate { get; set; } // date of Purachase 
         public decimal PurchaseCost { get;set; }
         public DateTime WarrantyExpiryDate { get; set; } // 10-10-2035
-        public DateTime? InstallationDate { get; set; }
+        public DateTime? InstallationDate { get; set; } // on site
         public int AssetCategoryID { get; set; }
         public int AssetLocationID { get; set; }
         public Asset_Status_Type AssetStatus {  get; set; }

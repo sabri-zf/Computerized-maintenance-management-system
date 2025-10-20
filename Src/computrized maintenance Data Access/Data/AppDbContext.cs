@@ -1,12 +1,5 @@
 ﻿using computrized_maintenance_Data_Access.Entites.AssetsManagment;
-using computrized_maintenance_Data_Access.Misc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace computrized_maintenance_Data_Access.Data
 {
@@ -36,6 +29,7 @@ namespace computrized_maintenance_Data_Access.Data
 
 
         public DbSet<Asset> Assets { get; set; }
+        public DbSet<Location> Locations { get; set; }
         public DbSet<Category> Categories {  get; set; }
     }
 }

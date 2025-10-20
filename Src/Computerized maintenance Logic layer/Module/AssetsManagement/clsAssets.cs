@@ -1,8 +1,10 @@
-﻿using computrized_maintenance_Data_Access.Data;
+﻿using Computerized_maintenance_Logic_layer.Module.DTO;
+using computrized_maintenance_Data_Access.Data;
 using computrized_maintenance_Data_Access.Entites.AssetsManagment;
 using computrized_maintenance_Data_Access.Enumes;
 using computrized_maintenance_Data_Access.Misc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
 {
@@ -10,7 +12,6 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
     {
 
         private  static AppDbContext? _Context;
-
         private readonly static clsAssets _Instance = new();
 
         public static clsAssets Instance
@@ -49,14 +50,14 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
             
         }
 
-        private clsAssets(int iD, string assetName, string assetTagNumber, string manufactuerName,
+        private clsAssets(int id, string assetName, string assetTagNumber, string manufactuerName,
             string manufactuerModelNumber, DateTime purchaseDate, decimal purchaseCost,
             DateTime warrantyExpiryDate, DateTime? installationDate, int assetCategoryID, 
             int assetLocationID,Asset_Status_Type assetStatus, MeterReading meterReading,
             Criticality_Rating criticality, DateTime createAssetDate, 
             DateTime? updateAssetDate, int createByUser)
         {
-            this.ID = iD;
+            this.ID = id;
             this.AssetName = assetName;
             this.AssetTagNumber = assetTagNumber;
             this.ManufactuerName = manufactuerName;
@@ -81,7 +82,9 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         /// <returns> Return object , otherwise null</returns>
         public async Task<clsAssets?> FindAsync(int ID)
         {
-            var Assets = await _Context.Assets.AsNoTracking().FirstOrDefaultAsync(x => x.ID == ID);
+            var Assets = await _Context.Assets
+                                       .AsNoTracking()
+                                       .SingleOrDefaultAsync(x => x.ID == ID);
 
             if(Assets is Asset)
             {
@@ -92,6 +95,39 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
             }
 
             return null;
+        }
+
+
+        /// <summary>
+        /// Retrieve Object's Assets from Data store 
+        /// </summary>
+        /// <param name="Name"> name of Asset you looking for </param>
+        /// <returns>object <see cref="clsAssets"/> or null</returns>
+        public  async Task<Assetdto?> FindByAssetNameAsync(string Name)
+        {
+            if(string.IsNullOrEmpty(Name)) return null;
+
+            var Asset = await _Context.Assets
+                                      .AsNoTracking()
+                                      .Where(x => x.AssetName == Name)
+                                      .Select(x => new Assetdto
+                                      (
+                                         x.AssetName,
+                                         x.AssetTagNumber,
+                                         x.ManufactuerName,
+                                         x.ManufactuerModelNumber,
+                                         x.PurchaseDate,
+                                         x.PurchaseCost,
+                                         x.WarrantyExpiryDate,
+                                         x.InstallationDate,
+                                         x.CreateAssetDate,
+                                         x.CreateByUser
+                                      )
+                                      ).FirstOrDefaultAsync();
+
+                                      
+
+            return Asset;
         }
 
         /// <summary>
@@ -117,7 +153,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         ///  Adding New Entity Asset On Data source
         /// </summary>
         /// <returns "name= bool"> Return True if Add Entity was successful, otherwise False </returns>
-        public bool AddNewAsset()
+        public  bool AddNewAsset()
         {
             Asset asset = new()
             {
@@ -139,9 +175,9 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
                 CreateByUser = this.CreateByUser
             };
 
-            _Context.Assets.Add(asset);
+             _Context.Assets.Add(asset);
 
-            return _Context.SaveChanges() > 0;
+            return  _Context.SaveChanges() > 0;
         }
 
         /// <summary>
@@ -214,26 +250,26 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
              * High performence to Update entity Without unnecessary Tracking
              */
 
-            return await _Context.Assets.Where(x => x.ID == this.ID)
-                .ExecuteUpdateAsync(A => A
+            return await _Context.Assets
+                                 .Where(x => x.ID == this.ID)
+                                 .ExecuteUpdateAsync(A => A
 
-                .SetProperty(p => p.AssetName, this.AssetName)
-                .SetProperty(p => p.AssetTagNumber, this.AssetTagNumber)
-                .SetProperty(p => p.ManufactuerName, this.ManufactuerName)
-                .SetProperty(p => p.ManufactuerModelNumber, this.ManufactuerModelNumber)
-                .SetProperty(p => p.PurchaseDate, this.PurchaseDate)
-                .SetProperty(p => p.PurchaseCost, this.PurchaseCost)
-                .SetProperty(p => p.WarrantyExpiryDate, this.WarrantyExpiryDate)
-                .SetProperty(p => p.InstallationDate, this.InstallationDate)
-                .SetProperty(p => p.AssetCategoryID, this.AssetCategoryID)
-                .SetProperty(p => p.AssetLocationID, this.AssetLocationID)
-                .SetProperty(p => p.AssetStatus, this.AssetStatus)
-                .SetProperty(p => p.MeterReading, this.MeterReading)
-                .SetProperty(p => p.Criticality, this.Criticality)
-                .SetProperty(p => p.CreateAssetDate, this.CreateAssetDate)
-                .SetProperty(p => p.CreateByUser, this.CreateByUser)
-
-            ) > 0;
+                                 .SetProperty(p => p.AssetName, this.AssetName)
+                                 .SetProperty(p => p.AssetTagNumber, this.AssetTagNumber)
+                                 .SetProperty(p => p.ManufactuerName, this.ManufactuerName)
+                                 .SetProperty(p => p.ManufactuerModelNumber, this.ManufactuerModelNumber)
+                                 .SetProperty(p => p.PurchaseDate, this.PurchaseDate)
+                                 .SetProperty(p => p.PurchaseCost, this.PurchaseCost)
+                                 .SetProperty(p => p.WarrantyExpiryDate, this.WarrantyExpiryDate)
+                                 .SetProperty(p => p.InstallationDate, this.InstallationDate)
+                                 .SetProperty(p => p.AssetCategoryID, this.AssetCategoryID)
+                                 .SetProperty(p => p.AssetLocationID, this.AssetLocationID)
+                                 .SetProperty(p => p.AssetStatus, this.AssetStatus)
+                                 .SetProperty(p => p.MeterReading, this.MeterReading)
+                                 .SetProperty(p => p.Criticality, this.Criticality)
+                                 .SetProperty(p => p.CreateAssetDate, this.CreateAssetDate)
+                                 .SetProperty(p => p.CreateByUser, this.CreateByUser)
+                                 ) > 0;
 
         }
 
@@ -243,32 +279,38 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         /// <returns "name= bool"> Return True if Delete successful, otherwise False </returns>
         public bool DeleteAsset()
         {
-            return _Context.Assets.Where(x => x.ID == this.ID).ExecuteDelete() > 0;
+            return _Context.Assets
+                .Where(x => x.ID == this.ID)
+                .ExecuteDelete() > 0;
         }
 
         /// <summary>
         /// Asynchronous Deleting Asset On Data source
         /// </summary>
         /// <returns "name= bool"> Return True if Delete successful, otherwise False </returns>
-        public async Task<bool> DeleteAssetAsync()
+        public async static Task<bool> DeleteAssetAsync(int ID)
         {
-            return await _Context.Assets.Where(x => x.ID == this.ID).ExecuteDeleteAsync() > 0;
+            return await _Context.Assets
+                                 .Where(x => x.ID == ID)
+                                 .ExecuteDeleteAsync() > 0;
         }
 
         /// <summary>
         /// Get each Assets on Data source,
         /// </summary>
         /// <returns>Return :Iquerable Asset Dbset </returns>
-        public IQueryable<Asset> GetAllAssets()
+        public async Task<IEnumerable<Asset>> GetAllAssets()
         {
-            return _Context.Assets.AsNoTracking();
+            return await _Context.Assets
+                           .AsNoTracking()
+                           .ToListAsync();
         }
 
 
         ~clsAssets()
         {
             if( _Context != null )
-            _Context.DisposeAsync();
+             _Context.DisposeAsync();
         }
 
     }

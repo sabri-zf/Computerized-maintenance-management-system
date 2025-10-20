@@ -1,14 +1,10 @@
 ﻿using computrized_maintenance_Data_Access.Enumes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Computerized_maintenance_Logic_layer.Module.DTO
+namespace CMMS_Api.DTO
 {
-    public sealed record Assetdto
-    (
+    public sealed record AssetDroRequest
+     (
+     int ID,
      string AssetName,
      string AssetTagNumber,
      string ManufactuerName,
@@ -17,7 +13,13 @@ namespace Computerized_maintenance_Logic_layer.Module.DTO
      decimal PurchaseCost,
      DateTime WarrantyExpiryDate,
      DateTime? InstallationDate,
+     int AssetCategoryID,
+     int AssetLocationID,
+     Asset_Status_Type AssetStatus,
+     MeterReading MeterReading,
+     Criticality_Rating Criticality,
      DateTime CreateAssetDate,
+     DateTime? UpdateAssetDate,
      int CreateByUser
     );
 }
