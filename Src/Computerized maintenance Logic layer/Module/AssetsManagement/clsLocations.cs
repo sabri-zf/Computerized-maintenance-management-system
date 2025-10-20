@@ -132,6 +132,23 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
             }
         }
 
+        public static async Task<bool> DeleteLocationAsync(int ID)
+        {
+            try
+            {
+                var result = await _Context.Locations
+                                           .Where(x => x.ID == ID)
+                                           .ExecuteDeleteAsync();
+
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting Location: {ex.Message}");
+                return false;
+            }
+        }
+
         /// <summary>
         /// Retrieve all Locations (read-only query).
         /// </summary>

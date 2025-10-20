@@ -3,7 +3,7 @@ using Computerized_maintenance_Logic_layer.Module.AssetsManagement;
 using computrized_maintenance_Data_Access.Entites.AssetsManagment;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CMMS_Api.Controllers
+namespace CMMS_Api.Controllers.AssetsManagementController
 {
 
     [ApiController]
@@ -65,7 +65,7 @@ namespace CMMS_Api.Controllers
             Asset_Image.ImageHeight = requestDto.ImageHight;
 
 
-            return Ok(new {imagePath = Asset_Image.ImagePath,ImageWidth = Asset_Image.ImageWidth , ImageHeight = Asset_Image.ImageHeight, status = "image has been update it"});
+            return Ok(new {imagePath = Asset_Image.ImagePath,Asset_Image.ImageWidth , Asset_Image.ImageHeight, status = "image has been update it"});
         }
 
         [HttpDelete("delete-assetImage/{id:int}",Name ="delete-image")]

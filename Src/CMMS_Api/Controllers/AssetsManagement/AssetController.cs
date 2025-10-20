@@ -4,7 +4,7 @@ using Computerized_maintenance_Logic_layer.Module.DTO;
 using computrized_maintenance_Data_Access.Entites.AssetsManagment;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CMMS_Api.Controllers
+namespace CMMS_Api.Controllers.AssetsManagementController
 {
     [ApiController]
     [Route("/Api/V1/asset")]

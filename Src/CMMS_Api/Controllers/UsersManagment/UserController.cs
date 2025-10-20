@@ -5,7 +5,7 @@ using computrized_maintenance_Data_Access.DTO;
 using computrized_maintenance_Data_Access.DTO.DtoWrite;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CMMS_Api.Controllers
+namespace CMMS_Api.Controllers.UsersManagment
 {
     [Route("api.Users/")]
     [ApiController]

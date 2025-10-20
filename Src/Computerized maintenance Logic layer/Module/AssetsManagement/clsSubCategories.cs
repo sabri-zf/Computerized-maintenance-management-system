@@ -137,6 +137,24 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
             }
         }
 
+
+        public static async Task<bool> DeleteSubCategoryAsync(int ID)
+        {
+            try
+            {
+                var result = await _Context.Set<SubCategory>()
+                                           .Where(x => x.ID == this.ID)
+                                           .ExecuteDeleteAsync();
+
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting SubCategory: {ex.Message}");
+                return false;
+            }
+        }
+
         /// <summary>
         /// Retrieves all SubCategories (read-only query).
         /// </summary>

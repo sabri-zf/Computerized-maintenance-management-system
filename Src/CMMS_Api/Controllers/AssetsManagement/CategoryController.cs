@@ -2,7 +2,7 @@
 using Computerized_maintenance_Logic_layer.Module.AssetsManagement;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CMMS_Api.Controllers
+namespace CMMS_Api.Controllers.AssetsManagementController
 {
     [ApiController]
 
