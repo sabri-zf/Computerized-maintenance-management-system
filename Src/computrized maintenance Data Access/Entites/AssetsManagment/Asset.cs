@@ -1,4 +1,5 @@
-﻿using computrized_maintenance_Data_Access.Enumes;
+﻿using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
+using computrized_maintenance_Data_Access.Enumes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace computrized_maintenance_Data_Access.Entites.AssetsManagment
         public virtual Location Location { get; set; } = null!;
         public virtual Category Category { get; set; }= null!;
         public virtual ICollection<AssetImage> AssetImages { get; set; }= new List<AssetImage>();
+        public virtual ICollection<WorkOrder> WorkOrders { get; set; } = new List<WorkOrder>();
 
 
         public override string ToString()
