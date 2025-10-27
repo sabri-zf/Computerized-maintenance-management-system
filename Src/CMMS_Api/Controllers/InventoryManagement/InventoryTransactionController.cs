@@ -5,17 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 namespace CMMS_Api.Controllers.InventoryManagement
 {
     [ApiController]
-    [Route("Api/V1/inventory-item")]
-    public class InventoryItemController(ClsInventoryItems _InventoryItem):Controller
+    [Route("Api/V1/inventory-Tranaction")]
+    public class InventoryTransactionController(ClsInventoryItems _InventoryItem):Controller
     {
 
 
-        [HttpGet("get-partitems",Name ="retrieve-partitems")]
+        [HttpGet("get-inventorytrasactions", Name = "retrieve-inventorytrasactions")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
 
-        public async Task<ActionResult<IEnumerable<InventoryItemResponseDto>>> GetAllItems()
+        public async Task<ActionResult<IEnumerable<InventoryTrasactionsResponseDto>>> GetAllItems()
         {
 
             var List = await _InventoryItem.GetAllInventoryItems();
@@ -26,7 +26,7 @@ namespace CMMS_Api.Controllers.InventoryManagement
         }
 
 
-        [HttpGet("get-partitem/{Id:int}",Name ="retrieve-PartItemById")]
+        [HttpGet("get-partitem/{Id:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -44,7 +44,7 @@ namespace CMMS_Api.Controllers.InventoryManagement
         }
 
 
-        [HttpPost("addnew-partitem", Name = "addnew-PartItem")]
+        [HttpPost("addnew-partitem")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -63,7 +63,7 @@ namespace CMMS_Api.Controllers.InventoryManagement
 
 
 
-        [HttpPut("edit-partitem", Name = "update-PartItem")]
+        [HttpPut("edit-partitem")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -81,7 +81,7 @@ namespace CMMS_Api.Controllers.InventoryManagement
         }
 
 
-        [HttpPut("delete-partitem/{Id:int}", Name = "remove-PartItem")]
+        [HttpPut("delete-partitem/{Id:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -97,5 +97,12 @@ namespace CMMS_Api.Controllers.InventoryManagement
 
             return Ok("Delete Part Item has been Succeed");
         }
+
+
+
+
+
+
+
     }
 }

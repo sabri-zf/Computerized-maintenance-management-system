@@ -1,9 +1,9 @@
 
 using CMMS_Api.Helper;
+using Computerized_maintenance_Logic_layer.Module.AssetsManagement;
 using Computerized_maintenance_Logic_layer.Module.InventoryManagement;
 using Computerized_maintenance_Logic_layer.Module.workOrderManagement;
 using computrized_maintenance_Data_Access.Data;
-using computrized_maintenance_Data_Access.Misc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -24,6 +24,7 @@ namespace CMMS_Api
             builder.Services.AddScoped<ClsWorkOrderHistory>();
             builder.Services.AddScoped<ClsInventoryItems>();
             builder.Services.AddScoped<ClsInventoryTransactions>();
+            builder.Services.AddScoped<ClsAssetImage>();
 
             // Add controller services to the container of DI
             builder.Services.AddControllers();

@@ -1,129 +1,141 @@
-﻿using computrized_maintenance_Data_Access.Data;
+﻿using CMMS_Api.DTO;
+using computrized_maintenance_Data_Access.Data;
 using computrized_maintenance_Data_Access.Entites.AssetsManagment;
-using computrized_maintenance_Data_Access.Misc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
 {
-    public class ClsAssetImage
+    public class ClsAssetImage(AppDbContext _Context)
     {
-        private static AppDbContext? _Context;
-        private readonly static ClsAssetImage _Instance = new();
-
-        public static ClsAssetImage? Instance
-        {
-            get
-            {
-                if(_Instance is not null)
-                {
-                     _Context = ClsUtility.ImplementDbContextService();
-                     return _Instance;
-                }
-
-                return null;
-            }
-        }
-
-        public int ID { get; set; }
-        public string ImagePath { get; set; } = null!;
-        public short ImageWidth { get; set; }
-        public short ImageHeight { get; set; }
-        public int AssetID { get; set; }
-
-        private ClsAssetImage() { }
-
-        private ClsAssetImage(int id, string imagePath, short imageWidth, short imageHeight, int assetId)
-        {
-            this.ID = id;
-            this.ImagePath = imagePath;
-            this.ImageWidth = imageWidth;
-            this.ImageHeight = imageHeight;
-            this.AssetID = assetId;
-        }
 
         /// <summary>
-        /// Asynchronously find an AssetImage by ID.
+        /// Retrieve a <see cref="AssetImageResponseDto"/> record 
         /// </summary>
-        public async Task<ClsAssetImage?> FindAsync(int id)
+        /// <param name="id">Unique identitfier of <see cref="AssetImage"/> </param>
+        /// <returns>Data transfer object <see cref="AssetImageResponseDto"/> record, otherwise <see langword="null"/></returns>
+        public async Task<AssetImageResponseDto?> FindAsync(int Id)
         {
+            if(Id < 1) return null;
+
             var entity = await _Context.Set<AssetImage>()
                                        .AsNoTracking()
-                                       .SingleOrDefaultAsync(x => x.ID == id);
+                                       .Where(x => x.ID == Id)
+                                       .Select(x => new AssetImageResponseDto
+                                              (
+                                                  x.ImagePath,
+                                                  x.ImageWidth,
+                                                  x.ImageHeight,
+                                                  x.AssetID
+                                              ))
+                                     .SingleOrDefaultAsync();
 
-            if (entity is AssetImage)
-            {
-                return new ClsAssetImage(entity.ID, entity.ImagePath, entity.ImageWidth, entity.ImageHeight, entity.AssetID);
-            }
-            return null;
+
+            return entity;
+        }
+
+
+        /// <summary>
+        /// Retrieve list for <see cref="AssetImageResponseDto"/>
+        /// </summary>
+        /// <returns>list of data transfer object <see cref="IEnumerable{AssetImageResponseDto}"/>, otherwise <see langword="null"/> </returns>
+        public async Task<IEnumerable<AssetImageResponseDto>?> GetAllAssetImage()
+        {
+            var List = await _Context.Set<AssetImage>()
+                                     .AsNoTracking()
+                                     .Select(x => new AssetImageResponseDto
+                                     (
+                                         x.ImagePath,
+                                         x.ImageWidth,
+                                         x.ImageHeight,
+                                         x.AssetID
+                                     ))
+                                     .ToListAsync();
+
+            if (List.Count < 0) return null;
+
+            return List.AsEnumerable();
         }
 
         /// <summary>
-        /// Asynchronously add a new AssetImage to the database.
+        /// Insert new instance of <see cref="AssetImage"/>, then remain it on dataset
         /// </summary>
-        public async Task<bool> AddNewImageAsync()
+        /// <param name="responseDto">Data transfer object of <see cref="AssetImageResponseDto"/>, dealing with response data</param>
+        /// <returns><see langword="true"> if add <see cref="AssetImage"/> has been succeed, otherwise <see langword="false"/></returns>
+        public async Task<bool> AddNewImageAsync(AssetImageResponseDto responseDto)
         {
+
+            if(!checkOutValidatationOfinputData(responseDto)) return false;
+
+
             AssetImage image = new()
             {
-                ID = this.ID,
-                ImagePath = this.ImagePath,
-                ImageWidth = this.ImageWidth,
-                ImageHeight = this.ImageHeight,
-                AssetID = this.AssetID
+                ImagePath = responseDto.ImagePath,
+                ImageWidth = responseDto.Imagewidth,
+                ImageHeight = responseDto.ImageHight,
+                AssetID = responseDto.AssetID
             };
 
             await _Context.Set<AssetImage>().AddAsync(image);
+
             return await _Context.SaveChangesAsync() > 0;
         }
 
-      
         /// <summary>
-        /// Asynchronously update an existing AssetImage.
+        /// Update <see cref="AssetImage"/>, then remain it on dataset
         /// </summary>
-        public async Task<bool> UpdateImageAsync()
+        /// <param name="requestDto">Data transfer object of <see cref="AssetImageRequestDto"/>, dealing with request data</param>
+        /// <returns><see langword="true"> if modify <see cref="AssetImage"/> has been succeed, otherwise <see langword="false"/></returns>
+        public async Task<bool> UpdateImageAsync(AssetImageRequestDto requestDto)
         {
+            var Dto = new AssetImageResponseDto(requestDto.ImagePath, requestDto.Imagewidth, requestDto.ImageHight, requestDto.AssetID);
+
+            if (!checkOutValidatationOfinputData(Dto, true, requestDto.ID)) return false;
+
             return await _Context.Set<AssetImage>()
-                                 .Where(x => x.ID == this.ID)
+                                 .Where(x => x.ID == requestDto.ID)
                                  .ExecuteUpdateAsync(u => u
-                                     .SetProperty(p => p.ImagePath, this.ImagePath)
-                                     .SetProperty(p => p.ImageWidth, this.ImageWidth)
-                                     .SetProperty(p => p.ImageHeight, this.ImageHeight)
-                                     .SetProperty(p => p.AssetID, this.AssetID)
+                                     .SetProperty(p => p.ImagePath, requestDto.ImagePath)
+                                     .SetProperty(p => p.ImageWidth, requestDto.Imagewidth)
+                                     .SetProperty(p => p.ImageHeight, requestDto.ImageHight)
+                                     .SetProperty(p => p.AssetID, requestDto.AssetID)
                                  ) > 0;
         }
 
         /// <summary>
-        /// Asynchronously delete an AssetImage by ID.
+        /// Omit <see cref="AssetImage"/> entity from Dataset
         /// </summary>
-        public async Task<bool> DeleteImageAsync()
+        /// <param name="Id">Unique identifier of <see cref="AssetImage"/> entity </param>
+        /// <returns></returns>
+        public async Task<bool> DeleteImageAsync(int Id)
         {
+            if(Id < 1) return false;
+
             return await _Context.Set<AssetImage>()
-                                 .Where(x => x.ID == this.ID)
+                                 .Where(x => x.ID == Id)
                                  .ExecuteDeleteAsync() > 0;
         }
 
-        public static async Task<bool> DeleteImageAsync(int id)
-        {
-            return await _Context.Set<AssetImage>()
-                                 .Where(x => x.ID == id)
-                                 .ExecuteDeleteAsync() > 0;
-        }
 
         /// <summary>
-        /// Asynchronously retrieve all AssetImages (read-only).
+        /// check if data input is valid when send it to update or add new entity <see cref="AssetImage"/>
         /// </summary>
-        public async Task<IEnumerable<AssetImage>> GetAllImages()
+        /// <param name="responseDto">Data transfer object of <see cref="AssetImageRequestDto"/>, dealing with request data</param>
+        /// <param name="IsRequerd">Check if OnRequset state</param>
+        /// <param name="ID">Unique identifier of <see cref="AssetImage"/> entity</param>
+        /// <returns><see langword="true"/> if data is valid,otherwise <see langword="false"/></returns>
+        private bool checkOutValidatationOfinputData(AssetImageResponseDto responseDto,bool IsRequerd =false ,int ID = 0)
         {
-            return await _Context.Set<AssetImage>()
-                                 .AsNoTracking()
-                                 .ToListAsync();
-        }
+            if(IsRequerd)
+            {
+                if(ID <1) return false;
+            }
 
-        ~ClsAssetImage()
-        {
-            if (_Context != null)
-                _Context.DisposeAsync();
+            if(string.IsNullOrEmpty(responseDto.ImagePath)) return false;
+            if(responseDto.Imagewidth < 150) return false;
+            if(responseDto.ImageHight < 150) return false;  
+            if(responseDto.AssetID < 1) return false;
+
+            return true;
         }
     }
 }
