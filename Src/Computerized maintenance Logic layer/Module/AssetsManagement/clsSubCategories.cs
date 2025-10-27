@@ -138,7 +138,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         }
 
 
-        public static async Task<bool> DeleteSubCategoryAsync(int ID)
+        public  async Task<bool> DeleteSubCategoryAsync(int ID)
         {
             try
             {

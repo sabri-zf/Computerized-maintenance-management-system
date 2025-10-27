@@ -15,7 +15,7 @@ namespace computrized_maintenance_Data_Access.Entites.WorkOrderManagement
         public int AssetID { get; set; }
         public int CreatedByID { get; set; }  
         public int AssignedToID { get; set; }
-        public workOrderStatus Status { get; set; } = workOrderStatus.Open;
+        public workOrderStatus Status { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime StartDate { get; set; }
 

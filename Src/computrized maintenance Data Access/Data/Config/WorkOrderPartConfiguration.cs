@@ -1,4 +1,5 @@
-﻿using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
+﻿using computrized_maintenance_Data_Access.Data.Seed;
+using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -34,7 +35,7 @@ namespace computrized_maintenance_Data_Access.Data.Config
                        .IsRequired();
 
 
-                builder.HasData();
+                builder.HasData(SeeData.WorkOrderParts);
 
             }
 

@@ -1,4 +1,6 @@
-﻿using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
+﻿using computrized_maintenance_Data_Access.Data.Seed;
+using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
+using computrized_maintenance_Data_Access.Enumes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -26,10 +28,11 @@ namespace computrized_maintenance_Data_Access.Data.Config
                     builder.Property(x => x.PerformedActionByID)
                            .HasColumnType ("int")
                            .IsRequired();
-                    
-                    // Don't forget to configure this action to be convinent with The requirement 
+
                     builder.Property(x => x.Action)
-                        //.HasConversion()
+                           .HasConversion(
+                        s => s.ToString(),
+                        v => (WorkOrderHistoryActionStatus)Enum.Parse(typeof(WorkOrderHistoryActionStatus), v))
                           .IsRequired();
 
 
@@ -41,7 +44,7 @@ namespace computrized_maintenance_Data_Access.Data.Config
                            .IsRequired();
                            
 
-                    builder.HasData();
+                    builder.HasData(SeeData.WorkOrderHistorys);
                 }
             }
 }

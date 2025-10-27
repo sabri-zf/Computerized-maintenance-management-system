@@ -49,7 +49,6 @@ namespace CMMS_Api.Controllers.AssetsManagementController
             return NotFound("Catagory Object Doesn't find");
         }
 
-        [HttpPut("edit-category/{id:int}/{CategoryName:alpha}",Name ="update-category")]
         [HttpPut("edit-category",Name ="update-category")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]

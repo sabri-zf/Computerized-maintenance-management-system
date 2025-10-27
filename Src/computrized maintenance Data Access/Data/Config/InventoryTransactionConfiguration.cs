@@ -1,6 +1,9 @@
-﻿using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
+﻿using computrized_maintenance_Data_Access.Data.Seed;
+using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
+using computrized_maintenance_Data_Access.Enumes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Transactions;
 
 namespace computrized_maintenance_Data_Access.Data.Config
 {
@@ -19,9 +22,12 @@ namespace computrized_maintenance_Data_Access.Data.Config
             builder.Property(x => x.InventoryItemID)
                    .IsRequired();
 
-            // don't forget it :)
             builder.Property(x => x.Type)
-                   .IsRequired();
+                    .HasConversion(
+                    s => s.ToString(),
+                    v => (TransactionType)Enum.Parse(typeof(TransactionType), v)
+                    )
+                    .IsRequired();
 
             builder.Property(x => x.Quntity)
                    .IsRequired();
@@ -34,7 +40,7 @@ namespace computrized_maintenance_Data_Access.Data.Config
                    .HasMaxLength(60)
                    .IsRequired(false);
 
-            builder.HasData();
+            builder.HasData(SeeData.InventoryTransactions);
         }
     }
 }
