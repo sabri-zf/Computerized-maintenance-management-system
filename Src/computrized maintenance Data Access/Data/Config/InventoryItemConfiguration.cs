@@ -1,4 +1,5 @@
-﻿using computrized_maintenance_Data_Access.Entites.InventoryManagement;
+﻿using computrized_maintenance_Data_Access.Data.Seed;
+using computrized_maintenance_Data_Access.Entites.InventoryManagement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -59,7 +60,7 @@ namespace computrized_maintenance_Data_Access.Data.Config
 
 
 
-            builder.HasData();
+            builder.HasData(SeeData.InventoryItems);
             
         }
     }

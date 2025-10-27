@@ -84,7 +84,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         {
             if (ID < 1) return BadRequest("Invalid operation");
 
-            return await clsSubCategories.DeleteSubCategoryAsync(ID)
+            return await clsSubCategories.Instance.DeleteSubCategoryAsync(ID)
                                          ? Ok("SubCategory has been Deleted")
                                          : StatusCode(500, "Error Occurred on system");
         }

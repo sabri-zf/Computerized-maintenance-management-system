@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using computrized_maintenance_Data_Access.Data;
 
@@ -11,9 +12,11 @@ using computrized_maintenance_Data_Access.Data;
 namespace computrized_maintenance_Data_Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251024203841_initial-migrate")]
+    partial class initialmigrate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -658,7 +661,9 @@ namespace computrized_maintenance_Data_Access.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2025, 10, 24, 21, 38, 40, 657, DateTimeKind.Local).AddTicks(6607));
 
                     b.Property<string>("Description")
                         .IsRequired()

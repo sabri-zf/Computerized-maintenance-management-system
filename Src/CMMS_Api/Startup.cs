@@ -1,7 +1,11 @@
 
 using CMMS_Api.Helper;
-using Microsoft.AspNetCore.Authentication;
+using Computerized_maintenance_Logic_layer.Module.InventoryManagement;
+using Computerized_maintenance_Logic_layer.Module.workOrderManagement;
+using computrized_maintenance_Data_Access.Data;
+using computrized_maintenance_Data_Access.Misc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -12,8 +16,16 @@ namespace CMMS_Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<AppDbContext>(option =>
+            option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            //register Application Classes on DI container to dealing with the opration of Ef core regulary
+            builder.Services.AddScoped<ClsWorkorders>();
+            builder.Services.AddScoped<ClsWorkOrderParts>();
+            builder.Services.AddScoped<ClsWorkOrderHistory>();
+            builder.Services.AddScoped<ClsInventoryItems>();
+            builder.Services.AddScoped<ClsInventoryTransactions>();
 
-            // Add services to the container.
+            // Add controller services to the container of DI
             builder.Services.AddControllers();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -55,9 +67,7 @@ namespace CMMS_Api
 
             app.UseAuthorization();
 
-
             app.MapControllers();
-
             app.Run();
         }
     }

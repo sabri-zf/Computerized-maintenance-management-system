@@ -12,15 +12,15 @@ using computrized_maintenance_Data_Access.Data;
 namespace computrized_maintenance_Data_Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250415205339_initial")]
-    partial class initial
+    [Migration("20251025071722_fix_tribleofdynamicDataOnHasData")]
+    partial class fix_tribleofdynamicDataOnHasData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -379,17 +379,17 @@ namespace computrized_maintenance_Data_Access.Migrations
                         new
                         {
                             ID = 1,
-                            LocationName = "Building A"
+                            LocationName = "Main Warehouse"
                         },
                         new
                         {
                             ID = 2,
-                            LocationName = "Building B"
+                            LocationName = "Secondary Storage"
                         },
                         new
                         {
                             ID = 3,
-                            LocationName = "facility - 109"
+                            LocationName = "Outdoor Yard"
                         });
                 });
 
@@ -443,6 +443,401 @@ namespace computrized_maintenance_Data_Access.Migrations
                         });
                 });
 
+            modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.InventoryManagement.InventoryItem", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("LocationID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PartNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<short>("Quintity")
+                        .HasColumnType("smallint");
+
+                    b.Property<short>("ReorderLevel")
+                        .HasColumnType("smallint");
+
+                    b.Property<decimal>("UnitCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("ID")
+                        .HasAnnotation("Sql server Identity", "1,1");
+
+                    b.HasIndex("LocationID");
+
+                    b.ToTable("InventoryItems", "Inventory");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            Description = "Standard HVAC air filter, 20x25x2 inches.",
+                            IsActive = true,
+                            ItemName = "Air Filter",
+                            LocationID = 1,
+                            PartNumber = "AF-1001",
+                            Quintity = (short)47,
+                            ReorderLevel = (short)10,
+                            UnitCost = 12.50m
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Description = "High-pressure hydraulic hose, 2-meter length.",
+                            IsActive = true,
+                            ItemName = "Hydraulic Hose",
+                            LocationID = 2,
+                            PartNumber = "HH-2045",
+                            Quintity = (short)18,
+                            ReorderLevel = (short)5,
+                            UnitCost = 45.75m
+                        },
+                        new
+                        {
+                            ID = 3,
+                            Description = "Synthetic lubricant oil, 5-liter container.",
+                            IsActive = true,
+                            ItemName = "Lubricant Oil",
+                            LocationID = 1,
+                            PartNumber = "LO-3020",
+                            Quintity = (short)15,
+                            ReorderLevel = (short)5,
+                            UnitCost = 38.90m
+                        },
+                        new
+                        {
+                            ID = 4,
+                            Description = "Industrial safety valve, 2-inch diameter.",
+                            IsActive = false,
+                            ItemName = "Safety Valve",
+                            LocationID = 3,
+                            PartNumber = "SV-1550",
+                            Quintity = (short)0,
+                            ReorderLevel = (short)3,
+                            UnitCost = 120.00m
+                        },
+                        new
+                        {
+                            ID = 5,
+                            Description = "Replacement motor for conveyor belt system.",
+                            IsActive = true,
+                            ItemName = "Conveyor Belt Motor",
+                            LocationID = 2,
+                            PartNumber = "CBM-450",
+                            Quintity = (short)1,
+                            ReorderLevel = (short)1,
+                            UnitCost = 350.00m
+                        },
+                        new
+                        {
+                            ID = 6,
+                            Description = "Digital pressure sensor, 0–10 bar range.",
+                            IsActive = false,
+                            ItemName = "Pressure Sensor",
+                            LocationID = 3,
+                            PartNumber = "PS-8812",
+                            Quintity = (short)0,
+                            ReorderLevel = (short)4,
+                            UnitCost = 78.40m
+                        });
+                });
+
+            modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.WorkOrderManagement.InventoryTransaction", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("InventoryItemID")
+                        .HasColumnType("int");
+
+                    b.Property<short>("Quntity")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Reference")
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID")
+                        .HasAnnotation("Sql Server Identity", "1,1");
+
+                    b.HasIndex("InventoryItemID");
+
+                    b.ToTable("InventoryTransactions", "Inventory");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            InventoryItemID = 1,
+                            Quntity = (short)100,
+                            TransactionDate = new DateTime(2025, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Type = "In"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            InventoryItemID = 1,
+                            Quntity = (short)20,
+                            Reference = "WO-0001",
+                            TransactionDate = new DateTime(2025, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Type = "Out"
+                        },
+                        new
+                        {
+                            ID = 3,
+                            InventoryItemID = 2,
+                            Quntity = (short)10,
+                            TransactionDate = new DateTime(2025, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Type = "In"
+                        },
+                        new
+                        {
+                            ID = 4,
+                            InventoryItemID = 2,
+                            Quntity = (short)3,
+                            TransactionDate = new DateTime(2025, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Type = "Out"
+                        },
+                        new
+                        {
+                            ID = 5,
+                            InventoryItemID = 3,
+                            Quntity = (short)2,
+                            TransactionDate = new DateTime(2025, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Type = "Out"
+                        });
+                });
+
+            modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.WorkOrderManagement.WorkOrder", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("AssetID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AssignedToID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CompeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedByID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkOrderNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("ID")
+                        .HasAnnotation("Sql server Identity", "1,1");
+
+                    b.HasIndex("AssetID");
+
+                    b.ToTable("WorkOrders", "maintain");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            AssetID = 3,
+                            AssignedToID = 1,
+                            CreatedByID = 22,
+                            CreatedDate = new DateTime(2025, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Replace air filter in HVAC unit.",
+                            DueDate = new DateTime(2025, 10, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Note = "Check stock for spare filters before starting.",
+                            StartDate = new DateTime(2025, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = "Open",
+                            WorkOrderNumber = "WO-0001"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            AssetID = 2,
+                            AssignedToID = 1,
+                            CompeletedDate = new DateTime(2025, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedByID = 5,
+                            CreatedDate = new DateTime(2025, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Inspect safety valves on boiler system.",
+                            DueDate = new DateTime(2025, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Note = "All valves passed inspection.",
+                            StartDate = new DateTime(2025, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = "Completed",
+                            WorkOrderNumber = "WO-0002"
+                        });
+                });
+
+            modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.WorkOrderManagement.WorkOrderHistory", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ActionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PerformedActionByID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WO_ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID")
+                        .HasAnnotation("Sql server Identity", "1,1");
+
+                    b.HasIndex("WO_ID");
+
+                    b.ToTable("WorkOrderHisties", "maintain");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            Action = "Created",
+                            ActionDate = new DateTime(2025, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PerformedActionByID = 22,
+                            WO_ID = 1
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Action = "Assgined",
+                            ActionDate = new DateTime(2025, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PerformedActionByID = 22,
+                            WO_ID = 1
+                        },
+                        new
+                        {
+                            ID = 3,
+                            Action = "Created",
+                            ActionDate = new DateTime(2025, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PerformedActionByID = 5,
+                            WO_ID = 2
+                        },
+                        new
+                        {
+                            ID = 4,
+                            Action = "Completed",
+                            ActionDate = new DateTime(2025, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PerformedActionByID = 1,
+                            WO_ID = 2
+                        });
+                });
+
+            modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.WorkOrderManagement.WorkOrderPart", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("PartItemID")
+                        .HasColumnType("int");
+
+                    b.Property<short>("QuantityUsed")
+                        .HasColumnType("smallint");
+
+                    b.Property<int>("WO_ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID")
+                        .HasAnnotation("Sql server Identity", "1,1");
+
+                    b.HasIndex("PartItemID");
+
+                    b.HasIndex("WO_ID");
+
+                    b.ToTable("WorkOrderParts", "maintain");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            PartItemID = 2,
+                            QuantityUsed = (short)2,
+                            WO_ID = 1
+                        },
+                        new
+                        {
+                            ID = 2,
+                            PartItemID = 5,
+                            QuantityUsed = (short)1,
+                            WO_ID = 1
+                        },
+                        new
+                        {
+                            ID = 3,
+                            PartItemID = 1,
+                            QuantityUsed = (short)3,
+                            WO_ID = 2
+                        });
+                });
+
             modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.AssetsManagment.Asset", b =>
                 {
                     b.HasOne("computrized_maintenance_Data_Access.Entites.AssetsManagment.Category", "Category")
@@ -484,9 +879,74 @@ namespace computrized_maintenance_Data_Access.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.InventoryManagement.InventoryItem", b =>
+                {
+                    b.HasOne("computrized_maintenance_Data_Access.Entites.AssetsManagment.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.WorkOrderManagement.InventoryTransaction", b =>
+                {
+                    b.HasOne("computrized_maintenance_Data_Access.Entites.InventoryManagement.InventoryItem", "InventoryItem")
+                        .WithMany("Transactions")
+                        .HasForeignKey("InventoryItemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InventoryItem");
+                });
+
+            modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.WorkOrderManagement.WorkOrder", b =>
+                {
+                    b.HasOne("computrized_maintenance_Data_Access.Entites.AssetsManagment.Asset", "Asset")
+                        .WithMany("WorkOrders")
+                        .HasForeignKey("AssetID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.WorkOrderManagement.WorkOrderHistory", b =>
+                {
+                    b.HasOne("computrized_maintenance_Data_Access.Entites.WorkOrderManagement.WorkOrder", "WorkOrder")
+                        .WithMany("Histories")
+                        .HasForeignKey("WO_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WorkOrder");
+                });
+
+            modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.WorkOrderManagement.WorkOrderPart", b =>
+                {
+                    b.HasOne("computrized_maintenance_Data_Access.Entites.InventoryManagement.InventoryItem", "InventoryItem")
+                        .WithMany("WorkOrderParts")
+                        .HasForeignKey("PartItemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("computrized_maintenance_Data_Access.Entites.WorkOrderManagement.WorkOrder", "WorkOrder")
+                        .WithMany("UsedParts")
+                        .HasForeignKey("WO_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InventoryItem");
+
+                    b.Navigation("WorkOrder");
+                });
+
             modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.AssetsManagment.Asset", b =>
                 {
                     b.Navigation("AssetImages");
+
+                    b.Navigation("WorkOrders");
                 });
 
             modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.AssetsManagment.Category", b =>
@@ -501,6 +961,20 @@ namespace computrized_maintenance_Data_Access.Migrations
                 {
                     b.Navigation("Asset")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.InventoryManagement.InventoryItem", b =>
+                {
+                    b.Navigation("Transactions");
+
+                    b.Navigation("WorkOrderParts");
+                });
+
+            modelBuilder.Entity("computrized_maintenance_Data_Access.Entites.WorkOrderManagement.WorkOrder", b =>
+                {
+                    b.Navigation("Histories");
+
+                    b.Navigation("UsedParts");
                 });
 #pragma warning restore 612, 618
         }

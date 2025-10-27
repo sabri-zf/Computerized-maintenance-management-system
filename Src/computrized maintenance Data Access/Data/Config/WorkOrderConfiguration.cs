@@ -1,4 +1,6 @@
-﻿using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
+﻿using computrized_maintenance_Data_Access.Data.Seed;
+using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
+using computrized_maintenance_Data_Access.Enumes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -39,7 +41,6 @@ namespace computrized_maintenance_Data_Access.Data.Config
 
             builder.Property(x => x.CreatedDate)
                 .HasColumnType("datetime2")
-                .HasDefaultValue(DateTime.Now)
                 .IsRequired();
 
             builder.Property(x => x.StartDate)
@@ -57,11 +58,12 @@ namespace computrized_maintenance_Data_Access.Data.Config
             builder.Property(x => x.Note)
                    .IsRequired(false);
 
-            // Don't forget to configure this action to be convinent with The requirement 
-
             builder.Property(x => x.Status)
-                //.HasConversion()
-                .IsRequired();
+                   .HasConversion(
+                        s => s.ToString(),
+                        v => (workOrderStatus)Enum.Parse(typeof(workOrderStatus), v)
+                                 )
+                   .IsRequired();
 
 
             // here we make relationchip with workeordes and asset (1(A)-M(Wo))
@@ -84,7 +86,7 @@ namespace computrized_maintenance_Data_Access.Data.Config
 
 
 
-            builder.HasData();
+            builder.HasData(SeeData.WorkOrders);
         }
 
 

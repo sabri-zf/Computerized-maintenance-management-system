@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CMMS_Api.Controllers.AssetsManagementController
 {
     [ApiController]
-    [Route("/Api/V1/asset")]
+    [Route("Api/V1/asset")]
     public class AssetController:Controller
     {
 
