@@ -8,15 +8,15 @@ namespace CMMS_Api.Controllers.AssetsManagementController
 
     [ApiController]
     [Route("Api/V1/asset-image")]
-    public class AssetImageController:Controller
+    public class AssetImageController(ClsAssetImage Instance) :Controller
     {
-        [HttpGet("get-images")]
+        [HttpGet("get-asset-images",Name ="asset-images")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<AssetImage>> GetAll()
+        public async Task<ActionResult> GetAllImagesAsync()
         {
-            var List_Image = await ClsAssetImage.Instance!.GetAllImages();
+            var List_Image = await Instance.GetAllAssetImage();
 
             if (List_Image is null)
             {
@@ -26,49 +26,48 @@ namespace CMMS_Api.Controllers.AssetsManagementController
             return Ok(List_Image);
         }
 
-        [HttpPost("add-assetimage")]
+
+        [HttpGet("get-asset-image/{Id:int}",Name ="get-asset-image-byid")]
+        public async Task<ActionResult> GetByIDAssetImageAsync(int Id)
+        {
+            if(Id< 1) return BadRequest("Invalid operation");
+
+            var ResopnseEntity = await Instance.FindAsync(Id);
+
+            return ResopnseEntity is AssetImageResponseDto
+                                  ? Ok(ResopnseEntity)
+                                  : StatusCode(500,"An error on system");
+        }
+
+        [HttpPost("add-asset-image",Name ="make-asset-image")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult> AddAssetImage(AssetImageResponseDto responseDto)
+        public async Task<ActionResult> AddAssetImageAsync(AssetImageResponseDto responseDto)
         {
             if (responseDto == null) return BadRequest("Invalid Operation");
 
-            var insertImage = ClsAssetImage.Instance;
+            var insertImage = await Instance.AddNewImageAsync(responseDto);
 
-            if (insertImage is null) return StatusCode(500, "Error Ouccrred on System");
-
-            insertImage.ImagePath = responseDto.ImagePath;
-            insertImage.ImageWidth = responseDto.Imagewidth;
-            insertImage.ImageHeight = responseDto.ImageHight;
-            insertImage.AssetID = responseDto.AssetID;
-
-            return await insertImage.AddNewImageAsync() ? Created("get-assetimage/{id}", insertImage)
-                                                        : StatusCode(500, "Error Ouccrred on System"); ;
+            return insertImage ? Created("get-assetimage/{id}", insertImage)
+                               : StatusCode(500, "Error Ouccrred on System"); ;
         }
 
-        [HttpPut("edit-assetimage/{id:int}",Name ="edit-image")]
+        [HttpPut("edit-asset-image",Name ="update-asset-image")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult> EditAssetImag(AssetImageRequestDto requestDto)
+        public async Task<ActionResult> EditAssetImagAsync(AssetImageRequestDto requestDto)
         {
+            if (requestDto is not AssetImageRequestDto || requestDto.ID < 1) return BadRequest("Invalid Operation");
 
-            if (requestDto == null || requestDto.ID < 1) return BadRequest("Invalid Operation");
+            var IsItupdated = await Instance.UpdateImageAsync(requestDto);
 
-            var Asset_Image = await ClsAssetImage.Instance.FindAsync(requestDto.ID);
-
-            if (Asset_Image is null) return NotFound("not found data");
-
-            Asset_Image.ImagePath = requestDto.ImagePath;
-            Asset_Image.ImageWidth = requestDto.Imagewidth;
-            Asset_Image.ImageHeight = requestDto.ImageHight;
-
-
-            return Ok(new {imagePath = Asset_Image.ImagePath,Asset_Image.ImageWidth , Asset_Image.ImageHeight, status = "image has been update it"});
+            return IsItupdated ? Ok("Asset image has been update it")
+                               : StatusCode(500, "An error occurred on system");
         }
 
-        [HttpDelete("delete-assetImage/{id:int}",Name ="delete-image")]
+        [HttpDelete("delete-asset-image/{id:int}",Name ="delete-asset-image")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -76,13 +75,10 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         {
             if (id < 1) return BadRequest("invalid operation");
 
-            var Is_deleted = await ClsAssetImage.DeleteImageAsync(id);
+            var Is_deleted = await Instance.DeleteImageAsync(id);
 
-
-            if (Is_deleted) return StatusCode(500, "Erorr occurred on system");
-
-
-            return Ok("Image Asset Has been Deleted");
+            return Is_deleted ? Ok("Image Asset Has been Deleted")
+                              : StatusCode(500, "Erorr occurred on system");
         }
     }
 }

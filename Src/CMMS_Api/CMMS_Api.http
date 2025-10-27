@@ -1,6 +1,4 @@
 @CMMS_Api_HostAddress = http://localhost:5189
 
-GET {{CMMS_Api_HostAddress}}/weatherforecast/
+GET {{CMMS_Api_HostAddress}}/Api/V1/asset-image/get-asset-images
 Accept: application/json
-
-###
