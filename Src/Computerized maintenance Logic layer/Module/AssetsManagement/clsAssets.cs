@@ -1,100 +1,48 @@
-﻿using Computerized_maintenance_Logic_layer.Module.DTO;
+﻿using CMMS_Api.DTO;
 using computrized_maintenance_Data_Access.Data;
 using computrized_maintenance_Data_Access.Entites.AssetsManagment;
-using computrized_maintenance_Data_Access.Enumes;
-using computrized_maintenance_Data_Access.Misc;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
 {
-    public class clsAssets
+    public sealed class clsAssets(AppDbContext _Context)
     {
 
-        private  static AppDbContext? _Context;
-        private readonly static clsAssets _Instance = new();
-
-        public static clsAssets Instance
-        {
-            get 
-            {
-                _Context = ClsUtility.ImplementDbContextService();
-                return _Instance; 
-            }
-        }
-        public int ID { get; set; }
-        public string AssetName { get; set; } = null!;
-        public string AssetTagNumber { get; set; } = null!;
-        public string ManufactuerName { get; set; } = null!;
-        public string ManufactuerModelNumber { get; set; } = null!;
-        public DateTime PurchaseDate { get; set; } 
-        public decimal PurchaseCost { get; set; }
-        public DateTime WarrantyExpiryDate { get; set; } 
-        public DateTime? InstallationDate { get; set; }
-        public int AssetCategoryID { get; set; }
-        public int AssetLocationID { get; set; }
-        public Asset_Status_Type AssetStatus { get; set; }
-        public MeterReading MeterReading { get; set; }
-        public Criticality_Rating Criticality { get; set; }
-        public DateTime CreateAssetDate { get; set; }
-        public DateTime? UpdateAssetDate { get; set; }
-        public int CreateByUser { get; set; }
-
-        //public clsAssets(AppDbContext dbContext)
-        //{
-        //    = dbContext;
-        //}
-
-        private clsAssets()
-        {
-            
-        }
-
-        private clsAssets(int id, string assetName, string assetTagNumber, string manufactuerName,
-            string manufactuerModelNumber, DateTime purchaseDate, decimal purchaseCost,
-            DateTime warrantyExpiryDate, DateTime? installationDate, int assetCategoryID, 
-            int assetLocationID,Asset_Status_Type assetStatus, MeterReading meterReading,
-            Criticality_Rating criticality, DateTime createAssetDate, 
-            DateTime? updateAssetDate, int createByUser)
-        {
-            this.ID = id;
-            this.AssetName = assetName;
-            this.AssetTagNumber = assetTagNumber;
-            this.ManufactuerName = manufactuerName;
-            this.ManufactuerModelNumber = manufactuerModelNumber;
-            this.PurchaseDate = purchaseDate;
-            this.PurchaseCost = purchaseCost;
-            this.WarrantyExpiryDate = warrantyExpiryDate;
-            this.InstallationDate = installationDate;
-            this.AssetCategoryID = assetCategoryID;
-            this.AssetLocationID = assetLocationID;
-            this.AssetStatus = assetStatus;
-            this.MeterReading = meterReading;
-            this.Criticality = criticality;
-            this.CreateAssetDate = createAssetDate;
-            this.UpdateAssetDate = updateAssetDate;
-            this.CreateByUser = createByUser;
-        }
-
         /// <summary>
-        /// Asynchronous Entity Asset From Data source 
+        ///  Retrieve Object's Assets from Data store as <see cref="AssetResponseDto"/>"/>
         /// </summary>
-        /// <returns> Return object , otherwise null</returns>
-        public async Task<clsAssets?> FindAsync(int ID)
+        /// <param name="ID">Unique identifier of Asset</param>
+        /// <returns><see cref="AssetResponseDto"/> if Data is found, otherwise <see langword="null"/></returns>
+        public async Task<AssetResponseDto?> FindAsync(int ID)
         {
             var Assets = await _Context.Assets
                                        .AsNoTracking()
-                                       .SingleOrDefaultAsync(x => x.ID == ID);
+                                       .Where(x => x.ID == ID)
+                                       .Select(
+                                        x => new AssetResponseDto
+                                        (
+                                            x.AssetName,
+                                            x.AssetTagNumber,
+                                            x.ManufactuerName,
+                                            x.ManufactuerModelNumber,
+                                            x.PurchaseDate,
+                                            x.PurchaseCost,
+                                            x.WarrantyExpiryDate,
+                                            x.InstallationDate,
+                                            x.AssetCategoryID,
+                                            x.AssetLocationID,
+                                            x.AssetStatus,
+                                            x.MeterReading,
+                                            x.Criticality,
+                                            x.CreateAssetDate,
+                                            x.UpdateAssetDate,
+                                            x.CreateByUser
+                                        )
+                                       )
+                                       .SingleOrDefaultAsync();
 
-            if(Assets is Asset)
-            {
-                return new clsAssets(Assets.ID, Assets.AssetName, Assets.AssetTagNumber, Assets.ManufactuerName
-                    , Assets.ManufactuerModelNumber, Assets.PurchaseDate, Assets.PurchaseCost, Assets.WarrantyExpiryDate,
-                    Assets.InstallationDate, Assets.AssetCategoryID, Assets.AssetLocationID, Assets.AssetStatus, Assets.MeterReading,
-                    Assets.Criticality, Assets.CreateAssetDate, Assets.UpdateAssetDate, Assets.CreateByUser);
-            }
 
-            return null;
+            return Assets;
         }
 
 
@@ -102,192 +50,133 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         /// Retrieve Object's Assets from Data store 
         /// </summary>
         /// <param name="Name"> name of Asset you looking for </param>
-        /// <returns>object <see cref="clsAssets"/> or null</returns>
-        public  async Task<Assetdto?> FindByAssetNameAsync(string Name)
+        /// <returns>object <see cref="AssetResponseDto"/>,otherwise <see langword="null"/></returns>
+        public async Task<AssetResponseDto?> FindByAssetNameAsync(string Name)
         {
-            if(string.IsNullOrEmpty(Name)) return null;
+            if (string.IsNullOrEmpty(Name)) return null;
 
             var Asset = await _Context.Assets
                                       .AsNoTracking()
                                       .Where(x => x.AssetName == Name)
-                                      .Select(x => new Assetdto
+                                      .Select(x => new AssetResponseDto
                                       (
-                                         x.AssetName,
-                                         x.AssetTagNumber,
-                                         x.ManufactuerName,
-                                         x.ManufactuerModelNumber,
-                                         x.PurchaseDate,
-                                         x.PurchaseCost,
-                                         x.WarrantyExpiryDate,
-                                         x.InstallationDate,
-                                         x.CreateAssetDate,
-                                         x.CreateByUser
+                                            x.AssetName,
+                                            x.AssetTagNumber,
+                                            x.ManufactuerName,
+                                            x.ManufactuerModelNumber,
+                                            x.PurchaseDate,
+                                            x.PurchaseCost,
+                                            x.WarrantyExpiryDate,
+                                            x.InstallationDate,
+                                            x.AssetCategoryID,
+                                            x.AssetLocationID,
+                                            x.AssetStatus,
+                                            x.MeterReading,
+                                            x.Criticality,
+                                            x.CreateAssetDate,
+                                            x.UpdateAssetDate,
+                                            x.CreateByUser
                                       )
                                       ).FirstOrDefaultAsync();
-
-                                      
 
             return Asset;
         }
 
-        /// <summary>
-        ///  Find Entity Asset From Data source 
-        /// </summary>
-        /// <returns> Return object , otherwise null</returns>
-        public clsAssets? Find(int ID)
-        {
-            var Assets =  _Context.Assets.AsNoTracking().FirstOrDefault(x => x.ID == ID);
-
-            if (Assets is Asset)
-            {
-                return new clsAssets(Assets.ID, Assets.AssetName, Assets.AssetTagNumber, Assets.ManufactuerName
-                    , Assets.ManufactuerModelNumber, Assets.PurchaseDate, Assets.PurchaseCost, Assets.WarrantyExpiryDate,
-                    Assets.InstallationDate, Assets.AssetCategoryID, Assets.AssetLocationID, Assets.AssetStatus, Assets.MeterReading,
-                    Assets.Criticality, Assets.CreateAssetDate, Assets.UpdateAssetDate, Assets.CreateByUser);
-            }
-
-            return null;
-        }
 
         /// <summary>
-        ///  Adding New Entity Asset On Data source
+        /// Add new <see cref="Asset"/> entity and save it on dataset
         /// </summary>
-        /// <returns "name= bool"> Return True if Add Entity was successful, otherwise False </returns>
-        public  bool AddNewAsset()
+        /// <param name="responseDto">Data transfer Object <see cref="AssetImageResponseDto"/> dealing with Response data</param>
+        /// <returns ><see langword="true"/> if Add Entity was successful, otherwise <see langword="false"/> </returns>
+        public async Task<bool> AddNewAssetAsync(AssetResponseDto responseDto)
         {
-            Asset asset = new()
+            if(!_checkOutValidatationOfinputData(responseDto)) return false;
+
+            var AssetEntity = new Asset()
             {
-                ID = this.ID,
-                AssetName = this.AssetName,
-                AssetTagNumber = this.AssetTagNumber,
-                ManufactuerName = this.ManufactuerName,
-                ManufactuerModelNumber = this.ManufactuerModelNumber,
-                PurchaseDate = this.PurchaseDate,
-                PurchaseCost = this.PurchaseCost,
-                WarrantyExpiryDate = this.WarrantyExpiryDate,
-                InstallationDate = this.InstallationDate,
-                AssetCategoryID = this.AssetCategoryID,
-                AssetLocationID = this.AssetLocationID,
-                AssetStatus = this.AssetStatus,
-                MeterReading = this.MeterReading,
-                Criticality = this.Criticality,
-                CreateAssetDate = this.CreateAssetDate,
-                CreateByUser = this.CreateByUser
+                AssetName = responseDto.AssetName,
+                AssetTagNumber = responseDto.AssetTagNumber,
+                ManufactuerName= responseDto.ManufactuerName,
+                ManufactuerModelNumber= responseDto.ManufactuerModelNumber,
+                PurchaseDate= responseDto.PurchaseDate,
+                PurchaseCost= responseDto.PurchaseCost,
+                WarrantyExpiryDate = responseDto.WarrantyExpiryDate,
+                InstallationDate= responseDto.InstallationDate,
+                AssetCategoryID = responseDto.AssetCategoryID,
+                AssetLocationID = responseDto.AssetLocationID,
+                AssetStatus= responseDto.AssetStatus,
+                MeterReading= responseDto.MeterReading,
+                Criticality= responseDto.Criticality,
+                CreateAssetDate = responseDto.CreateAssetDate,
+                UpdateAssetDate = responseDto.UpdateAssetDate,
+                CreateByUser = responseDto.CreateByUser
             };
 
-             _Context.Assets.Add(asset);
-
-            return  _Context.SaveChanges() > 0;
-        }
-
-        /// <summary>
-        /// Asynchronous Adding New Entity Asset On Data source
-        /// </summary>
-        /// <returns "name= bool"> Return True if Add Entity was successful, otherwise False </returns>
-        public async Task<bool> AddNewAssetAsync()
-        {
-            Asset asset = new()
-            {
-                ID = this.ID,
-                AssetName = this.AssetName,
-                AssetTagNumber = this.AssetTagNumber,
-                ManufactuerName = this.ManufactuerName,
-                ManufactuerModelNumber = this.ManufactuerModelNumber,
-                PurchaseDate = this.PurchaseDate,
-                PurchaseCost = this.PurchaseCost,
-                WarrantyExpiryDate = this.WarrantyExpiryDate,
-                InstallationDate = this.InstallationDate,
-                AssetCategoryID = this.AssetCategoryID,
-                AssetLocationID = this.AssetLocationID,
-                AssetStatus = this.AssetStatus,
-                MeterReading = this.MeterReading,
-                Criticality = this.Criticality,
-                CreateAssetDate = this.CreateAssetDate,
-                CreateByUser = this.CreateByUser
-            };
-
-           await _Context.Assets.AddAsync(asset);
+            await _Context.Assets.AddAsync(AssetEntity);
 
             return await _Context.SaveChangesAsync() > 0;
         }
 
         /// <summary>
-        /// Update Entity Asset On Data source
+        /// Add new <see cref="Asset"/> entity and save it on dataset
         /// </summary>
-        /// <returns "name= bool"> Return True if Update successful, otherwise False </returns>
-        public bool UpdateAsset()
+        /// <param name="requestDto">Data transfer Object <see cref="AssetImageResponseDto"/> dealing with Response data</param>
+        /// <returns ><see langword="true"/> if Add Entity was successful, otherwise <see langword="false"/> </returns>
+        public async Task<bool> UpdateAssetAsync(AssetRequestDto requestDto)
         {
-            return  _Context.Assets.Where(x => x.ID == this.ID)
-               .ExecuteUpdate(A => A
 
-               .SetProperty(p => p.AssetName, this.AssetName)
-               .SetProperty(p => p.AssetTagNumber, this.AssetTagNumber)
-               .SetProperty(p => p.ManufactuerName, this.ManufactuerName)
-               .SetProperty(p => p.ManufactuerModelNumber, this.ManufactuerModelNumber)
-               .SetProperty(p => p.PurchaseDate, this.PurchaseDate)
-               .SetProperty(p => p.PurchaseCost, this.PurchaseCost)
-               .SetProperty(p => p.WarrantyExpiryDate, this.WarrantyExpiryDate)
-               .SetProperty(p => p.InstallationDate, this.InstallationDate)
-               .SetProperty(p => p.AssetCategoryID, this.AssetCategoryID)
-               .SetProperty(p => p.AssetLocationID, this.AssetLocationID)
-               .SetProperty(p => p.AssetStatus, this.AssetStatus)
-               .SetProperty(p => p.MeterReading, this.MeterReading)
-               .SetProperty(p => p.Criticality, this.Criticality)
-               .SetProperty(p => p.CreateAssetDate, this.CreateAssetDate)
-               .SetProperty(p => p.CreateByUser, this.CreateByUser)
-
-           ) > 0;
-        }
-
-        /// <summary>
-        /// Asynchronous Update Entity Asset On Data source
-        /// </summary>
-        /// <returns "name= bool"> Return True if Update successful, otherwise False </returns>
-        public async Task<bool> UpdateAssetAsync()
-        {
-           
             /*
              * High performence to Update entity Without unnecessary Tracking
              */
 
-            return await _Context.Assets
-                                 .Where(x => x.ID == this.ID)
-                                 .ExecuteUpdateAsync(A => A
+            var ResponseDto = new AssetResponseDto (
+                                            requestDto.AssetName,
+                                            requestDto.AssetTagNumber,
+                                            requestDto.ManufactuerName,
+                                            requestDto.ManufactuerModelNumber,
+                                            requestDto.PurchaseDate,
+                                            requestDto.PurchaseCost,
+                                            requestDto.WarrantyExpiryDate,
+                                            requestDto.InstallationDate,
+                                            requestDto.AssetCategoryID,
+                                            requestDto.AssetLocationID,
+                                            requestDto.AssetStatus,
+                                            requestDto.MeterReading,
+                                            requestDto.Criticality,
+                                            requestDto.CreateAssetDate,
+                                            requestDto.UpdateAssetDate,
+                                            requestDto.CreateByUser
+                                      );
+            if (!_checkOutValidatationOfinputData(ResponseDto,true,requestDto.ID)) return false;
 
-                                 .SetProperty(p => p.AssetName, this.AssetName)
-                                 .SetProperty(p => p.AssetTagNumber, this.AssetTagNumber)
-                                 .SetProperty(p => p.ManufactuerName, this.ManufactuerName)
-                                 .SetProperty(p => p.ManufactuerModelNumber, this.ManufactuerModelNumber)
-                                 .SetProperty(p => p.PurchaseDate, this.PurchaseDate)
-                                 .SetProperty(p => p.PurchaseCost, this.PurchaseCost)
-                                 .SetProperty(p => p.WarrantyExpiryDate, this.WarrantyExpiryDate)
-                                 .SetProperty(p => p.InstallationDate, this.InstallationDate)
-                                 .SetProperty(p => p.AssetCategoryID, this.AssetCategoryID)
-                                 .SetProperty(p => p.AssetLocationID, this.AssetLocationID)
-                                 .SetProperty(p => p.AssetStatus, this.AssetStatus)
-                                 .SetProperty(p => p.MeterReading, this.MeterReading)
-                                 .SetProperty(p => p.Criticality, this.Criticality)
-                                 .SetProperty(p => p.CreateAssetDate, this.CreateAssetDate)
-                                 .SetProperty(p => p.CreateByUser, this.CreateByUser)
+            return await _Context.Assets
+                                 .Where(x => x.ID == requestDto.ID)
+                                 .ExecuteUpdateAsync(A => A
+                                 .SetProperty(p => p.AssetName, requestDto.AssetName)
+                                 .SetProperty(p => p.AssetTagNumber, requestDto.AssetTagNumber)
+                                 .SetProperty(p => p.ManufactuerName, requestDto.ManufactuerName)
+                                 .SetProperty(p => p.ManufactuerModelNumber, requestDto.ManufactuerModelNumber)
+                                 .SetProperty(p => p.PurchaseDate, requestDto.PurchaseDate)
+                                 .SetProperty(p => p.PurchaseCost, requestDto.PurchaseCost)
+                                 .SetProperty(p => p.WarrantyExpiryDate, requestDto.WarrantyExpiryDate)
+                                 .SetProperty(p => p.InstallationDate, requestDto.InstallationDate)
+                                 .SetProperty(p => p.AssetCategoryID, requestDto.AssetCategoryID)
+                                 .SetProperty(p => p.AssetLocationID, requestDto.AssetLocationID)
+                                 .SetProperty(p => p.AssetStatus, requestDto.AssetStatus)
+                                 .SetProperty(p => p.MeterReading, requestDto.MeterReading)
+                                 .SetProperty(p => p.Criticality, requestDto.Criticality)
+                                 .SetProperty(p => p.CreateAssetDate, requestDto.CreateAssetDate)
+                                 .SetProperty(p => p.CreateByUser, requestDto.CreateByUser)
                                  ) > 0;
 
         }
 
+       
         /// <summary>
-        /// Delete Asset On Data source
+        ///  Delete <see cref="Asset"/> into dataset
         /// </summary>
-        /// <returns "name= bool"> Return True if Delete successful, otherwise False </returns>
-        public bool DeleteAsset()
-        {
-            return _Context.Assets
-                .Where(x => x.ID == this.ID)
-                .ExecuteDelete() > 0;
-        }
-
-        /// <summary>
-        /// Asynchronous Deleting Asset On Data source
-        /// </summary>
-        /// <returns "name= bool"> Return True if Delete successful, otherwise False </returns>
+        /// <param name="ID">Unique identifier of <see cref="Asset"/></param>
+        /// <returns> <see langword="true"/> if Delete was successful, otherwise <see langword="false"/></returns>
         public async static Task<bool> DeleteAssetAsync(int ID)
         {
             return await _Context.Assets
@@ -296,22 +185,63 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         }
 
         /// <summary>
-        /// Get each Assets on Data source,
+        /// Retrieve whole <see cref="Asset"/> Entity, from Dataset
         /// </summary>
-        /// <returns>Return :Iquerable Asset Dbset </returns>
-        public async Task<IEnumerable<Asset>> GetAllAssets()
+        /// <returns> <see cref="IEnumerable{AssetResponseDto}"/>,otherwise <see langword="null"/> </returns>
+        public async Task<IEnumerable<AssetResponseDto>?> GetAllAssetsAsync()
         {
-            return await _Context.Assets
+            var List = await _Context.Assets
                            .AsNoTracking()
+                           .Select(x => new AssetResponseDto
+                                      (
+                                            x.AssetName,
+                                            x.AssetTagNumber,
+                                            x.ManufactuerName,
+                                            x.ManufactuerModelNumber,
+                                            x.PurchaseDate,
+                                            x.PurchaseCost,
+                                            x.WarrantyExpiryDate,
+                                            x.InstallationDate,
+                                            x.AssetCategoryID,
+                                            x.AssetLocationID,
+                                            x.AssetStatus,
+                                            x.MeterReading,
+                                            x.Criticality,
+                                            x.CreateAssetDate,
+                                            x.UpdateAssetDate,
+                                            x.CreateByUser
+                                      )
+                                   )
                            .ToListAsync();
+
+            if (List.Count <= 0) return null;
+
+            return List.AsEnumerable();
         }
 
-
-        ~clsAssets()
+        /// <summary>
+        /// scan if the input data is valid to use it or not
+        /// </summary>
+        /// <param name="responseDto">Data transfer Object <see cref="AssetImageResponseDto"/> dealing with Response data</param>
+        /// <param name="IsRequerd">check if the states is OnRequset or not</param>
+        /// <param name="ID">Unique identifier of <see cref="Asset"/></param>
+        /// <returns><see langword="true"/> if data is valid,otherwise <see langword="false"/> </returns>
+        private bool _checkOutValidatationOfinputData(AssetResponseDto responseDto, bool IsRequerd = false, int ID = 0)
         {
-            if( _Context != null )
-             _Context.DisposeAsync();
-        }
+            if (IsRequerd)
+            {
+                if (ID < 1) return false;
+            }
+            if (string.IsNullOrEmpty(responseDto.AssetName)) return false;
+            if (string.IsNullOrEmpty(responseDto.AssetTagNumber)) return false;
+            if (string.IsNullOrEmpty(responseDto.ManufactuerName)) return false;
+            if (string.IsNullOrEmpty(responseDto.ManufactuerModelNumber)) return false;
+            if (responseDto.PurchaseCost < 0) return false;
+            if (responseDto.AssetCategoryID < 1) return false;
+            if (responseDto.AssetLocationID < 1) return false;
+            if (responseDto.CreateByUser < 1) return false;
 
+            return true;
+        }
     }
 }

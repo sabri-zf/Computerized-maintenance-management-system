@@ -67,7 +67,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult> postAsset(AssetDtoResponse ResponseDto)
+        public async Task<ActionResult> postAsset(AssetResponseDto ResponseDto)
         {
 
             if (ResponseDto is null) return BadRequest("invalid input");
@@ -107,7 +107,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> editAsset(AssetDroRequest requestDto)
+        public async Task<IActionResult> editAsset(AssetRequestDto requestDto)
         {
             if (requestDto is null || requestDto.ID < 1) return BadRequest("Invalid Operation");
 

@@ -64,7 +64,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         public async Task<bool> AddNewImageAsync(AssetImageResponseDto responseDto)
         {
 
-            if(!checkOutValidatationOfinputData(responseDto)) return false;
+            if(!_checkOutValidatationOfinputData(responseDto)) return false;
 
 
             AssetImage image = new()
@@ -89,7 +89,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         {
             var Dto = new AssetImageResponseDto(requestDto.ImagePath, requestDto.Imagewidth, requestDto.ImageHight, requestDto.AssetID);
 
-            if (!checkOutValidatationOfinputData(Dto, true, requestDto.ID)) return false;
+            if (!_checkOutValidatationOfinputData(Dto, true, requestDto.ID)) return false;
 
             return await _Context.Set<AssetImage>()
                                  .Where(x => x.ID == requestDto.ID)
@@ -123,7 +123,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         /// <param name="IsRequerd">Check if OnRequset state</param>
         /// <param name="ID">Unique identifier of <see cref="AssetImage"/> entity</param>
         /// <returns><see langword="true"/> if data is valid,otherwise <see langword="false"/></returns>
-        private bool checkOutValidatationOfinputData(AssetImageResponseDto responseDto,bool IsRequerd =false ,int ID = 0)
+        private bool _checkOutValidatationOfinputData(AssetImageResponseDto responseDto,bool IsRequerd =false ,int ID = 0)
         {
             if(IsRequerd)
             {
