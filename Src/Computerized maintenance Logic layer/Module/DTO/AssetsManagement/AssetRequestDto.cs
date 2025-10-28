@@ -2,14 +2,15 @@
 
 namespace CMMS_Api.DTO
 {
-    public record AssetDtoResponse
-    (
-     string AssetName ,
-     string AssetTagNumber ,
+    public sealed record AssetRequestDto
+     (
+     int ID,
+     string AssetName,
+     string AssetTagNumber,
      string ManufactuerName,
      string ManufactuerModelNumber,
      DateTime PurchaseDate,
-     decimal PurchaseCost ,
+     decimal PurchaseCost,
      DateTime WarrantyExpiryDate,
      DateTime? InstallationDate,
      int AssetCategoryID,

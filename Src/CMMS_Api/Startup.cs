@@ -22,9 +22,15 @@ namespace CMMS_Api
             builder.Services.AddScoped<ClsWorkorders>();
             builder.Services.AddScoped<ClsWorkOrderParts>();
             builder.Services.AddScoped<ClsWorkOrderHistory>();
+
             builder.Services.AddScoped<ClsInventoryItems>();
             builder.Services.AddScoped<ClsInventoryTransactions>();
+
+            builder.Services.AddScoped<clsAssets>();
             builder.Services.AddScoped<ClsAssetImage>();
+            builder.Services.AddScoped<clsCategories>();
+            builder.Services.AddScoped<clsSubCategories>();
+            builder.Services.AddScoped<clsLocations>();
 
             // Add controller services to the container of DI
             builder.Services.AddControllers();

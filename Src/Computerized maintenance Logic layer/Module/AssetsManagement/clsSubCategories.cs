@@ -1,6 +1,6 @@
-﻿using computrized_maintenance_Data_Access.Data;
+﻿using CMMS_Api.DTO;
+using computrized_maintenance_Data_Access.Data;
 using computrized_maintenance_Data_Access.Entites.AssetsManagment;
-using computrized_maintenance_Data_Access.Misc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
@@ -8,60 +8,26 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
     /// <summary>
     /// Logic-layer class for managing SubCategory entity operations (CRUD).
     /// </summary>
-    public sealed class clsSubCategories
+    public sealed class clsSubCategories(AppDbContext _Context)
     {
-        #region Private Fields & Singleton
-
-        private static AppDbContext? _Context;
-        private readonly static clsSubCategories _Instance = new();
-
-        public static clsSubCategories Instance
-        {
-            get
-            {
-                _Context = ClsUtility.ImplementDbContextService();
-                return _Instance;
-            }
-        }
-
-        #endregion
-
-        #region Properties
-
-        public int ID { get; set; }
-        public string Sub_Category_Name { get; set; } = null!;
-        public int CategoryID { get; set; }
-
-        #endregion
-
-        #region Constructors
-
-        private clsSubCategories() { }
-
-        private clsSubCategories(int id, string subCategoryName, int categoryId)
-        {
-            ID = id;
-            Sub_Category_Name = subCategoryName;
-            CategoryID = categoryId;
-        }
-
-        #endregion
-
         #region CRUD Operations
 
         /// <summary>
-        /// Asynchronously finds a SubCategory by ID.
+        /// Retrieve <see cref="SubCategoryResponseDto"/> from a data store
         /// </summary>
-        public async Task<clsSubCategories?> FindAsync(int id)
+        /// <param name="Id">Unique identifier of <see cref="SubCategory"/></param>
+        /// <returns>Data transfer object of <see cref="SubCategoryResponseDto"/>,otherwise <see langword="null"/></returns>
+        public async Task<SubCategoryResponseDto?> FindAsync(int Id)
         {
             try
             {
+                if(Id < 1) return null;
                 var entity = await _Context.Set<SubCategory>()
                                            .AsNoTracking()
                                            .SingleOrDefaultAsync(x => x.ID == id);
 
                 return entity is not null
-                    ? new clsSubCategories(entity.ID, entity.Sub_Category_Name, entity.CategoryID)
+                    ? new SubCategoryResponseDto(entity.Sub_Category_Name, entity.CategoryID)
                     : null;
             }
             catch (Exception ex)
@@ -72,16 +38,21 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         }
 
         /// <summary>
-        /// Asynchronously adds a new SubCategory to the database.
+        /// Add new a entity of <see cref="SubCategory"/> into data store
         /// </summary>
-        public async Task<bool> AddNewSubCategoryAsync()
+        /// <param name="responseDto">Data transfer object of <see cref="SubCategoryResponseDto"/></param>
+        /// <returns><see langword="true"/> if add data has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> AddNewSubCategoryAsync(SubCategoryResponseDto responseDto)
         {
             try
             {
+                if(!_IsDataInputValid(responseDto)) return false;
+
+
                 var subCategory = new SubCategory
                 {
-                    Sub_Category_Name = this.Sub_Category_Name,
-                    CategoryID = this.CategoryID
+                    Sub_Category_Name = responseDto.SubCategoryName,
+                    CategoryID = responseDto.CategoryID
                 };
 
                 await _Context.Set<SubCategory>()
@@ -97,16 +68,21 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         }
 
         /// <summary>
-        /// Asynchronously updates an existing SubCategory.
+        /// Update a entity of <see cref="SubCategory"/> into data store
         /// </summary>
-        public async Task<bool> UpdateSubCategoryAsync()
+        /// <param name="requestDto">Data transfer object of <see cref="SubCategoryRequestDto"/></param>
+        /// <returns><see langword="true"/> if add update has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> UpdateSubCategoryAsync(SubCategoryRequestDto requestDto)
         {
             try
             {
+
+                if(!_IsDataInputValid(new SubCategoryResponseDto(requestDto.SubCategoryName, requestDto.CategoryID),true,requestDto.ID)) return false;
                 var result = await _Context.Set<SubCategory>()
-                                           .Where(x => x.ID == this.ID)
+                                           .Where(x => x.ID == requestDto.ID)
                                            .ExecuteUpdateAsync(u => u
-                                               .SetProperty(p => p.Sub_Category_Name, this.Sub_Category_Name)
+                                               .SetProperty(p => p.Sub_Category_Name, requestDto.SubCategoryName)
+                                               .SetProperty(p => p.CategoryID, requestDto.CategoryID)
                                                );
                 return result > 0;
             }
@@ -118,14 +94,18 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         }
 
         /// <summary>
-        /// Asynchronously deletes a SubCategory by ID.
+        /// Delete a entity <see cref="SubCategory"/> from data store
         /// </summary>
-        public async Task<bool> DeleteSubCategoryAsync()
+        /// <param name="Id">Unique identifier of <see cref="SubCategory"/></param>
+        /// <returns><see langword="true"/> if add delete has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> DeleteSubCategoryAsync(int Id)
         {
             try
             {
+                if(Id < 1) return false;
+
                 var result = await _Context.Set<SubCategory>()
-                                           .Where(x => x.ID == this.ID)
+                                           .Where(x => x.ID == Id)
                                            .ExecuteDeleteAsync();
 
                 return result > 0;
@@ -138,45 +118,42 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         }
 
 
-        public  async Task<bool> DeleteSubCategoryAsync(int ID)
+       /// <summary>
+       ///  Retrieve whole a record of <see cref="SubCategory"/> entity form data store
+       /// </summary>
+       /// <returns>Data transfer object <see cref="SubCategoryResponseDto"/>, otherwise <see langword="null"/></returns>
+        public async Task<IEnumerable<SubCategoryResponseDto>> GetAllSubCategories()
         {
-            try
-            {
-                var result = await _Context.Set<SubCategory>()
-                                           .Where(x => x.ID == this.ID)
-                                           .ExecuteDeleteAsync();
+            var List = await _Context.Set<SubCategory>()
+                                 .AsNoTracking()
+                                 .Select( x => new SubCategoryResponseDto(x.Sub_Category_Name,x.CategoryID))
+                                 .ToListAsync();
 
-                return result > 0;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error deleting SubCategory: {ex.Message}");
-                return false;
-            }
+
+            return List.AsEnumerable();
         }
 
+        #endregion
         /// <summary>
-        /// Retrieves all SubCategories (read-only query).
+        /// check-out of Data input  is valid or not 
         /// </summary>
-        public async Task<IEnumerable<SubCategory>> GetAllSubCategories()
+        /// <param name="response"></param>
+        /// <param name="IsRequest"></param>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+       private bool _IsDataInputValid(SubCategoryResponseDto response,bool IsRequest=false,int Id=0)
         {
-            return await _Context.Set<SubCategory>()
-                           .Include(s => s.Category)
-                           .AsNoTracking()
-                           .ToListAsync();
+            if(IsRequest)
+            {
+                if(Id < 1) return false;
+            }
+
+            if(string.IsNullOrEmpty(response.SubCategoryName)) return false;
+            if(response.CategoryID < 1) return false;
+
+
+            return true;
         }
 
-        #endregion
-
-       
-        #region Destructor
-
-        ~clsSubCategories()
-        {
-            if (_Context is not null)
-                _Context.DisposeAsync();
-        }
-
-        #endregion
     }
 }

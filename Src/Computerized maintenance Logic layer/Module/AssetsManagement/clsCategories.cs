@@ -1,4 +1,5 @@
-﻿using computrized_maintenance_Data_Access.Data;
+﻿using CMMS_Api.DTO;
+using computrized_maintenance_Data_Access.Data;
 using computrized_maintenance_Data_Access.Entites.AssetsManagment;
 using computrized_maintenance_Data_Access.Misc;
 using Microsoft.EntityFrameworkCore;
@@ -8,53 +9,28 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
     /// <summary>
     /// Logic-layer class for handling CRUD operations of Category entity.
     /// </summary>
-    public sealed class clsCategories
+    public sealed class clsCategories(AppDbContext _Context)
     {
-        #region Private Fields & Singleton
-
-        private static AppDbContext? _Context;
-        private readonly static clsCategories _Instance = new();
-
-        public static clsCategories Instance
-        {
-            get
-            {
-                _Context = ClsUtility.ImplementDbContextService();
-                return _Instance;
-            }
-        }
-
-        #endregion
-
-        public int ID { get; set; }
-        public string Category_Name { get; set; } = null!;
-
-        private clsCategories() { }
-
-        private clsCategories(int id, string categoryName)
-        {
-            ID = id;
-            Category_Name = categoryName;
-        }
-
-
         #region CRUD Operations
 
         /// <summary>
-        /// Asynchronously finds a Category by its unique ID.
+        /// Retrieve a Category as data transfer object by its unique identifier.
         /// </summary>
-        public async Task<clsCategories?> FindAsync(int id)
+        /// <param name="id">unique identifier of <see cref="Category"/></param>
+        /// <returns><see cref="CategoryResponseDto"/> if find has been succeed, otherwise <see langword="null"/></returns>
+        public async Task<CategoryResponseDto?> FindAsync(int id)
         {
             try
             {
+                if(id < 1) return null; 
+
+
                 var entity = await _Context.Categories
                                            .AsNoTracking()
                                            .SingleOrDefaultAsync(x => x.ID == id);
 
-                return entity is not null
-                    ? new clsCategories(entity.ID, entity.Category_Name)
-                    : null;
-            }
+                return entity is Category ? new CategoryResponseDto(entity.Category_Name): null;
+            } 
             catch (Exception ex)
             {
                 // TODO: Add proper logging service here
@@ -64,15 +40,20 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         }
 
         /// <summary>
-        /// Asynchronously adds a new Category to the data source.
+        /// Add new Category to the data source asynchronously
         /// </summary>
-        public async Task<bool> AddNewCategoryAsync()
+        /// <param name="responseDto">Data transfer object of <see cref="CategoryResponseDto"/></param>
+        /// <returns><see langword="true"/> if add entity has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> AddNewCategoryAsync(CategoryResponseDto responseDto)
         {
             try
             {
+
+                if(!_IsDataInputValidate(responseDto)) return  false;
+
                 var category = new Category
                 {
-                    Category_Name = this.Category_Name
+                    Category_Name = responseDto.CategoryName
                 };
 
                 await _Context.Categories.AddAsync(category);
@@ -86,16 +67,24 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         }
 
         /// <summary>
-        /// Asynchronously updates an existing Category in the data source.
+        /// Add new Category to the data source asynchronously
         /// </summary>
-        public async Task<bool> UpdateCategoryAsync()
+        /// <param name="requestDto">Data transfer object of <see cref="CategoryRequestDto"/></param>
+        /// <returns><see langword="true"/> if update entity has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> UpdateCategoryAsync(CategoryRequestDto requestDto)
         {
             try
             {
+
+                if(!_IsDataInputValidate(new CategoryResponseDto(requestDto.CategoryName), true, requestDto.ID)) 
+                    return  false;
+
+
                 var result = await _Context.Categories
-                                           .Where(x => x.ID == this.ID)
+                                           .Where(x => x.ID == requestDto.ID)
                                            .ExecuteUpdateAsync(u => u
-                                           .SetProperty(p => p.Category_Name, this.Category_Name));
+                                           .SetProperty(p => p.Category_Name, requestDto.CategoryName)
+                                           );
 
                 return result > 0;
             }
@@ -107,31 +96,16 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         }
 
         /// <summary>
-        /// Asynchronously deletes a Category from the data source.
+        /// Delete Category from the data source asynchronously
         /// </summary>
-        public async Task<bool> DeleteCategoryAsync()
+        /// <param name="Id">unique identifier of <see cref="Category"/></param>
+        /// <returns><see langword="true"/> if delete entity has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> DeleteCategoryAsync(int Id)
         {
             try
             {
                 var result = await _Context.Categories
-                                           .Where(x => x.ID == this.ID)
-                                           .ExecuteDeleteAsync();
-
-                return result > 0;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error deleting Category: {ex.Message}");
-                return false;
-            }
-        }
-
-        public async Task<bool> DeleteCategoryAsync(int ID)
-        {
-            try
-            {
-                var result = await _Context.Categories
-                                           .Where(x => x.ID == ID)
+                                           .Where(x => x.ID == Id)
                                            .ExecuteDeleteAsync();
 
                 return result > 0;
@@ -144,15 +118,21 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         }
 
         /// <summary>
-        /// Asynchronously retrieves all Categories.
+        /// retrieve all Categories as data transfer object
         /// </summary>
-        public async Task<IEnumerable<Category>?> GetAllCategories()
+        /// <returns></returns>
+        public async Task<IEnumerable<CategoryResponseDto>?> GetAllCategories()
         {
             try
             {
-                return await _Context.Categories
-                          .AsNoTracking()
-                          .ToListAsync();
+                var List = await _Context.Categories
+                           .AsNoTracking()
+                           .Select(x => new CategoryResponseDto(x.Category_Name))
+                           .ToListAsync();
+
+                if(List.Count < 0) return null;
+
+                return List.AsEnumerable();
             }
             catch (Exception ex)
             {
@@ -165,14 +145,24 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
 
         #endregion
 
-
-
-
-        ~clsCategories()
+        /// <summary>
+        /// Check if input data is valid when sending it to update or add new <see cref="Category"/> entity
+        /// </summary>
+        /// <param name="responseDto">Data transfer object of <see cref="CategoryResponseDto"/></param>
+        /// <param name="isRequired">Check if is it ready to be OnRequest</param>
+        /// <param name="id">unique identifier of <see cref="Category"/></param>
+        /// <returns><see langword="true"/> if data is valid, otherwise <see langword="false"/> </returns>
+        private bool _IsDataInputValidate(CategoryResponseDto responseDto, bool isRequired = false, int id = 0)
         {
-            if (_Context is not null)
-                _Context.DisposeAsync();
+            if (isRequired)
+            {
+                if (id < 1) return false;
+            }
+            if (string.IsNullOrEmpty(responseDto.CategoryName)) return false;
+
+            return true;
         }
+
 
     }
 }
