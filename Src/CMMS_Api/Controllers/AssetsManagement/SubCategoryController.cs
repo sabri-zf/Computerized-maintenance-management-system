@@ -7,24 +7,40 @@ namespace CMMS_Api.Controllers.AssetsManagementController
 {
     [ApiController]
     [Route("Api/V1/subgategory")]
-    public class SubCategoryController:Controller
+    public class SubCategoryController(clsSubCategories Instance) :Controller
     {
 
 
-        [HttpGet("get-subcategories",Name ="retrieve-sub-category")]
+        [HttpGet("get-subcategories", Name = "retrieve-sub-category")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-
-        public async Task<ActionResult> GetAllSubCategory()
+        public async Task<ActionResult<IEnumerable<SubCategoryResponseDto>>> GetAllSubCategory()
         {
-            var List = await clsSubCategories.Instance.GetAllSubCategories();
+            var List = await Instance.GetAllSubCategories();
 
-            if (List is not IEnumerable<SubCategory>) return NotFound("Data Doesn't exist"); 
+            if (List is not IEnumerable<SubCategoryResponseDto>) return NotFound("Data Doesn't exist");
 
             return Ok(List);
         }
+
+
+        [HttpGet("get-subcategory/{id:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<SubCategoryResponseDto>> GetSubCategoryByID(int id)
+        {
+            if (id < 1) return BadRequest("Invalid operation");
+
+            var SubCategory_obj = await Instance.FindAsync(id);
+
+            return SubCategory_obj is SubCategoryResponseDto ? Ok(SubCategory_obj)
+                                                             : NotFound($"SubCategory with that Id '{id}' desn't find");
+        }
+
 
         [HttpPost("add-new-subcategory",Name ="add-subcategory")]
         [ProducesResponseType(200)]
@@ -32,20 +48,16 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         [ProducesResponseType(501)]
-
-        public async Task<ActionResult> AddNewSubCategory([FromBody] SubCategoryResponseDto responseDto)
+        public async Task<ActionResult> AddNewSubCategory(SubCategoryResponseDto responseDto)
         {
             if (responseDto is not SubCategoryResponseDto) return BadRequest("invalid operation");
 
-            var SubCategory_Obj = clsSubCategories.Instance;
+            var IsAdded = await Instance.AddNewSubCategoryAsync(responseDto);
 
-            if (SubCategory_Obj is not clsSubCategories) return StatusCode(StatusCodes.Status501NotImplemented,"Error when try to make a instance");
+            if (!IsAdded) return StatusCode(StatusCodes.Status501NotImplemented,"Error when try to make a instance");
 
-            SubCategory_Obj.Sub_Category_Name = responseDto.SubCategoryName;
-            SubCategory_Obj.CategoryID = responseDto.CategoryID;
-
-            return await SubCategory_Obj.AddNewSubCategoryAsync() ? Ok(SubCategory_Obj) : StatusCode(500, "Error occurred on system");
-
+          
+            return  Ok("Add new SubCategory has been done") ;
         }
 
 
@@ -54,21 +66,11 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-
-        public async Task<ActionResult> UpdateSubCategory([FromBody] SubCategoryRequestDto requestDto)
+        public async Task<ActionResult> UpdateSubCategory(SubCategoryRequestDto requestDto)
         {
             if (requestDto is not SubCategoryRequestDto || requestDto.ID < 1) return BadRequest("Invalid operation");
 
-            var Findout = await clsSubCategories.Instance.FindAsync(requestDto.ID);
-
-            if (Findout is not clsSubCategories) return NotFound( "Error occurred when to make a instance");
-
-            Findout.Sub_Category_Name = requestDto.SubCategoryName;
-            // here you can make endpoint to send data to db 
-            // e.i update subcategories set SubcategoryName = "your value" where Id = Id;
-
-
-            return await Findout.UpdateSubCategoryAsync()
+            return await Instance.UpdateSubCategoryAsync(requestDto)
                                         ? Ok("Update SubCategory Has been Done")
                                         : StatusCode(500, "Error Occurred On system");
         }
@@ -79,12 +81,11 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        
         public async Task <ActionResult> DeleteSubCategory(int ID)
         {
             if (ID < 1) return BadRequest("Invalid operation");
 
-            return await clsSubCategories.Instance.DeleteSubCategoryAsync(ID)
+            return await Instance.DeleteSubCategoryAsync(ID)
                                          ? Ok("SubCategory has been Deleted")
                                          : StatusCode(500, "Error Occurred on system");
         }

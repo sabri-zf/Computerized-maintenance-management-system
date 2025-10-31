@@ -65,6 +65,10 @@ namespace computrized_maintenance_Data_Access.Data.Config
                                  )
                    .IsRequired();
 
+            builder.Property(x => x.PreventiveMaintenanceID)
+                   .HasColumnType("int")
+                   .IsRequired();
+
 
             // here we make relationchip with workeordes and asset (1(A)-M(Wo))
             builder.HasOne(w => w.Asset)
@@ -84,7 +88,10 @@ namespace computrized_maintenance_Data_Access.Data.Config
                    .HasForeignKey(x =>x.WO_ID)
                    .IsRequired();
 
-
+            builder.HasOne(x => x.PreventiveMaintenance)
+                   .WithMany(p => p.workOrders)
+                   .HasForeignKey(x => x.PreventiveMaintenanceID)
+                   .IsRequired();
 
             builder.HasData(SeeData.WorkOrders);
         }

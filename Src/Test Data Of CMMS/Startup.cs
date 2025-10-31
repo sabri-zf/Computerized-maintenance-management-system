@@ -229,29 +229,7 @@ namespace Test_Data_Of_CMMS
             {
 
                
-                var AssetFind = await clsAssets.Instance.FindAsync(1);
-
-
-                if (AssetFind is clsAssets)
-                {
-                    Console.WriteLine("Before update Status Of Asset\n");
-                    Console.WriteLine(AssetFind?.AssetStatus);
-
-                    AssetFind!.AssetStatus = Asset_Status_Type.UnderMaintenance;
-
-                    if (await AssetFind.UpdateAssetAsync())
-                    {
-                        Console.WriteLine("Update has been Successed\n");
-                    }else
-                    {
-                        Console.WriteLine("Update Has been failed\n");
-                    }
-
-
-                    Console.WriteLine("After update Status Of Asset\n");
-                    Console.WriteLine(AssetFind?.AssetStatus);
-
-                }
+              
 
                 Console.ReadKey();
 

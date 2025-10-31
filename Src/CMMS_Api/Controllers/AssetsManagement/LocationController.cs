@@ -8,7 +8,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
     [ApiController]
 
     [Route("Api/V1/location")]
-    public class LocationController:Controller
+    public class LocationController(clsLocations Instance) :Controller
     {
 
 
@@ -17,15 +17,29 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-
         public async Task<ActionResult> GetAllLocation()
         {
-            var List = await clsLocations.Instance.GetAllLocations();
+            var List = await Instance.GetAllLocations();
 
-
-            if (List is not IEnumerable<Location>) return NotFound("Data you looing for doesn't exist");
+            if (List is not IEnumerable<LocationResponseDto>) return NotFound("Data you looing for doesn't exist");
             
             return Ok(List);
+        }
+
+
+        [HttpGet("get-location/{id:int}",Name ="get-location-byid")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<LocationResponseDto>> GetLocationById(int id)
+        {
+            if (id < 1) return BadRequest("Invalid operation");
+
+            var responseDto = await Instance.FindAsync(id);
+            if (responseDto is null) return NotFound("Location doesn't find");
+
+            return Ok(responseDto);
         }
 
 
@@ -34,21 +48,16 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-
-        public async Task<ActionResult> AddNewLocation([FromBody] LocationResponseDto responseDto)
+        public async Task<IActionResult> AddNewLocation(LocationResponseDto responseDto)
         {
             if(responseDto is not LocationResponseDto) return BadRequest("Invalid Operation");
 
-            var Location_obj = clsLocations.Instance;
+            var Location_obj = await Instance.AddNewLocationAsync(responseDto);
 
-            if (Location_obj is not clsLocations) return StatusCode(5001, "Error occurred when you try to make a instance");
+            if (!Location_obj) return StatusCode(5001, "Error occurred when you try to make a instance");
 
-            Location_obj.LocationName = responseDto.LocationName;
 
-            return await Location_obj.AddNewLocationAsync() 
-                                     ? Ok(Location_obj)
-                                     : StatusCode(500, "error occurred on system");
-
+            return Ok("Add new Location has been done");
         }
 
         [HttpPut("edit-location",Name ="update-location")]
@@ -56,19 +65,15 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult> UpdateLocation([FromBody] LocationRequestDto requestDto)
+        public async Task<IActionResult> UpdateLocation( LocationRequestDto requestDto)
         {
             if (requestDto is not LocationRequestDto || requestDto.ID < 1) return BadRequest("Invalid Operation");
 
-            var Location_obj = clsLocations.Instance;
+            var Location_obj = await Instance.UpdateLocationAsync(requestDto);
 
-            if (Location_obj is not clsLocations) return StatusCode(5001, "Error Occurred whe you try to make a instance");
+            if (!Location_obj) return StatusCode(5001, "Error Occurred whe you try to make a instance");
 
-            Location_obj.LocationName = requestDto.LocationName;
-
-            return await Location_obj.UpdateLocationAsync()
-                                     ? Ok("Update Location Has been done")
-                                     : StatusCode(500, "Error Occurred on system");
+            return Ok("Update Location Has been done");
         }
 
         [HttpDelete("delete-location/{id:int}", Name ="remove-location")]
@@ -76,13 +81,11 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-
         public async Task<ActionResult> DeleteLocation(int Id)
         {
             if (Id < 1) return BadRequest("Invalid operation");
 
-
-            return await clsLocations.DeleteLocationAsync(Id)
+            return await Instance.DeleteLocationAsync(Id)
                                      ? Ok("Delete Location Has been Done")
                                      : StatusCode(500, "Error occurred on system");
         }

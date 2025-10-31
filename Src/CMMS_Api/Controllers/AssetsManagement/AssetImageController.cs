@@ -28,6 +28,11 @@ namespace CMMS_Api.Controllers.AssetsManagementController
 
 
         [HttpGet("get-asset-image/{Id:int}",Name ="get-asset-image-byid")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+
         public async Task<ActionResult> GetByIDAssetImageAsync(int Id)
         {
             if(Id< 1) return BadRequest("Invalid operation");
@@ -36,7 +41,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
 
             return ResopnseEntity is AssetImageResponseDto
                                   ? Ok(ResopnseEntity)
-                                  : StatusCode(500,"An error on system");
+                                  : NotFound("Data you looking for is not Found");
         }
 
         [HttpPost("add-asset-image",Name ="make-asset-image")]
@@ -45,11 +50,11 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         [ProducesResponseType(404)]
         public async Task<ActionResult> AddAssetImageAsync(AssetImageResponseDto responseDto)
         {
-            if (responseDto == null) return BadRequest("Invalid Operation");
+            if (responseDto is not AssetImageResponseDto) return BadRequest("Invalid Operation");
 
             var insertImage = await Instance.AddNewImageAsync(responseDto);
 
-            return insertImage ? Created("get-assetimage/{id}", insertImage)
+            return insertImage ? Ok("Add new image Asset has been done")
                                : StatusCode(500, "Error Ouccrred on System"); ;
         }
 
@@ -61,10 +66,10 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         {
             if (requestDto is not AssetImageRequestDto || requestDto.ID < 1) return BadRequest("Invalid Operation");
 
-            var IsItupdated = await Instance.UpdateImageAsync(requestDto);
+            var IsUpdated = await Instance.UpdateImageAsync(requestDto);
 
-            return IsItupdated ? Ok("Asset image has been update it")
-                               : StatusCode(500, "An error occurred on system");
+            return IsUpdated ? Ok("Asset image has been updated")
+                             : StatusCode(500, "An error occurred on system");
         }
 
         [HttpDelete("delete-asset-image/{id:int}",Name ="delete-asset-image")]

@@ -81,7 +81,7 @@ namespace CMMS_Api.Controllers.InventoryManagement
         }
 
 
-        [HttpPut("delete-partitem/{Id:int}", Name = "remove-PartItem")]
+        [HttpDelete("delete-partitem/{Id:int}", Name = "remove-PartItem")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

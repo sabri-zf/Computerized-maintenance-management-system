@@ -1,4 +1,5 @@
 ﻿using computrized_maintenance_Data_Access.Entites.AssetsManagment;
+using computrized_maintenance_Data_Access.Entites.preventiveMaintenanceManagement;
 using computrized_maintenance_Data_Access.Enumes;
 
 namespace computrized_maintenance_Data_Access.Entites.WorkOrderManagement
@@ -12,6 +13,7 @@ namespace computrized_maintenance_Data_Access.Entites.WorkOrderManagement
         public int ID { get; set; }
         public string WorkOrderNumber { get; set; } = null!;
         public string Description { get; set; } = null!;
+        public int PreventiveMaintenanceID { get; set; }
         public int AssetID { get; set; }
         public int CreatedByID { get; set; }  
         public int AssignedToID { get; set; }
@@ -31,6 +33,7 @@ namespace computrized_maintenance_Data_Access.Entites.WorkOrderManagement
         // work order has many Asset , and Asset rely one workOrder
 
         public Asset Asset { get; set; } = null!;
+        public PreventiveMaintenance PreventiveMaintenance { get; set; } = null!;
         public ICollection<WorkOrderPart> UsedParts { get; set; } = new List<WorkOrderPart>();
         public ICollection<WorkOrderHistory> Histories { get; set; } = new List<WorkOrderHistory>();
 

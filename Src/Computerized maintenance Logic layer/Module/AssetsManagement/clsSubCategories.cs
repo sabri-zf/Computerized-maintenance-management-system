@@ -24,7 +24,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
                 if(Id < 1) return null;
                 var entity = await _Context.Set<SubCategory>()
                                            .AsNoTracking()
-                                           .SingleOrDefaultAsync(x => x.ID == id);
+                                           .SingleOrDefaultAsync(x => x.ID == Id);
 
                 return entity is not null
                     ? new SubCategoryResponseDto(entity.Sub_Category_Name, entity.CategoryID)

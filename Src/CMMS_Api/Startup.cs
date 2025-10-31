@@ -2,6 +2,7 @@
 using CMMS_Api.Helper;
 using Computerized_maintenance_Logic_layer.Module.AssetsManagement;
 using Computerized_maintenance_Logic_layer.Module.InventoryManagement;
+using Computerized_maintenance_Logic_layer.Module.preventiveMaintenanceManagement;
 using Computerized_maintenance_Logic_layer.Module.workOrderManagement;
 using computrized_maintenance_Data_Access.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -31,6 +32,8 @@ namespace CMMS_Api
             builder.Services.AddScoped<clsCategories>();
             builder.Services.AddScoped<clsSubCategories>();
             builder.Services.AddScoped<clsLocations>();
+
+            builder.Services.AddScoped<ClspreventiveMaintenances>();
 
             // Add controller services to the container of DI
             builder.Services.AddControllers();

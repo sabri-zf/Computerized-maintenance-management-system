@@ -1,5 +1,6 @@
 ﻿using computrized_maintenance_Data_Access.Entites.AssetsManagment;
 using computrized_maintenance_Data_Access.Entites.InventoryManagement;
+using computrized_maintenance_Data_Access.Entites.preventiveMaintenanceManagement;
 using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
 using computrized_maintenance_Data_Access.Enumes;
 using System.Collections.ObjectModel;
@@ -9,7 +10,28 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 	internal class SeeData
 	{
 
-		public static Collection<WorkOrder> WorkOrders = new Collection<WorkOrder>()
+		public static Collection<PreventiveMaintenance> PreventiveMaintenances = new Collection<PreventiveMaintenance>()
+		{
+			new PreventiveMaintenance() {
+				ID=1,
+				AssetID=3,
+				TaskDescription="Replace air filter in HVAC unit every 3 months.",
+				Frequency=EnFrequencyTask.Quarterly,
+				CreatedDate=new DateTime(2025,1,1),
+				NextDueDate=new DateTime(2025,10,1)
+			},
+			new PreventiveMaintenance() {
+				ID=2,
+				AssetID=2,
+				TaskDescription="Inspect safety valves on boiler system every 6 months.",
+				Frequency= EnFrequencyTask.SemiAnnual,
+				CreatedDate=new DateTime(2025,3,1),
+				NextDueDate=new DateTime(2025,9,1)
+			}
+
+		};
+
+        public static Collection<WorkOrder> WorkOrders = new Collection<WorkOrder>()
 		{
 			  new WorkOrder
 		{
@@ -17,7 +39,8 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 			WorkOrderNumber = "WO-0001",
 			Description = "Replace air filter in HVAC unit.",
 			AssetID = 3,
-			CreatedByID = 22,
+			PreventiveMaintenanceID = 1,
+            CreatedByID = 22,
 			AssignedToID = 1,
 			Status = workOrderStatus.Open,
 			CreatedDate = new DateTime(2025, 10, 1),
@@ -33,7 +56,8 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 			WorkOrderNumber = "WO-0002",
 			Description = "Inspect safety valves on boiler system.",
 			AssetID = 2,
-			CreatedByID = 5,
+			PreventiveMaintenanceID = 2,
+            CreatedByID = 5,
 			AssignedToID = 1,
 			Status = workOrderStatus.Completed,
 			CreatedDate = new DateTime(2025, 9, 15),

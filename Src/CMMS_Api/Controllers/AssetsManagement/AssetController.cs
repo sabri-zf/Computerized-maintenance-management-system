@@ -8,7 +8,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
 {
     [ApiController]
     [Route("Api/V1/asset")]
-    public class AssetController:Controller
+    public class AssetController(clsAssets Instance):Controller
     {
 
 
@@ -17,7 +17,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         [ProducesResponseType(400)]
         public async Task<ActionResult<Asset>> GetAll()
         {
-            var List_Assets = await clsAssets.Instance.GetAllAssets();
+            var List_Assets = await Instance.GetAllAssetsAsync();
 
             if(List_Assets is null) return NotFound("Data Not Found");
 
@@ -25,16 +25,16 @@ namespace CMMS_Api.Controllers.AssetsManagementController
             return Ok(List_Assets);
         }
 
-        [HttpGet("get-asset{asset_name:alpha}",Name ="asset")]
+        [HttpGet("get-asset/{asset_name}")] // add costume constatint regx to avoid send number to request
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<Assetdto>> GetAssetByName(string asset_name)
+        public async Task<ActionResult<AssetResponseDto>> GetAssetByName(string asset_name)
         {
             if (string.IsNullOrEmpty(asset_name)) return BadRequest("Invalid Operation");
 
-            var Output = await clsAssets.Instance.FindByAssetNameAsync(asset_name);
+            var Output = await Instance.FindByAssetNameAsync(asset_name);
 
             if (Output is null) return NotFound("Asset doesn't find");
 
@@ -43,63 +43,41 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         }
 
 
-        [HttpGet("get-asset/{id:int}", Name = "asset-id")]
+        [HttpGet("get-asset/{Id:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<Assetdto>> GetAssetById(int id)
+        public async Task<ActionResult<AssetResponseDto>> GetAssetById(int Id)
         {
-            if (id < 1) return BadRequest("invalid operation");
+            if (Id < 1) return BadRequest("Invalid Operation");
 
-            var Result = await clsAssets.Instance.FindAsync(id);
+            var Output = await Instance.FindAsync(Id);
 
-            if (Result is null) return NotFound("Asset doesn't find");
+            if (Output is null) return NotFound("Asset doesn't find");
 
-            var Dto = new Assetdto(Result.AssetName,Result.AssetTagNumber,Result.ManufactuerName,
-                Result.ManufactuerModelNumber,Result.PurchaseDate,Result.PurchaseCost,Result.WarrantyExpiryDate,
-                Result.InstallationDate,Result.CreateAssetDate,Result.CreateByUser);
 
-            return Ok(Dto);
+            return Ok(Output);
         }
+
 
         [HttpPost("add-new-asset",Name ="add-asset")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult> postAsset(AssetResponseDto ResponseDto)
+        public async Task<ActionResult<AssetImageRequestDto>> AddNewAsset(AssetResponseDto ResponseDto)
         {
 
-            if (ResponseDto is null) return BadRequest("invalid input");
+            if (ResponseDto is null) return BadRequest("Invalid Operation");
 
-            clsAssets asset = clsAssets.Instance;
+            var IsAdded = await Instance.AddNewAssetAsync(ResponseDto);
 
-            asset.AssetName = ResponseDto.AssetName;
-            asset.AssetTagNumber = ResponseDto.AssetTagNumber;
-            asset.ManufactuerName = ResponseDto.ManufactuerName;
-            asset.ManufactuerModelNumber = ResponseDto.ManufactuerModelNumber;
-            asset.PurchaseDate = ResponseDto.PurchaseDate;
-            asset.PurchaseCost = ResponseDto.PurchaseCost;
-            asset.WarrantyExpiryDate = ResponseDto.WarrantyExpiryDate;
-            asset.InstallationDate = ResponseDto.InstallationDate;
-            asset.AssetCategoryID = ResponseDto.AssetCategoryID;
-            asset.AssetLocationID = ResponseDto.AssetLocationID;
-            asset.AssetStatus = ResponseDto.AssetStatus;
-            asset.MeterReading = ResponseDto.MeterReading;
-            asset.Criticality = ResponseDto.Criticality;
-            asset.CreateAssetDate = ResponseDto.CreateAssetDate;
-            asset.UpdateAssetDate = ResponseDto.UpdateAssetDate;
-            asset.CreateByUser= ResponseDto.CreateByUser;
-
-
-            if (! await asset.AddNewAssetAsync())
+            if (!IsAdded)
             {
                 return  StatusCode(500,"Erorr Occurred On System");
             }
 
-
-
-            return Created("get-asset/asset_name", asset);
+            return CreatedAtAction("GetAssetByName", new { asset_name = ResponseDto.AssetName},ResponseDto);
         }
 
 
@@ -107,41 +85,14 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> editAsset(AssetRequestDto requestDto)
+        public async Task<IActionResult> EditAsset(AssetRequestDto requestDto)
         {
             if (requestDto is null || requestDto.ID < 1) return BadRequest("Invalid Operation");
 
-            var find_out = await clsAssets.Instance.FindAsync(requestDto.ID);
+            var find_out = await Instance.UpdateAssetAsync(requestDto);
 
-            if(find_out is null)
-            {
-                return NotFound($"Asset not Found by This ({requestDto.ID}) ID");
-            }
-
-            find_out.AssetName = requestDto.AssetName;
-            find_out.AssetTagNumber = requestDto.AssetTagNumber;
-            find_out.ManufactuerName = requestDto.ManufactuerName;
-            find_out.ManufactuerModelNumber = requestDto.ManufactuerModelNumber;
-            find_out.PurchaseDate = requestDto.PurchaseDate;
-            find_out.PurchaseCost = requestDto.PurchaseCost;
-            find_out.WarrantyExpiryDate = requestDto.WarrantyExpiryDate;
-            find_out.InstallationDate = requestDto.InstallationDate;
-            find_out.AssetCategoryID = requestDto.AssetCategoryID;
-            find_out.AssetLocationID = requestDto.AssetLocationID;
-            find_out.AssetStatus = requestDto.AssetStatus;
-            find_out.MeterReading = requestDto.MeterReading;
-            find_out.Criticality = requestDto.Criticality;
-            find_out.CreateAssetDate = requestDto.CreateAssetDate;
-            find_out.UpdateAssetDate = requestDto.UpdateAssetDate;
-            find_out.CreateByUser = requestDto.CreateByUser;
-
-            if(await find_out.UpdateAssetAsync())
-            {
-
-            return Ok("Update asset has been done");
-            }
-
-            return StatusCode(500, "Error Occurred on system");
+            return find_out ? Ok("Update Asset has been succeed")
+                            : StatusCode(500, "Error Occurred on system");
         }
 
 
@@ -153,7 +104,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         {
             if (ID < 1) return BadRequest("Invalid Operation");
 
-            var IsDeleted = await clsAssets.DeleteAssetAsync(ID);
+            var IsDeleted = await Instance.DeleteAssetAsync(ID);
 
             if (!IsDeleted)
             {

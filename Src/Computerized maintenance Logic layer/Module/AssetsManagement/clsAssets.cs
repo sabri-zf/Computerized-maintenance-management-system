@@ -177,7 +177,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         /// </summary>
         /// <param name="ID">Unique identifier of <see cref="Asset"/></param>
         /// <returns> <see langword="true"/> if Delete was successful, otherwise <see langword="false"/></returns>
-        public async static Task<bool> DeleteAssetAsync(int ID)
+        public async Task<bool> DeleteAssetAsync(int ID)
         {
             return await _Context.Assets
                                  .Where(x => x.ID == ID)
