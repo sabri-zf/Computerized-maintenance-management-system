@@ -1,4 +1,5 @@
 ﻿using computrized_maintenance_Data_Access.Entites.AssetsManagment;
+using computrized_maintenance_Data_Access.Entites.DownTimeTracking;
 using computrized_maintenance_Data_Access.Entites.InventoryManagement;
 using computrized_maintenance_Data_Access.Entites.preventiveMaintenanceManagement;
 using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
@@ -7,6 +8,9 @@ using System.Collections.ObjectModel;
 
 namespace computrized_maintenance_Data_Access.Data.Seed
 {
+	/// <summary>
+	/// Created Collection of Seed-data to each entity on System
+	/// </summary>
 	internal class SeeData
 	{
 
@@ -31,7 +35,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 
 		};
 
-        public static Collection<WorkOrder> WorkOrders = new Collection<WorkOrder>()
+		public static Collection<WorkOrder> WorkOrders = new Collection<WorkOrder>()
 		{
 			  new WorkOrder
 		{
@@ -40,7 +44,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 			Description = "Replace air filter in HVAC unit.",
 			AssetID = 3,
 			PreventiveMaintenanceID = 1,
-            CreatedByID = 22,
+			CreatedByID = 22,
 			AssignedToID = 1,
 			Status = workOrderStatus.Open,
 			CreatedDate = new DateTime(2025, 10, 1),
@@ -57,7 +61,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 			Description = "Inspect safety valves on boiler system.",
 			AssetID = 2,
 			PreventiveMaintenanceID = 2,
-            CreatedByID = 5,
+			CreatedByID = 5,
 			AssignedToID = 1,
 			Status = workOrderStatus.Completed,
 			CreatedDate = new DateTime(2025, 9, 15),
@@ -255,7 +259,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 	{
 		ID = 4,
 		InventoryItemID = 2,
-        Type = TransactionType.Out,
+		Type = TransactionType.Out,
 		Quntity = 3,
 		TransactionDate = new DateTime(2025, 10, 6),
 	},
@@ -269,5 +273,47 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 	},
 
 		};
+
+		public static Collection<DownTimeEvent> downTimeEvents = new Collection<DownTimeEvent>()
+		{
+			  new DownTimeEvent
+	{
+		ID = 1,
+		AssetID = 1,
+		WO_ID = 1,
+		DownTimeType = EnDownTimeType.Unplanned,
+		StartDownTimeEvent = new DateTime(2025, 10, 10, 8, 15, 0),
+		EndDownTimeEvent = new DateTime(2025, 10, 10, 10, 45, 0),
+		Reason = "Motor overheating due to lack of lubrication",
+		ActionTaken = "Replaced bearing and added lubrication",
+		PerformedByID = 1
+	},
+
+	new DownTimeEvent
+	{
+		ID = 2,
+		AssetID = 3,
+		WO_ID = 2,
+		DownTimeType = EnDownTimeType.Planned,
+		StartDownTimeEvent = new DateTime(2025, 10, 12, 14, 00, 0),
+		EndDownTimeEvent = new DateTime(2025, 10, 12, 17, 30, 0),
+		Reason = "Scheduled control system upgrade",
+		ActionTaken = "Installed new firmware and tested functionality",
+		PerformedByID = 6
+	},
+	new DownTimeEvent
+	{
+		ID = 3,
+		AssetID = 3,
+		WO_ID = null,
+		DownTimeType = EnDownTimeType.Unplanned,
+		StartDownTimeEvent = new DateTime(2025, 10, 15, 9, 00, 0),
+		EndDownTimeEvent = new DateTime(2025, 10, 15, 9, 45, 0),
+		Reason = "Unexpected sensor calibration issue",
+		ActionTaken = "Recalibrated sensor and updated firmware",
+		PerformedByID = 6
+	}
+		};
+
 	}
 }

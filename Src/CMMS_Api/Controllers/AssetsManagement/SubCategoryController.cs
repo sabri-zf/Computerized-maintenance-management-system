@@ -1,6 +1,5 @@
 ﻿using CMMS_Api.DTO;
 using Computerized_maintenance_Logic_layer.Module.AssetsManagement;
-using computrized_maintenance_Data_Access.Entites.AssetsManagment;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMMS_Api.Controllers.AssetsManagementController

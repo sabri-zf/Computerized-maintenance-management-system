@@ -1,4 +1,5 @@
 ﻿using computrized_maintenance_Data_Access.Entites.AssetsManagment;
+using computrized_maintenance_Data_Access.Entites.DownTimeTracking;
 using computrized_maintenance_Data_Access.Entites.InventoryManagement;
 using computrized_maintenance_Data_Access.Entites.preventiveMaintenanceManagement;
 using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
@@ -10,28 +11,8 @@ namespace computrized_maintenance_Data_Access.Data
 {
     public class AppDbContext : DbContext
     {
-
-        //public AppDbContext()
-        //{
-
-        //}
-
-
-        public AppDbContext(DbContextOptions optionsBuilder) : base(optionsBuilder)
-        {
-
-        }
-
-
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    base.OnConfiguring(optionsBuilder);
-
-        //    optionsBuilder.UseSqlServer(ClsUtility.ConnectionString);
-
-        //}
-
+        public AppDbContext(DbContextOptions optionsBuilder) : base(optionsBuilder) { }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -39,7 +20,7 @@ namespace computrized_maintenance_Data_Access.Data
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
 
-
+        // Eager Load Entities 
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -49,5 +30,6 @@ namespace computrized_maintenance_Data_Access.Data
         public DbSet<InventoryItem> inventoryItems { get; set; }
         public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
         public DbSet<PreventiveMaintenance> PreventiveMaintenances{ get; set;}
+        public DbSet<DownTimeEvent> DownTimeEvents { get; set; }
     }
 }
