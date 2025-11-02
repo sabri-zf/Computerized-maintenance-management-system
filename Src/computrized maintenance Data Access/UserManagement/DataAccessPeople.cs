@@ -1,12 +1,11 @@
-﻿
-using computrized_maintenance_Data_Access.DTO;
+﻿using computrized_maintenance_Data_Access.DTO;
 using computrized_maintenance_Data_Access.Misc;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.Common;
-namespace computrized_maintenance_Data_Access
+namespace computrized_maintenance_Data_Access.UserManagement
 {
     public class DataAccessPeople
     {
@@ -15,7 +14,7 @@ namespace computrized_maintenance_Data_Access
         
         public static bool Find(int? PersonID,ref PersonTableDto Dto)
         {
-            if (PersonID < 0 || !(PersonID.HasValue)) return false;
+            if (PersonID < 0 || !PersonID.HasValue) return false;
 
             bool IsFound = false;
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
@@ -66,7 +65,7 @@ namespace computrized_maintenance_Data_Access
                 {
                     string ExecuteStoreProcedure = "Sp_GetAllPeople";
 
-                    people = await connection.QueryAsync<PersonTableDto>(ExecuteStoreProcedure, commandType: System.Data.CommandType.StoredProcedure);
+                    people = await connection.QueryAsync<PersonTableDto>(ExecuteStoreProcedure, commandType: CommandType.StoredProcedure);
                 }
                 catch (Exception ex)
                 {
@@ -88,7 +87,7 @@ namespace computrized_maintenance_Data_Access
                 {
                     string ExecuteStoreProcedure = "Sp_GetAllPeople";
 
-                    people = connection.Query<PersonTableDto>(ExecuteStoreProcedure, commandType: System.Data.CommandType.StoredProcedure);
+                    people = connection.Query<PersonTableDto>(ExecuteStoreProcedure, commandType: CommandType.StoredProcedure);
                 }
                 catch (Exception ex)
                 {
@@ -114,14 +113,14 @@ namespace computrized_maintenance_Data_Access
             parameter.Add("@Phone", person.Phone);
             parameter.Add("@BirthDay", person.BirthDay);
             parameter.Add("@Addrees", person.Addrees);
-            parameter.Add("@PersonID", dbType: System.Data.DbType.Int32, direction: System.Data.ParameterDirection.Output);
+            parameter.Add("@PersonID", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             using (SqlConnection connection = new SqlConnection(connectionString: ClsUtility.ConnectionString))
             {
                 try
                 {
                     connection.Open();
-                    connection.Execute(sql: "Sp_AddNewPeople", parameter, commandType: System.Data.CommandType.StoredProcedure);
+                    connection.Execute(sql: "Sp_AddNewPeople", parameter, commandType: CommandType.StoredProcedure);
 
                     PersonID = parameter.Get<int>("@PersonID");
                 }
@@ -159,7 +158,7 @@ namespace computrized_maintenance_Data_Access
 
                     connection.Open();
 
-                    IsUpdateSuccessed = connection.Execute("Sp_UpdatePeople", parameter, commandType: System.Data.CommandType.StoredProcedure) > 0 ? true : false;
+                    IsUpdateSuccessed = connection.Execute("Sp_UpdatePeople", parameter, commandType: CommandType.StoredProcedure) > 0 ? true : false;
                 }
                 catch (Exception ex)
                 {

@@ -1,7 +1,7 @@
 ﻿using Computerized_maintenance_Logic_layer.Module.User_Management.Enums;
 using Computerized_maintenance_Logic_layer.Module.User_Management.Interface;
-using computrized_maintenance_Data_Access;
 using computrized_maintenance_Data_Access.DTO;
+using computrized_maintenance_Data_Access.UserManagement;
 
 namespace Computerized_maintenance_Logic_layer.Module.User_Management
 {

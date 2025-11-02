@@ -4,7 +4,7 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
-namespace computrized_maintenance_Data_Access
+namespace computrized_maintenance_Data_Access.UserManagement
 {
     public class DataAccessAdmin
     {
