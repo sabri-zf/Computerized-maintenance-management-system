@@ -1,9 +1,11 @@
 
 using CMMS_Api.Helper;
 using Computerized_maintenance_Logic_layer.Module.AssetsManagement;
+using Computerized_maintenance_Logic_layer.Module.DownTimeTracking;
 using Computerized_maintenance_Logic_layer.Module.InventoryManagement;
 using Computerized_maintenance_Logic_layer.Module.preventiveMaintenanceManagement;
 using Computerized_maintenance_Logic_layer.Module.workOrderManagement;
+using Computerized_maintenance_Logic_layer.Services;
 using computrized_maintenance_Data_Access.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +35,10 @@ namespace CMMS_Api
             builder.Services.AddScoped<clsSubCategories>();
             builder.Services.AddScoped<clsLocations>();
 
+            builder.Services.AddScoped<ClsDownTimeEvents>();
             builder.Services.AddScoped<ClspreventiveMaintenances>();
+
+            builder.Services.AddTransient<CalculateService>();
 
             // Add controller services to the container of DI
             builder.Services.AddControllers();

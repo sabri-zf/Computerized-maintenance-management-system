@@ -15,6 +15,6 @@
         string Reason,
         string? ActionTaken,
         int PerformedByID,
-        DateTime CreateAt
+        DateTime? CreateAt
    );
 }
