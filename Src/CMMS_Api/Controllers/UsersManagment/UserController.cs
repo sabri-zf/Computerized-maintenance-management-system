@@ -1,166 +1,151 @@
-﻿using CMMS_Api.DTO;
-using Computerized_maintenance_Logic_layer.Module.User_Management;
-using Computerized_maintenance_Logic_layer.Module.User_Management.Extensions;
+﻿using Computerized_maintenance_Logic_layer.Module.User_Management;
 using computrized_maintenance_Data_Access.DTO;
-using computrized_maintenance_Data_Access.DTO.DtoWrite;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMMS_Api.Controllers.UsersManagment
 {
-    [Route("api.Users/")]
+    [Route("api/v1/users")]
     [ApiController]
     //[Authorize]
-    public class UserController:ControllerBase
+    public class UserController(ClsUsers _instance):Controller
     {
 
-
-        [HttpGet("AllUsers")]
+        [HttpGet("retrieve",Name ="retrieve_all_Users")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public ActionResult<List<UserTableViewDto>> GetAllUsers()
+        public async Task<ActionResult> GetAllUsers()
         {
-            var ListOfUsers = ClsUsers.GetAllUsers();
 
-            if(ListOfUsers is null)
-            return NotFound("Not Found : Data of User Not Found");
+            try
+            {
+                var ListOfUsers = await _instance.GetAllUsersAsync();
 
-            return Ok(ListOfUsers);
+                if (ListOfUsers is null)
+                    return NotFound("Not Found : Data of User Not Found");
+
+                return Ok(ListOfUsers);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server Error : {ex.Message}");
+            }
         }
 
-
-        [HttpGet("GetUserByID{id}",Name ="Get User By ID")]
+        [HttpGet("retrieve-one/{id}",Name ="get_one_user")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public ActionResult<Api_UserDto> GetUserByID(int? id)
+        public async  Task<ActionResult> GetUserByID(int id)
         {
-            if (id is null || id <= 0) return BadRequest($"Error : Invlid ID ({id})");
+            if (id < 1) return BadRequest($"Error : Invlid ID ({id})");
 
-
-            if (!ClsUsers.IsExistUser(id)) return StatusCode(500, "Server : User Doesn't Exist");
-
-            var FindUser = ClsUsers.FindUser(id);
-
-            if(FindUser is not ClsUsers)
+            try
             {
-                return NotFound("Not Found : Error Occurred invalid User");
+                if (!await _instance.IsExistUserAsync(id)) return StatusCode(500, "Server : User Doesn't Exist");
+
+                var FindUser = await _instance.FindUserAsync(id);
+
+                if (FindUser is not UserDtoResponse)
+                {
+                    return NotFound("Not Found : Error Occurred invalid User");
+                }
+
+                return Ok(FindUser);
+
             }
-
-
-            Api_UserDto apiUser = new()
+            catch (Exception ex)
             {
-                UserId = FindUser.UserID,
-                UserName = FindUser.UserName,
-                FirstName = FindUser.First_Name,
-                LastName = FindUser.Last_Name,
-                Email = FindUser.Email,
-                Phone = FindUser.Phone,
-                Address = FindUser.Address,
-                BirthDay = FindUser.BithDay,
-                RoleName = FindUser.Role?.RoleName,
-                Permission = FindUser.Permisson,
-                IsActive = FindUser.IsActive
-            };
-
-            return Ok(apiUser);
+                return StatusCode(500, $"Server Error : {ex.Message}");
+            }
         }
 
-        [HttpPost("AddNewUser",Name = "Add New User")]
+        [HttpPost("create",Name = "add_new_user")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public ActionResult<Api_UserDto> AddNewUser(UserWriteData userWrite)
+        public async  Task<ActionResult> AddNewUser(ProcessAddUserDto resquest)
         {
-            if (userWrite is not UserWriteData)
+            if (resquest is not ProcessAddUserDto)
             {
-                return BadRequest("Bad Request : Error occurred on Sent");
+                return BadRequest("Bad Request : Invalid operation");
             }
 
-            var User = new ClsUsers(userWrite);
-
-            if(!User.Save())
+            try
             {
-               return StatusCode(500, "Server : Error has been occurred ,User Not Saved");
-            }
+                var IsInseted = await _instance.AddNewUserAsync(resquest);
 
-            return Ok($"Add new User id ({User.UserID}) Hass been Successful ");
+                if (!IsInseted)
+                {
+                    return StatusCode(500, "Server : Error has been occurred ,User Not Saved");
+                }
+
+                return Ok($"Add new User id Hass been Successful ");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server Error : {ex.Message}");
+            }
         }
 
 
-        [HttpPut("Update{id}", Name = "Update User")]
+        [HttpPut("edit/{id}", Name = "update_user")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public ActionResult UpdateUser(int id, UserWriteData userWrite)
+        public async Task<ActionResult> UpdateUser(ProcessUpdateUserDto resquest)
         {
-            if (id <= 0) return BadRequest("Error : Invalid Request");
+            if (resquest.UserId < 1 || resquest is not ProcessUpdateUserDto) return BadRequest("Bad a request : Invalid Operation");
 
-            if (userWrite is not UserWriteData)
+            try
             {
-                return BadRequest("Error : Error occurred on Sent");
+                var FindUser = await _instance.UpdateUserAsync(resquest);
+
+                if (!FindUser)
+                {
+                    return StatusCode(500, "Server : Error has been occurred ,User doesn't Save");
+                }
+
+                return Ok($"Update a user Has been succeed");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server Error : {ex.Message}");
             }
 
-            var FindUser = ClsUsers.FindUser(id);
-
-            if (FindUser == null) return NotFound("Not Found : User Not Found");
-
-            FindUser.UserName   = userWrite.UserName;
-            FindUser.Password   = userWrite.Password;
-            FindUser.RoleID     = userWrite.RoleID;
-            FindUser.Permisson  = userWrite.permission;
-            FindUser.IsActive   = userWrite.IsActive;
-            FindUser.First_Name = userWrite.FirstName;
-            FindUser.Last_Name  = userWrite.LastName;
-            FindUser.Email      = userWrite.Email;
-            FindUser.Phone      = userWrite.Phone;
-            FindUser.BithDay    = userWrite.BirthDay;
-            FindUser.Address    = userWrite.Addrees;
-
-
-            if (!FindUser.Save())
-            {
-                return StatusCode(500, "Server : Error has been occurred ,User not Saved");
-            }
-
-
-
-            return Ok($"Update user ID:({id}) Has been successed");
         }
 
 
-        [HttpDelete("Delete{id}", Name = "Delete User")]
+        [HttpDelete("omit/{id}", Name = "delete_user")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public ActionResult DeleteUser(int id)
+        public async Task<ActionResult> DeleteUser(int id)
         {
-            if (id < 1 ) return BadRequest($"Bad Requst : Invalid Request ID {id}");
+            if (id < 1 ) return BadRequest($"Bad Requst : Invalid operation");
 
-            if(!ClsUsers.IsExistUser(id))
+            try
             {
-                return NotFound("Not Found : Invalid User");
+                if (!await _instance.IsExistUserAsync(id))
+                {
+                    return NotFound("Not Found : User doesn't find");
+                }
+
+                if (!await _instance.DeleteUserAsync(id))
+                {
+                    return StatusCode(500, "Server : Error has been occurred");
+                }
+
+                return Ok($"Delete user Has been succeed");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server Error : {ex.Message}");
             }
 
-            int? PersonId = UserService.GetPersonIdOfUser(id);
-
-            if (!PersonId.HasValue) return StatusCode(500, "Server : Error occurred on system");
-
-            if (!ClsUsers.DeleteUser(id,PersonId))
-            {
-                return StatusCode(500,"Server : Error has been occurred");
-            }
-
-            return Ok($"Delete user ID:({id}) Has been successed");
         }
 
 

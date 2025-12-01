@@ -1,31 +1,28 @@
-﻿using computrized_maintenance_Data_Access.DTO;
-using computrized_maintenance_Data_Access.UserManagement;
-
-namespace Computerized_maintenance_Logic_layer.Module.User_Management
+﻿namespace Computerized_maintenance_Logic_layer.Module.User_Management
 {
-    public static class RoleManipulateDataExtension
-    {
+    //public static class RoleManipulateDataExtension
+    //{
 
-        public static ClsRoles? Find(this ClsRoles role,int? ID)
-        {
-            RoleTableDto roleDto = new RoleTableDto();
-            if (DataAccessRole.Find(ID,ref roleDto))
-            {
-               return new ClsRoles(roleDto);
-            }
+    //    //public static ClsRoles? Find(this ClsRoles role,int? ID)
+    //    //{
+    //    //    RoleDtoRequest roleDto = new RoleDtoRequest();
+    //    //    if (DataAccessRole.Find(ID,ref roleDto))
+    //    //    {
+    //    //       return new ClsRoles(roleDto);
+    //    //    }
 
-            return null;
-        }
+    //    //    return null;
+    //    //}
 
-        public static string? GetRoleName(this ClsRoles role)
-        {
-            return DataAccessRole.RoleName(role.RoleID);
-        }
+    //    //public static string? GetRoleName(this ClsRoles role)
+    //    //{
+    //    //    return DataAccessRole.RoleName(role.RoleID);
+    //    //}
 
-        public static List<RoleTableDto> GetAllRoles(this ClsRoles role)
-        {
-            return DataAccessRole.GetAllRoles();
-        }
+    //    //public static List<RoleDtoRequest> GetAllRoles(this ClsRoles role)
+    //    //{
+    //    //    return DataAccessRole.GetAllRoles();
+    //    //}
 
-    }
+    //}
 }

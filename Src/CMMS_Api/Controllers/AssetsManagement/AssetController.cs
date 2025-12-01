@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace CMMS_Api.Controllers.AssetsManagementController
 {
     [ApiController]
-    [Route("Api/V1/asset")]
+    [Route("api/v1/assets")]
     public class AssetController(clsAssets Instance):Controller
     {
 
 
-        [HttpGet("get-assets",Name ="get-assets")]
+        [HttpGet("retrieve",Name ="get-assets")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<Asset>> GetAll()
@@ -25,7 +25,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
             return Ok(List_Assets);
         }
 
-        [HttpGet("get-asset/{asset_name}")] // add costume constatint regx to avoid send number to request
+        [HttpGet("retrieve-one/{asset_name}")] // add costume constatint regx to avoid send number to request
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -42,8 +42,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
             return Ok(Output);
         }
 
-
-        [HttpGet("get-asset/{Id:int}")]
+        [HttpGet("retrieve-one/{Id:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -60,8 +59,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
             return Ok(Output);
         }
 
-
-        [HttpPost("add-new-asset",Name ="add-asset")]
+        [HttpPost("create",Name ="add-asset")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -80,8 +78,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
             return CreatedAtAction("GetAssetByName", new { asset_name = ResponseDto.AssetName},ResponseDto);
         }
 
-
-        [HttpPut("edit-Asset",Name ="edit-asset")]
+        [HttpPut("edit",Name ="edit-asset")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -95,8 +92,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
                             : StatusCode(500, "Error Occurred on system");
         }
 
-
-        [HttpDelete("delet-asset/{ID:int}",Name ="delete-asset")]
+        [HttpDelete("ommit/{ID:int}",Name ="delete-asset")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -113,6 +109,5 @@ namespace CMMS_Api.Controllers.AssetsManagementController
 
             return Ok("Delete Asset Has been Done");
         }
-
     }
 }

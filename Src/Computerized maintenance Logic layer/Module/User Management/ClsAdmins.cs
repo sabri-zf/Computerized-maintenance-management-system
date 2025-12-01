@@ -1,99 +1,76 @@
-﻿using Computerized_maintenance_Logic_layer.Module.User_Management.Enums;
+﻿using Computerized_maintenance_Logic_layer.Module.User_Management.Interface;
 using computrized_maintenance_Data_Access.DTO;
 using computrized_maintenance_Data_Access.UserManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Computerized_maintenance_Logic_layer.Module.User_Management
 {
-    public class ClsAdmins
+    public class ClsAdmins(AdminRepo _Repo)
     {
-        private Mode_Save _mode;
-        public int AdminID { get; private set; }
-        public  int? UserID { get;  set; }
-        public ClsUsers? Users { get; set; }
 
-        public AdminTableDto? DTO { get; set; }
-        public ClsAdmins() 
+        /// <summary>
+        /// Retrieve Admin <see cref="AdminDtoResponse"/> by ID"/>
+        /// </summary>
+        /// <param name="ID">unique identifier of admin</param>
+        /// <returns>data transfer object of <see cref="AdminDtoResponse"/> in case an operation has been done, otherwise <see langword="null"/></returns>
+        public async Task<AdminDtoResponse?> FindAsync(int ID)
         {
-            this.AdminID = -1;
-            this.UserID = null;
-            this.DTO = new ();
-            //this.Users = new ClsUsers();
-
-            _mode = Mode_Save.AddNew;
+            return await _Repo.FinsByIdAsync(ID);
         }
 
-        private ClsAdmins(int adminID , int ? userID)
+
+        /// <summary>
+        /// Insert new admin record on the system
+        /// </summary>
+        /// <param name="adminRequest">data transfer object of <see cref="ProcessAddUserDto"/></param>
+        /// <returns><see langword="true"/> if an operation has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> AddNewAsync(ProcessAddUserDto adminRequest)
         {
-            this.AdminID = adminID;
-            this.UserID = userID;
-            this.Users = ClsUsers.FindUser(UserID);
-            this._mode = Mode_Save.Update;
+           if(adminRequest is not ProcessAddUserDto) return false;
+
+            return await _Repo.AddNewAdminAsync(adminRequest) > 0;
         }
 
-        public static ClsAdmins? Find(int ID)
+        /// <summary>
+        /// Update an admin record on the system
+        /// </summary>
+        /// <param name="adminRequest">data transfer object of <see cref="AdminDtoRequest"/></param>
+        /// <returns><see langword="true"/> if an operation has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> UpdateAsync(ProcessUpdateAdminDto adminRequest)
         {
-            var Dto = new AdminTableDto();
-            if(DataAccessAdmin.FindByID(ID, ref Dto))
-            {
-               return new ClsAdmins(ID, Dto.UserID);
-            }
-
-            return null;
+            if(adminRequest is not ProcessUpdateAdminDto) return false;
+            return await _Repo.UpdateAdminAsync(adminRequest);
         }
 
-        private bool AddnewAdmin()
+        /// <summary>
+        /// Delete an admin record on the system
+        /// </summary>
+        /// <param name="Id">Unique identifier of admin </param>
+        /// <returns><see langword="true"/> if an operation has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> DeleteAsync(int Id)
         {
-            this.DTO.UserID = this.Users.UserID;
-            this.AdminID = DataAccessAdmin.AddNewAdmin(this.DTO);
-
-            return (this.AdminID > 0);
+            if(Id < 1) return false;
+            return await _Repo.DeleteAdminAsync(Id);
         }
 
-        public static bool DeleteAdmin(int? ID)
+        /// <summary>
+        /// Verify an admin existence on the system
+        /// </summary>
+        /// <param name="Id">Unique identifier of admin </param>
+        /// <returns><see langword="true"/> if an operation has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> IsExistAsync(int Id)
         {
-            return DataAccessAdmin.DeleteAdmin(ID);
+            if(Id < 1) return false;
+            return await _Repo.IsExistAdminAsync(Id);
         }
 
-        public bool DeleteAdmin()
-        {
-            return DeleteAdmin(this.AdminID);
-        }
 
-        public bool Save()
+        /// <summary>
+        /// retrieve all admins on the system
+        /// </summary>
+        /// <returns>a collection of Admins list <see cref="IEnumerable{AdminTableViewDto}"/>, otherwise <see langword="null"/></returns>
+        public async Task<IEnumerable<AdminTableViewDto>?> GetAllAsync()
         {
-            switch (_mode)
-            {
-                
-                case Mode_Save.AddNew:
-                    if (AddnewAdmin())
-                    {
-                        this._mode = Mode_Save.Update;
-                        return true;
-                    }
-                 return false;
-            }
-
-            return false;
-        }
-
-        public static bool IsExistAdmin(int AdminID)
-        {
-            return DataAccessAdmin.IsExistAdmin(AdminID);
-        }
-
-        public bool IsExistAdmin()
-        {
-            return IsExistAdmin(this.AdminID);
-        }
-
-        public static List<AdminTableViewDto>? GetAllAdmin()
-        {
-            return DataAccessAdmin.GetAllAdmins();
+            return await _Repo.GetAllAdminsAsync();
         }
 
     }

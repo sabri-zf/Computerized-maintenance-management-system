@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace CMMS_Api.Controllers.WorkOrderManagement
 {
     [ApiController]
-    [Route("Api/V1/work-order-history")]
+    [Route("api/v1/work-order-histories")]
     public class WorkOrderHistoryController(ClsWorkOrderHistory _workOrderHistory) : Controller
     {
 
-        [HttpGet("get-workorder-histories", Name = "get-all-workorder-hisorty")]
+        [HttpGet("retrieve", Name = "get-all-workorder-hisorty")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -22,7 +22,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
             return Ok(WorkOrders_List);
         }
 
-        [HttpGet("get-work-order-history/{Id}", Name = "get-Work-order-history")]
+        [HttpGet("retrieve-one/{Id}", Name = "get-Work-order-history")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -39,7 +39,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
             return Ok(WorkOrder_Obj);
         }
 
-        [HttpPost("addnew-work-order-history")]
+        [HttpPost("create")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -55,7 +55,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
         }
 
 
-        [HttpPut("edit-work-order-history")]
+        [HttpPut("edit")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -72,7 +72,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
         }
 
 
-        [HttpDelete("delete-work-order-history/{Id}", Name = "remove-work-order-history")]
+        [HttpDelete("ommit/{Id}", Name = "remove-work-order-history")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]

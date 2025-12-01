@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace CMMS_Api.Controllers.InventoryManagement
 {
     [ApiController]
-    [Route("Api/V1/inventory-Tranaction")]
+    [Route("api/v1/inventory-Tranactions")]
     public class InventoryTransactionController(ClsInventoryItems _InventoryItem):Controller
     {
 
 
-        [HttpGet("get-inventorytrasactions", Name = "retrieve-inventorytrasactions")]
+        [HttpGet("retrieve", Name = "retrieve-inventorytrasactions")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -26,7 +26,7 @@ namespace CMMS_Api.Controllers.InventoryManagement
         }
 
 
-        [HttpGet("get-partitem/{Id:int}")]
+        [HttpGet("retrieve-one/{Id:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -44,7 +44,7 @@ namespace CMMS_Api.Controllers.InventoryManagement
         }
 
 
-        [HttpPost("addnew-partitem")]
+        [HttpPost("create")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -63,7 +63,7 @@ namespace CMMS_Api.Controllers.InventoryManagement
 
 
 
-        [HttpPut("edit-partitem")]
+        [HttpPut("edit")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -81,7 +81,7 @@ namespace CMMS_Api.Controllers.InventoryManagement
         }
 
 
-        [HttpDelete("delete-partitem/{Id:int}")]
+        [HttpDelete("ommit/{Id:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace CMMS_Api.Controllers.WorkOrderManagement
 {
     [ApiController]
-    [Route("Api/V1/work-order-part")]
+    [Route("api/v1/work-order-parts")]
     public class WorkOrderPartController(ClsWorkOrderParts _workorder_parts) : Controller
     {
 
-        [HttpGet("get-workorder-parts", Name = "get-all-workorder-parts")]
+        [HttpGet("retrieve", Name = "get-all-workorder-parts")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -23,12 +23,11 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
             return Ok(WorkOrdersPart_List);
         }
 
-        [HttpGet("get-work-order-part/{Id}", Name = "get-Work-order-part")]
+        [HttpGet("retrieve-one/{Id}", Name = "get-Work-order-part")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-
         public async Task<ActionResult<WorkOrderPartResponseDto>> GetByID([FromRoute] int Id)
         {
             if (Id < 1) return BadRequest("Invalid Operation");
@@ -40,7 +39,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
             return Ok(WorkOrderPart_Obj);
         }
 
-        [HttpPost("addnew-work-order")]
+        [HttpPost("create")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -64,12 +63,10 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
             return Created();
         }
 
-
-        [HttpPut("edit-work-order-Part")]
+        [HttpPut("edit")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-
         public async Task<ActionResult> UpdateWorkOrder([FromBody] WorkOrderPartRequestDto requestDto)
         {
             if (requestDto is not WorkOrderPartRequestDto && requestDto.ID < 1) return BadRequest("Invalid Operation");
@@ -81,12 +78,10 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
             return Ok("Work-Order has been Updated ");
         }
 
-
-        [HttpDelete("delete-work-order-Part/{Id}", Name = "remove-work-order-Part")]
+        [HttpDelete("ommit/{Id}", Name = "remove-work-order-Part")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-
         public async Task<ActionResult> DeleteWorkOrder(int Id)
         {
             if (Id < 1) return BadRequest("Invalid Operation");

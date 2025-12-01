@@ -15,7 +15,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
     {
 
 
-        public static bool Find(int? ID, ref CountryTableDto Dto)
+        public static bool Find(int? ID, ref CountryDtoResquest Dto)
         {
             if (ID == null || ID < 1) return false;
 
@@ -29,7 +29,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
 
                     string Query = "select * from Countries where CountryID = @ID";
                     connection.Open();
-                    var Result = connection.Query<CountryTableDto>(Query, DepartmentParam, commandType: CommandType.Text).SingleOrDefault();
+                    var Result = connection.Query<CountryDtoResquest>(Query, DepartmentParam, commandType: CommandType.Text).SingleOrDefault();
 
                     if (Result != null)
                     {
@@ -75,10 +75,10 @@ namespace computrized_maintenance_Data_Access.UserManagement
 
         }
 
-        public static IEnumerable<CountryTableDto>? GetAll()
+        public static IEnumerable<CountryDtoResquest>? GetAll()
         {
 
-            IEnumerable<CountryTableDto>? CountryList = null;
+            IEnumerable<CountryDtoResquest>? CountryList = null;
 
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
@@ -88,7 +88,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
 
                     connection.Open();
 
-                    var Result = connection.Query<CountryTableDto>(Query);
+                    var Result = connection.Query<CountryDtoResquest>(Query);
 
                     if (Result != null)
                     {

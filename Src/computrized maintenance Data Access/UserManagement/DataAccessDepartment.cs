@@ -43,10 +43,10 @@ namespace computrized_maintenance_Data_Access.UserManagement
 
         }
 
-        public static IEnumerable<DepartmentTableDto>? GetAll()
+        public static IEnumerable<DepartmentDtoRequest>? GetAll()
         {
 
-            IEnumerable<DepartmentTableDto>? DepartmentList = null;
+            IEnumerable<DepartmentDtoRequest>? DepartmentList = null;
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
                 try
@@ -55,7 +55,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
 
                     connection.Open();
 
-                    var Result = connection.Query<DepartmentTableDto>(Query);
+                    var Result = connection.Query<DepartmentDtoRequest>(Query);
 
                     if (Result != null)
                     {
@@ -72,7 +72,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
             }
         }
 
-        public static bool Find(int? ID, ref DepartmentTableDto Dto)
+        public static bool Find(int? ID, ref DepartmentDtoRequest Dto)
         {
             if (ID == null || ID < 1) return false;
 
@@ -86,7 +86,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
 
                     string Query = "select * from Departments where DepartmentID = @ID";
                     connection.Open();
-                    var Result = connection.Query<DepartmentTableDto>(Query, DepartmentParam, commandType: CommandType.Text).SingleOrDefault();
+                    var Result = connection.Query<DepartmentDtoRequest>(Query, DepartmentParam, commandType: CommandType.Text).SingleOrDefault();
 
                     if (Result != null)
                     {

@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace CMMS_Api.Controllers.AssetsManagementController
 {
     [ApiController]
-    [Route("Api/V1/subgategory")]
+    [Route("api/v1/subgategories")]
     public class SubCategoryController(clsSubCategories Instance) :Controller
     {
 
 
-        [HttpGet("get-subcategories", Name = "retrieve-sub-category")]
+        [HttpGet("retrieve", Name = "retrieve-sub-category")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -25,7 +25,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         }
 
 
-        [HttpGet("get-subcategory/{id:int}")]
+        [HttpGet("retrieve-one/{id:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -41,7 +41,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         }
 
 
-        [HttpPost("add-new-subcategory",Name ="add-subcategory")]
+        [HttpPost("create",Name ="add-subcategory")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -60,7 +60,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         }
 
 
-        [HttpPut("edit-subcategory", Name ="update-subcategory")]
+        [HttpPut("edit", Name ="update-subcategory")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -75,7 +75,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         }
 
 
-        [HttpDelete("delete-subcategory/{ID:int}",Name ="remove-subcategory")]
+        [HttpDelete("ommit/{ID:int}",Name ="remove-subcategory")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

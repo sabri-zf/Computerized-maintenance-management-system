@@ -1,16 +1,15 @@
 ﻿using CMMS_Api.DTO;
 using Computerized_maintenance_Logic_layer.Module.AssetsManagement;
-using computrized_maintenance_Data_Access.Entites.AssetsManagment;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMMS_Api.Controllers.AssetsManagementController
 {
 
     [ApiController]
-    [Route("Api/V1/asset-image")]
+    [Route("api/v1/asset-images")]
     public class AssetImageController(ClsAssetImage Instance) :Controller
     {
-        [HttpGet("get-asset-images",Name ="asset-images")]
+        [HttpGet("retrieve",Name ="asset-images")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         [ProducesResponseType(404)]
@@ -27,7 +26,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         }
 
 
-        [HttpGet("get-asset-image/{Id:int}",Name ="get-asset-image-byid")]
+        [HttpGet("retrieve-one/{Id:int}",Name ="get-asset-image-byid")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -44,7 +43,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
                                   : NotFound("Data you looking for is not Found");
         }
 
-        [HttpPost("add-asset-image",Name ="make-asset-image")]
+        [HttpPost("create",Name ="make-asset-image")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         [ProducesResponseType(404)]
@@ -58,7 +57,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
                                : StatusCode(500, "Error Ouccrred on System"); ;
         }
 
-        [HttpPut("edit-asset-image",Name ="update-asset-image")]
+        [HttpPut("edit",Name ="update-asset-image")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -72,7 +71,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
                              : StatusCode(500, "An error occurred on system");
         }
 
-        [HttpDelete("delete-asset-image/{id:int}",Name ="delete-asset-image")]
+        [HttpDelete("ommit/{id:int}",Name ="delete-asset-image")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]

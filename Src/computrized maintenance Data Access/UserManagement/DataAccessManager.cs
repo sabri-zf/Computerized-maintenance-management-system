@@ -13,7 +13,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
 {
     public class DataAccessManager
     {
-        public static bool Find(int? ID , ref ManagerTableDto dto)
+        public static bool Find(int? ID , ref ManagerDtoRequest dto)
         {
             if (ID < 1 || ID is null) return false;
 
@@ -26,7 +26,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
                     DynamicParameters ManagerParam = new DynamicParameters();
                     ManagerParam.Add("@ManagerID", ID);
 
-                    var Result = connection.Query<ManagerTableDto>("Sp_FindManagerByID", ManagerParam, commandType: CommandType.StoredProcedure).SingleOrDefault();
+                    var Result = connection.Query<ManagerDtoRequest>("Sp_FindManagerByID", ManagerParam, commandType: CommandType.StoredProcedure).SingleOrDefault();
 
                     if (Result != null)
                     {
@@ -44,7 +44,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
             return IsFound;
         }
 
-        public static int? AddNewManager(ManagerTableDto dto)
+        public static int? AddNewManager(ManagerDtoRequest dto)
         {
             if (dto == null) return null;
 
@@ -78,7 +78,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
             return ManagerId;
         }
 
-        public static bool UpdateManger(ManagerTableDto dto)
+        public static bool UpdateManger(ManagerDtoRequest dto)
         {
             if (dto == null) return false;
 
@@ -105,7 +105,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
             return IsUpdateManager;
         }
 
-        public static bool DeleteManager(ManagerTableDto managerDto)
+        public static async Task<bool> DeleteManager(ManagerDtoRequest managerDto)
         {
             if(managerDto == null) return false;
 
@@ -114,7 +114,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
             {
                 try
                 {
-                    int? personID = DataAccessUser.GetPersonID(managerDto.UserID);
+                    int? personID = await UserRepo.GetPersonIdAsync(managerDto.UserID);
 
                     if (personID == null) return false;
 
@@ -124,12 +124,13 @@ namespace computrized_maintenance_Data_Access.UserManagement
                     Managerparam.Add("@PersonID", personID);
 
                     connection.Open();
-                   IsDeletedManager = connection.Execute("Sp_DeleteManager", param:Managerparam,commandType:CommandType.StoredProcedure) > 0;
+                   IsDeletedManager = await connection.ExecuteAsync("Sp_DeleteManager", param:Managerparam,commandType:CommandType.StoredProcedure) > 0;
+                   connection.Close();
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    throw;
+                    return false;
                 }
             }
 

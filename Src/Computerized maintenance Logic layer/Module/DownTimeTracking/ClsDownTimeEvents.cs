@@ -97,9 +97,8 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
             }
             catch (Exception ex)
             {
+                throw new Exception(ex.Message, ex);
             }
-
-            return null;
         }
        
 
@@ -126,7 +125,7 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
                     Reason = responseDto.Reason,
                     ActionTaken = responseDto.ActionTaken,
                     PerformedByID = responseDto.PerformedByID,
-                    CreateAt = responseDto.CreateAt,
+                    CreateAt = responseDto.CreateAt!.Value
                 };
 
 
@@ -164,7 +163,7 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
                              requestDto.Reason,
                              requestDto.ActionTaken,
                              requestDto.PerformedByID,
-                             requestDto.CreateAt
+                             null
                            );
 
                 if (!_CheckValidInputData(ResponsDto,true,requestDto.ID)) return false;
@@ -185,6 +184,7 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
             }
             catch (Exception ex)
             {
+               
                 return false;
             }
         }

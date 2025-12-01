@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace CMMS_Api.Controllers.WorkOrderManagement
 {
     [ApiController]
-    [Route("Api/V1/work-order")]
+    [Route("api/v1/work-orders")]
     public class WorkOrderController (ClsWorkorders _workorder):Controller
     {
 
-        [HttpGet("get-workorders",Name ="get-all-workorder")]
+        [HttpGet("retrieve", Name ="get-all-workorder")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -24,7 +24,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
             return Ok(WorkOrders_List);
         }
 
-        [HttpGet("get-work-order/{Id}",Name ="get-Work-order")]
+        [HttpGet("retrieve-one/{Id}", Name ="get-Work-order")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -41,7 +41,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
             return Ok(WorkOrder_Obj);
         }
 
-        [HttpPost("addnew-work-order")]
+        [HttpPost("create")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -76,7 +76,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
         }
 
 
-        [HttpPut("edit-work-order")]
+        [HttpPut("edit")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -93,7 +93,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
         }
 
 
-        [HttpDelete("delete-work-order/{Id}",Name ="remove-work-order")]
+        [HttpDelete("ommit/{Id}",Name ="remove-work-order")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]

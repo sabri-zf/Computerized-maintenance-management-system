@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace CMMS_Api.Controllers.PreventiveMaintenanceManagement
 {
     [ApiController]
-    [Route("Api/V1/preventive-maintenance")]
+    [Route("api/v1/preventive-maintenances")]
     public class PreventiveMaintenanceController(ClspreventiveMaintenances _Instance) : Controller
     {
-        [HttpGet("get-all-preventive-maintenances", Name = "get-all-preventive-maintenances")]
+        [HttpGet("retrive-pm", Name = "get-all-preventive-maintenances")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -20,7 +20,7 @@ namespace CMMS_Api.Controllers.PreventiveMaintenanceManagement
             return Ok(List);
         }
 
-        [HttpGet("get-preventive-maintenance/{id:int}", Name = "get-preventive-maintenance-byid")]
+        [HttpGet("retrieve-one-pm/{id:int}", Name = "get-preventive-maintenance-byid")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -37,7 +37,7 @@ namespace CMMS_Api.Controllers.PreventiveMaintenanceManagement
         }
 
 
-        [HttpPost("add-preventive-maintenance", Name = "add-preventive-maintenance")]
+        [HttpPost("create-pm", Name = "add-preventive-maintenance")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -50,7 +50,7 @@ namespace CMMS_Api.Controllers.PreventiveMaintenanceManagement
                            : StatusCode(500, "Error Occurred on System");
         }
 
-        [HttpPut("update-preventive-maintenance", Name = "update-preventive-maintenance")]
+        [HttpPut("edit-pm", Name = "update-preventive-maintenance")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -63,7 +63,7 @@ namespace CMMS_Api.Controllers.PreventiveMaintenanceManagement
                            : StatusCode(500, "Error Occurred on System");
         }
 
-        [HttpDelete("delete-preventive-maintenance/{id:int}", Name = "delete-preventive-maintenance")]
+        [HttpDelete("ommit-pm/{id:int}", Name = "delete-preventive-maintenance")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]

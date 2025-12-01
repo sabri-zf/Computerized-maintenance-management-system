@@ -1,10 +1,11 @@
 
+using CMMS_Api.Extensions;
 using CMMS_Api.Helper;
-using Computerized_maintenance_Logic_layer.Module.AssetsManagement;
-using Computerized_maintenance_Logic_layer.Module.InventoryManagement;
-using Computerized_maintenance_Logic_layer.Module.preventiveMaintenanceManagement;
-using Computerized_maintenance_Logic_layer.Module.workOrderManagement;
+using Computerized_maintenance_Logic_layer.Module.User_Management;
+using Computerized_maintenance_Logic_layer.Module.User_Management.Extensions;
+using Computerized_maintenance_Logic_layer.Services;
 using computrized_maintenance_Data_Access.Data;
+using computrized_maintenance_Data_Access.UserManagement;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,20 +21,22 @@ namespace CMMS_Api
             builder.Services.AddDbContext<AppDbContext>(option =>
             option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             //register Application Classes on DI container to dealing with the opration of Ef core regulary
-            builder.Services.AddScoped<ClsWorkorders>();
-            builder.Services.AddScoped<ClsWorkOrderParts>();
-            builder.Services.AddScoped<ClsWorkOrderHistory>();
+            builder.Services.AddWorkOrders();
+            builder.Services.AddInventory();
+            builder.Services.AddAssets();
+            builder.Services.AddDownTimeAndPriventive();
 
-            builder.Services.AddScoped<ClsInventoryItems>();
-            builder.Services.AddScoped<ClsInventoryTransactions>();
+            builder.Services.AddScoped<CalculateService>();
+            builder.Services.AddScoped<UserService>();
 
-            builder.Services.AddScoped<clsAssets>();
-            builder.Services.AddScoped<ClsAssetImage>();
-            builder.Services.AddScoped<clsCategories>();
-            builder.Services.AddScoped<clsSubCategories>();
-            builder.Services.AddScoped<clsLocations>();
+            builder.Services.AddScoped<AdminRepo>();
+            builder.Services.AddScoped<ClsAdmins>();
 
-            builder.Services.AddScoped<ClspreventiveMaintenances>();
+            builder.Services.AddScoped<UserRepo>();
+            builder.Services.AddScoped<ClsUsers>();
+
+            builder.Services.AddScoped<RoleRepo>();
+            builder.Services.AddScoped<ClsRoles>();
 
             // Add controller services to the container of DI
             builder.Services.AddControllers();

@@ -6,11 +6,11 @@ namespace CMMS_Api.Controllers.AssetsManagementController
 {
     [ApiController]
 
-    [Route("Api/V1/category")]
+    [Route("api/v1/categories")]
     public class CategoryController(clsCategories Instance) :Controller
     {
 
-        [HttpGet("get-gategories",Name ="get-all-gategories")]
+        [HttpGet("retrieve",Name ="get-all-gategories")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -26,8 +26,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
             return Ok(list);
         }
 
-
-        [HttpGet("get-gategory/{id:int}",Name ="get-gategory-byid")]
+        [HttpGet("retrieve-one/{id:int}", Name ="get-gategory-byid")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -43,8 +42,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
             return Ok(responseDto);
         }
 
-
-        [HttpPost("add-gategory",Name ="new-gategory")]
+        [HttpPost("create",Name ="new-gategory")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -58,11 +56,10 @@ namespace CMMS_Api.Controllers.AssetsManagementController
                            : StatusCode(500, "Error Occurred on System");
         }
 
-        [HttpPut("edit-category",Name ="update-category")]
+        [HttpPut("edit",Name ="update-category")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-
         public async Task<IActionResult> UpdateCategory(CategoryRequestDto requestDto)
         {
 
@@ -74,8 +71,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
                             : StatusCode(500, "Error Occurred on System");
         }
 
-
-        [HttpDelete("delete-gategory/{id:int}",Name ="Remove-category")]
+        [HttpDelete("ommit/{id:int}",Name ="Remove-category")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -87,6 +83,5 @@ namespace CMMS_Api.Controllers.AssetsManagementController
                                  ? Ok("Category has been deleted")
                                  : StatusCode(500, "Error occurred on system");
         }
-
     }
 }

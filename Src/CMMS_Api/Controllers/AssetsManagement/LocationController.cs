@@ -7,12 +7,12 @@ namespace CMMS_Api.Controllers.AssetsManagementController
 {
     [ApiController]
 
-    [Route("Api/V1/location")]
+    [Route("api/v1/locations")]
     public class LocationController(clsLocations Instance) :Controller
     {
 
 
-        [HttpGet("get-locations",Name ="retrieve-location")]
+        [HttpGet("retrieve", Name ="retrieve-location")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -27,7 +27,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         }
 
 
-        [HttpGet("get-location/{id:int}",Name ="get-location-byid")]
+        [HttpGet("retrieve-one/{id:int}", Name ="get-location-byid")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -43,7 +43,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
         }
 
 
-        [HttpPost("add-new-location",Name ="add-location")]
+        [HttpPost("create",Name ="add-location")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -60,7 +60,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
             return Ok("Add new Location has been done");
         }
 
-        [HttpPut("edit-location",Name ="update-location")]
+        [HttpPut("edit",Name ="update-location")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -76,7 +76,7 @@ namespace CMMS_Api.Controllers.AssetsManagementController
             return Ok("Update Location Has been done");
         }
 
-        [HttpDelete("delete-location/{id:int}", Name ="remove-location")]
+        [HttpDelete("ommit/{id:int}", Name ="remove-location")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

@@ -2,21 +2,19 @@
 using computrized_maintenance_Data_Access.Misc;
 using Dapper;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 using System.Data;
-using System.Data.Common;
 namespace computrized_maintenance_Data_Access.UserManagement
 {
-    public class DataAccessPeople
+    public sealed class PeopleRepo
     {
        
         // using Deapper to excuted my database result set 
         
-        public static bool Find(int? PersonID,ref PersonTableDto Dto)
+        public async  Task<PersonDtoResponse?> FindAsync(int PersonID)
         {
-            if (PersonID < 0 || !PersonID.HasValue) return false;
+            if (PersonID < 1) return null;
 
-            bool IsFound = false;
+           
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
                 try
@@ -27,84 +25,61 @@ namespace computrized_maintenance_Data_Access.UserManagement
                     string query = @"Select * From People where PersonID = @PersonID";
 
                     connection.Open();
-                    var result = connection.Query<PersonTableDto>(query, PersonParam, commandType: CommandType.Text).SingleOrDefault();
+                    var result = await connection.QueryFirstAsync<PersonDtoResponse>(query, PersonParam, commandType: CommandType.Text);
 
-                    if (result != null)
-                    {
-                        Dto = result;                               
-                        IsFound = true;
-                    }
-                    else
-                    {
-                        IsFound = false;
-                    }    
+                    if (result is not null) return result;
+                   
                 }
                 catch (SqlException e)
                 {
                     Console.WriteLine(e.Message);
-                    throw;
+                    return null;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    throw;
+                    return null;
                 }
 
-                return IsFound;
+                return null;
             }
         }
-        public static async Task<List<PersonTableDto>> GetPeopleAsync()
+        public async Task<IEnumerable<PersonDtoResponse>?> GetPeopleAsync()
         {
-            //List<PersonDto>? people = new List<PersonDto>();
-
-            IEnumerable<PersonTableDto> people;
 
             using (SqlConnection connection = new SqlConnection(connectionString: ClsUtility.ConnectionString))
             {
                 try
                 {
+
                     string ExecuteStoreProcedure = "Sp_GetAllPeople";
 
-                    people = await connection.QueryAsync<PersonTableDto>(ExecuteStoreProcedure, commandType: CommandType.StoredProcedure);
+                    connection.Open();
+                    var peopleList = await connection.QueryAsync<PersonDtoResponse>(ExecuteStoreProcedure, commandType: CommandType.StoredProcedure);
+                    connection.Close();
+
+                    if (peopleList is not null) return peopleList;
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
                     Console.WriteLine(ex.Message);
-                    throw;
+                    return null;
                 }
 
             }
-            return people.ToList();
+            return null;
         }
 
-        public static List<PersonTableDto> GetPeople()
+        public async Task<bool> AddNewPerson(PersonDtoResponse? person)
         {
-            IEnumerable<PersonTableDto> people;
+            if (person == null) return false;
+            if(string.IsNullOrEmpty(person.FirstName)) return false;
+            if(string.IsNullOrEmpty(person.LastName)) return false;
+            if(string.IsNullOrEmpty(person.Phone)) return false;
+            if(string.IsNullOrEmpty(person.Email)) return false;
+            if(string.IsNullOrEmpty(person.Addrees)) return false;
+            
 
-            using (SqlConnection connection = new SqlConnection(connectionString: ClsUtility.ConnectionString))
-            {
-                try
-                {
-                    string ExecuteStoreProcedure = "Sp_GetAllPeople";
-
-                    people = connection.Query<PersonTableDto>(ExecuteStoreProcedure, commandType: CommandType.StoredProcedure);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    throw;
-                }
-
-            }
-            return people.ToList();
-        }
-
-
-        public static int? AddNewPerson(PersonTableDto? person)
-        {
-            if (person == null) return null;
-
-            int? PersonID = null;
 
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@FirstName", person.FirstName);
@@ -120,27 +95,34 @@ namespace computrized_maintenance_Data_Access.UserManagement
                 try
                 {
                     connection.Open();
-                    connection.Execute(sql: "Sp_AddNewPeople", parameter, commandType: CommandType.StoredProcedure);
+                    var IsAdded = await connection.ExecuteAsync(sql: "Sp_AddNewPeople", parameter, commandType: CommandType.StoredProcedure) > 0;
+                    connection.Close();
 
-                    PersonID = parameter.Get<int>("@PersonID");
+                    if (IsAdded)
+                    {
+                        return true;
+                    }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    throw;
+                    return false;
                 }
 
 
             }
-            return PersonID;
+            return false;
         }
 
-
-        public static bool UpdatePerson(PersonTableDto? person)
+        public  async Task<bool> UpdatePerson(PersonDtoRequest? person)
         {
             if (person == null) return false;
-
-            bool IsUpdateSuccessed = false;
+            if (person.PersonID < 1) return false;
+            if (string.IsNullOrEmpty(person.FirstName)) return false;
+            if (string.IsNullOrEmpty(person.LastName)) return false;
+            if (string.IsNullOrEmpty(person.Phone)) return false;
+            if (string.IsNullOrEmpty(person.Email)) return false;
+            if (string.IsNullOrEmpty(person.Addrees)) return false;
 
             using (SqlConnection connection = new SqlConnection(connectionString: ClsUtility.ConnectionString))
             {
@@ -157,20 +139,24 @@ namespace computrized_maintenance_Data_Access.UserManagement
 
 
                     connection.Open();
+                     var IsUpdate = await connection.ExecuteAsync("Sp_UpdatePeople", parameter, commandType: CommandType.StoredProcedure) > 0;
+                    connection.Close();
 
-                    IsUpdateSuccessed = connection.Execute("Sp_UpdatePeople", parameter, commandType: CommandType.StoredProcedure) > 0 ? true : false;
+                    if (IsUpdate)
+                    {
+                        return true;
+                    }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    IsUpdateSuccessed = false;
+                    return false;
                 }
             }
-            return IsUpdateSuccessed;
+            return false;
         }
 
-
-        public static bool DeletePerson(int? ID)
+        public async Task<bool> DeletePerson(int ID)
         {
             if (ID < 1) return false;
 
@@ -184,21 +170,19 @@ namespace computrized_maintenance_Data_Access.UserManagement
                     DeleteParameter.Add("@PersonID" ,ID);
 
                     connection.Open();
-
-                    IsDelelteSuccessed = connection.Execute("Sp_DeletePeople", DeleteParameter, commandType: CommandType.StoredProcedure) > 0;
+                    IsDelelteSuccessed = await connection.ExecuteAsync("Sp_DeletePeople", DeleteParameter, commandType: CommandType.StoredProcedure) > 0;
+                    connection.Close();
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    IsDelelteSuccessed = false;
-                    throw;
+                    return false;
                 }
             }
             return IsDelelteSuccessed;
         }
 
-
-        public static bool IsExistPerson(int? ID)
+        public async  Task<bool> IsExistPerson(int? ID)
         {
             if(ID < 1) return false;
 
@@ -213,19 +197,17 @@ namespace computrized_maintenance_Data_Access.UserManagement
 
                     string querey = @"select  Found = 1 from People where PersonID = @PersonID";
 
-                    IsExist = connection.ExecuteScalar<int>(querey,IsExistParameter, commandType: CommandType.Text) > 0;
+                    IsExist = await connection.ExecuteScalarAsync<int>(querey, IsExistParameter, commandType: CommandType.Text) > 0;
                 }
                 catch (SqlException ex)
                 {
                     Console.WriteLine(ex.Message);
-                    IsExist = false;
-                    throw;
-                }catch(Exception ex)
+                    return false;
+-                }catch(Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    IsExist = false;
-                    throw;
-                }
+                    return false;
+-                }
             }
             return IsExist;
         }

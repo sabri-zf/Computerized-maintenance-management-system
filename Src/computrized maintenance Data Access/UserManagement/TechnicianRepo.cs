@@ -6,10 +6,10 @@ using System.Data;
 
 namespace computrized_maintenance_Data_Access.UserManagement
 {
-    public class DataAccessTechnician
+    public sealed class TechnicianRepo
     {
 
-        public static bool Find(int? ID, ref TechnicianTableDto dto)
+        public async Task<TechnicianDtoRepose> Find(int? ID, ref TechnicianDtoRequest dto)
         {
 
             if (ID is null || ID < 1) return false;
@@ -24,7 +24,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
                     TechnicianParam.Add("@TechnincianID", ID);
 
                     connection.Open();
-                    var Result = connection.Query<TechnicianTableDto>("Sp_FindByTechnicianID", TechnicianParam, commandType: CommandType.StoredProcedure).SingleOrDefault();
+                    var Result = connection.Query<TechnicianDtoRequest>("Sp_FindByTechnicianID", TechnicianParam, commandType: CommandType.StoredProcedure).SingleOrDefault();
 
                     if (Result != null)
                     {
@@ -44,7 +44,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
         }
 
 
-        public static int AddNewTechnician(TechnicianTableDto dto)
+        public static int AddNewTechnician(TechnicianDtoRequest dto)
         {
             if(dto == null) return -1;
 
@@ -76,7 +76,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
             return TechID;
         }
 
-        public static bool UpdateTechnician(TechnicianTableDto dto)
+        public static bool UpdateTechnician(TechnicianDtoRequest dto)
         {
             if (dto == null ) return false;
 
