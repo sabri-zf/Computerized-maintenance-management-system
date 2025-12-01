@@ -5,11 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace CMMS_Api.Controllers.DownTimeTracking
 {
     [ApiController]
+<<<<<<< HEAD
     [Route("api/v1/downtimes")]
     public class DowntTimeEventController(ClsDownTimeEvents _instance):Controller
     {
 
         [HttpGet("retrieve")]
+=======
+    [Route("Api/V1/downtime")]
+    public class DowntTimeEventController(ClsDownTimeEvents _instance):Controller
+    {
+
+        [HttpGet("get-downtimes")]
+>>>>>>> 7ecd9b3fb34d55baf740a9d47dc5552315b35ca9
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -33,7 +41,11 @@ namespace CMMS_Api.Controllers.DownTimeTracking
             }
         }
 
+<<<<<<< HEAD
         [HttpGet("retrieve-one/{Id:int}")]
+=======
+        [HttpGet("get-downtime/{Id:int}")]
+>>>>>>> 7ecd9b3fb34d55baf740a9d47dc5552315b35ca9
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -56,7 +68,11 @@ namespace CMMS_Api.Controllers.DownTimeTracking
         }
 
 
+<<<<<<< HEAD
         [HttpPost("create")]
+=======
+        [HttpPost("add-downtime")]
+>>>>>>> 7ecd9b3fb34d55baf740a9d47dc5552315b35ca9
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -80,7 +96,11 @@ namespace CMMS_Api.Controllers.DownTimeTracking
         }
 
 
+<<<<<<< HEAD
         [HttpPut("edit")]
+=======
+        [HttpPut("edit-downtime")]
+>>>>>>> 7ecd9b3fb34d55baf740a9d47dc5552315b35ca9
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -106,7 +126,11 @@ namespace CMMS_Api.Controllers.DownTimeTracking
         }
 
 
+<<<<<<< HEAD
         [HttpDelete("ommit/{Id:int}")]
+=======
+        [HttpDelete("delete-downtime/{Id:int}")]
+>>>>>>> 7ecd9b3fb34d55baf740a9d47dc5552315b35ca9
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]

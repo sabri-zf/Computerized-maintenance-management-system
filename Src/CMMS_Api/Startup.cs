@@ -1,8 +1,16 @@
 
 using CMMS_Api.Extensions;
 using CMMS_Api.Helper;
+<<<<<<< HEAD
 using Computerized_maintenance_Logic_layer.Module.User_Management;
 using Computerized_maintenance_Logic_layer.Module.User_Management.Extensions;
+=======
+using Computerized_maintenance_Logic_layer.Module.AssetsManagement;
+using Computerized_maintenance_Logic_layer.Module.DownTimeTracking;
+using Computerized_maintenance_Logic_layer.Module.InventoryManagement;
+using Computerized_maintenance_Logic_layer.Module.preventiveMaintenanceManagement;
+using Computerized_maintenance_Logic_layer.Module.workOrderManagement;
+>>>>>>> 7ecd9b3fb34d55baf740a9d47dc5552315b35ca9
 using Computerized_maintenance_Logic_layer.Services;
 using computrized_maintenance_Data_Access.Data;
 using computrized_maintenance_Data_Access.UserManagement;
@@ -32,11 +40,18 @@ namespace CMMS_Api
             builder.Services.AddScoped<AdminRepo>();
             builder.Services.AddScoped<ClsAdmins>();
 
+<<<<<<< HEAD
             builder.Services.AddScoped<UserRepo>();
             builder.Services.AddScoped<ClsUsers>();
 
             builder.Services.AddScoped<RoleRepo>();
             builder.Services.AddScoped<ClsRoles>();
+=======
+            builder.Services.AddScoped<ClsDownTimeEvents>();
+            builder.Services.AddScoped<ClspreventiveMaintenances>();
+>>>>>>> 7ecd9b3fb34d55baf740a9d47dc5552315b35ca9
+
+            builder.Services.AddTransient<CalculateService>();
 
             // Add controller services to the container of DI
             builder.Services.AddControllers();
