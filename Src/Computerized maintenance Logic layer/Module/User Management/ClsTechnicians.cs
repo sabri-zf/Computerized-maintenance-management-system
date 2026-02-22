@@ -1,100 +1,66 @@
-﻿using Computerized_maintenance_Logic_layer.Module.User_Management.Enums;
-using computrized_maintenance_Data_Access.DTO;
+﻿using computrized_maintenance_Data_Access.DTO;
 using computrized_maintenance_Data_Access.UserManagement;
 
 namespace Computerized_maintenance_Logic_layer.Module.User_Management
 {
-    public class ClsTechnicians
+    public sealed class ClsTechnicians(TechnicianRepo _Reop)
     {
-        //public Mode_Save _mode;
-        //public int TechnicianID { get; private set; }
-        //public int UserID { get; set; }
-        //public ClsUsers? User { get; set; }
-        //public int DepartmentID { get; set; }
-        //public ClsDepartments? Department { get; set; }
-        //public int ManagedByID { get; set; }
-        //public ClsManagers? ManagerBy { get; set; }
-        //public int CreatedByAdmin { get; set; }
-        //public ClsAdmins? AdminCreated { get; set; }
+        /// <summary>
+        /// Retrieve one record form dataset asynchronous
+        /// </summary>
+        /// <param name="ID">unique identifier of technicion</param>
+        /// <returns> data transfer object of <see cref="TechnicianDtoRepose"/>, otherwise <see langword="null"/></returns>
+        public async Task<TechnicianDtoRepose?> FindAsync(int ID)
+        {
+            if (ID < 1) return null;
 
-        //public TechnicianDtoRequest Dto { get; set; }
+            return await _Reop.FindByIDAsync(ID);
+        }
 
-        //public ClsTechnicians(TechnicianDtoRequest Dto, Mode_Save Mode = Mode_Save.AddNew)
-        //{
-        //    this.TechnicianID = Dto.TechnicianID;
-        //    this.UserID = Dto.UserID;
-        //    this.DepartmentID = Dto.DepartmentID;
-        //    this.ManagedByID = Dto.ManagedBy;
-        //    this.CreatedByAdmin = Dto.CreatedByAdmin;
-        //    this.Dto = Dto;
+        /// <summary>
+        /// Insert new record  to dataset asynchronous
+        /// </summary>
+        /// <param name="technicianDto">data transer object <see cref="ProcessToCreateTechnicianDto"/></param>
+        /// <returns><see langword="true"/> in case operation has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> AddNewTehnicianAsync(ProcessToCreateTechnicianDto technicianDto)
+        {
+            if(technicianDto == null) return false;
 
-        //    this._mode = Mode;
-        //    if(_mode == Mode_Save.Update)
-        //    {
-        //        this.User = ClsUsers.FindUser(this.UserID);
-        //        this.Department = null;
-        //        this.ManagerBy = ClsManagers.Find(this.ManagedByID);
-        //        this.AdminCreated = ClsAdmins.Find(this.CreatedByAdmin);
-        //    }
+            return await _Reop.AddNewTechnicianAsync(technicianDto);
+        }
 
-        //}
-
-
-        //public static ClsTechnicians? Find(int? ID)
-        //{
-        //    TechnicianDtoRequest technicianDto  = new TechnicianDtoRequest();
-
-        //    if(DataAccessTechnician.Find(ID, ref technicianDto))
-        //    {
-        //        return new ClsTechnicians(technicianDto);
-        //    }
-
-        //    return null;
-        //}
-
-        //public static bool Delete (int ID)
-        //{
-        //    return DataAccessTechnician.DeleteTechnician(ID); 
-        //}
-
-        //public bool Delete()
-        //{
-        //    return Delete(this.TechnicianID);
-        //}
-
-        //private bool Update()
-        //{
-        //    return DataAccessTechnician.UpdateTechnician(Dto);
-        //}
-
-        //private bool AddNew()
-        //{
-        //    this.TechnicianID = DataAccessTechnician.AddNewTechnician(this.Dto);
-
-        //    return (this.TechnicianID > 0);
-        //}
-
-        //public bool Save()
-        //{
-        //    switch (this._mode)
-        //    {
-        //        case Mode_Save.AddNew:
-        //            if (AddNew())
-        //            {
-        //                _mode = Mode_Save.Update;
-        //                return true;
-        //            }
-        //            return false;
-        //        case Mode_Save.Update:
-        //            return Update();
-        //    }
-        //    return false;
-        //}
+        /// <summary>
+        /// Modfy a record from dataset asynchronous
+        /// </summary>
+        /// <param name="technicianDto">data transer object <see cref="ProcessToModifyTechnicianDto"/></param>
+        /// <returns><see langword="true"/> in case operation has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> UpdateTehnicianAsync(ProcessToModifyTechnicianDto technicianDto)
+        {
+            if (technicianDto == null) return false;
 
 
-        //public List<TechnicianTableViewDto>? GetAllTechnicians()
-        //{
-        //    return DataAccessTechnician.GetAll();
-        //}
+            return await _Reop.UpdateTechnicianAsync(technicianDto);
+        }
+
+        /// <summary>
+        /// Delete a record from dataset asynchronous
+        /// </summary>
+        /// <param name="ID">Unique Identifier <see cref="ClsTechnicians"/></param>
+        /// <returns><see langword="true"/> in case operation has been done, otherwise <see langword="false"/></returns>
+        public async Task<bool> DeleteTechincianAsync(int ID)
+        {
+            if(ID < 1) return false;
+
+            return await _Reop.DeleteTechnicianAsync(ID);
+        }
+
+        /// <summary>
+        /// Retrieve whole records from dataset asynchronous
+        /// </summary>
+        /// <returns> A collaction of <see cref="TechnicianTableViewDto"/>, otherwise <see langword="null"/> </returns>
+        public async Task<IEnumerable<TechnicianTableViewDto>?> RetrieveAllTechincinAsync()
+        {
+            return await _Reop.RetrieveAllTechnicionAsync();
+        }
     }
 }

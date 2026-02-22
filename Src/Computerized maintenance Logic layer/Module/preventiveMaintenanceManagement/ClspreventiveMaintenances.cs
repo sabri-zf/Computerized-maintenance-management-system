@@ -100,7 +100,7 @@ namespace Computerized_maintenance_Logic_layer.Module.preventiveMaintenanceManag
                 {
                    AssetID         = responseDto.AssetID,
                    TaskDescription = responseDto.TaskDescription,
-                   Frequency       = (EnFrequencyTask) Enum.Parse(typeof(EnFrequencyTask), responseDto.Frequency),
+                   Frequency       = (En_FrequencyTask) Enum.Parse(typeof(En_FrequencyTask), responseDto.Frequency),
                    CreatedDate     = responseDto.ScheduledDate,
                    NextDueDate     = responseDto.NextScheduleDate
                 };
@@ -143,7 +143,7 @@ namespace Computerized_maintenance_Logic_layer.Module.preventiveMaintenanceManag
                                      .ExecuteUpdateAsync(u => u
                                         .SetProperty(p => p.AssetID, requestDto.AssetID)
                                         .SetProperty(p => p.TaskDescription, requestDto.TaskDescription)
-                                        .SetProperty(p => p.Frequency, (EnFrequencyTask)Enum.Parse(typeof(EnFrequencyTask), requestDto.Frequency))
+                                        .SetProperty(p => p.Frequency, (En_FrequencyTask)Enum.Parse(typeof(En_FrequencyTask), requestDto.Frequency))
                                         .SetProperty(p => p.CreatedDate, requestDto.ScheduledDate)
                                         .SetProperty(p => p.NextDueDate, requestDto.NextScheduleDate)
                                      ) > 0;

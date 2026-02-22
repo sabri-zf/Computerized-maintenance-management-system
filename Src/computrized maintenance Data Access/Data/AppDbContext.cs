@@ -2,6 +2,7 @@
 using computrized_maintenance_Data_Access.Entites.DownTimeTracking;
 using computrized_maintenance_Data_Access.Entites.InventoryManagement;
 using computrized_maintenance_Data_Access.Entites.preventiveMaintenanceManagement;
+using computrized_maintenance_Data_Access.Entites.ReportsAndAnalysis;
 using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
 using computrized_maintenance_Data_Access.Misc;
 using Microsoft.EntityFrameworkCore;
@@ -31,5 +32,6 @@ namespace computrized_maintenance_Data_Access.Data
         public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
         public DbSet<PreventiveMaintenance> PreventiveMaintenances{ get; set;}
         public DbSet<DownTimeEvent> DownTimeEvents { get; set; }
+        public DbSet<Report> Reports { get; set; } 
     }
 }

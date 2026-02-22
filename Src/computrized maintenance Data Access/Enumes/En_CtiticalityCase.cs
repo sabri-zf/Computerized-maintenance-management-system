@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace computrized_maintenance_Data_Access.Enumes
 {
    
-       public enum Criticality_Rating
+       public enum En_Criticality_Rating
         {
 
          High ,

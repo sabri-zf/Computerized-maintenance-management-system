@@ -11,7 +11,7 @@ namespace computrized_maintenance_Data_Access.Entites.DownTimeTracking
        public int? WO_ID { get; set; }
        public DateTime StartDownTimeEvent { get; set; }
        public DateTime? EndDownTimeEvent { get; set; }
-       public EnDownTimeType DownTimeType { get; set; }
+       public En_DownTimeType DownTimeType { get; set; }
        public string Reason { get; set; } = null!;
        public string? ActionTaken { get; set; }
        public int PerformedByID { get; set; }

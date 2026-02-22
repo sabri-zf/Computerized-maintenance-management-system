@@ -225,7 +225,7 @@ namespace Test_Data_Of_CMMS
         {
 
 
-            static async Task Main(string[] args)
+            static void Main(string[] args)
             {
 
                

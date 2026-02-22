@@ -31,7 +31,7 @@ namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
             var workOrderHistoryEntity = new computrized_maintenance_Data_Access.Entites.WorkOrderManagement.WorkOrderHistory
             {
                 WO_ID = workOrderHistory.WorkOrderID,
-                Action =  Enum.Parse<WorkOrderHistoryActionStatus>(workOrderHistory.Action,true),
+                Action =  Enum.Parse<En_WorkOrderHistoryActionStatus>(workOrderHistory.Action,true),
                 ActionDate = workOrderHistory.ActionDate,
                 PerformedActionByID = workOrderHistory.PerformedActionByID
             };

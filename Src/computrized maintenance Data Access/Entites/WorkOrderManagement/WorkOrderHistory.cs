@@ -9,7 +9,7 @@ namespace computrized_maintenance_Data_Access.Entites.WorkOrderManagement
     {
         public int ID { get; set; }
         public int WO_ID { get; set; }
-        public WorkOrderHistoryActionStatus Action { get; set; }
+        public En_WorkOrderHistoryActionStatus Action { get; set; }
         public DateTime ActionDate { get; set; }
         public int PerformedActionByID {  get; set; }
 

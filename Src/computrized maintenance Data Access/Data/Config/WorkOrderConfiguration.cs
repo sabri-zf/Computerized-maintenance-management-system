@@ -61,7 +61,7 @@ namespace computrized_maintenance_Data_Access.Data.Config
             builder.Property(x => x.Status)
                    .HasConversion(
                         s => s.ToString(),
-                        v => (workOrderStatus)Enum.Parse(typeof(workOrderStatus), v)
+                        v => (En_workOrderStatus)Enum.Parse(typeof(En_workOrderStatus), v)
                                  )
                    .IsRequired();
 

@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace computrized_maintenance_Data_Access.Enumes
 {
-    public enum EnDownTimeType
+  public enum En_Asset_Status_Type
     {
-        Planned =1,
-        Unplanned
+        Active,
+        UnderMaintenance,
+        OutOfService,
+        Retired,
+        Disposed
     }
 }

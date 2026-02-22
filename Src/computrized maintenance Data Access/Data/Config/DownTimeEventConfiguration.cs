@@ -46,7 +46,7 @@ namespace computrized_maintenance_Data_Access.Data.Config
             builder.Property(x => x.DownTimeType)
                    .HasConversion(
                                 v => v.ToString(),
-                                T => (EnDownTimeType)Enum.Parse(typeof(EnDownTimeType), T))
+                                T => (En_DownTimeType)Enum.Parse(typeof(En_DownTimeType), T))
                    .HasMaxLength(20)
                    .HasColumnOrder(5)
                    .IsRequired();

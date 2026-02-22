@@ -10,7 +10,7 @@ namespace computrized_maintenance_Data_Access.Entites.preventiveMaintenanceManag
         public int ID { get; set; }
         public int AssetID { get; set; }
         public string TaskDescription { get; set; } = null!;
-        public EnFrequencyTask Frequency { get; set; }
+        public En_FrequencyTask Frequency { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime NextDueDate { get; set; }
 

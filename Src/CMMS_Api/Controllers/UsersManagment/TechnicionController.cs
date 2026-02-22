@@ -4,24 +4,22 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CMMS_Api.Controllers.UsersManagment
 {
-    [Route("api/v1/users")]
+    [Route("api/v1/tehnicians")]
     [ApiController]
-    //[Authorize]
-    public class UserController(ClsUsers _instance):Controller
+    public class TechnicionController(ClsTechnicians _instance) : Controller
     {
-        [HttpGet("retrieve",Name ="retrieve_all_Users")]
+        [HttpGet("retrieve", Name = "retrieve_all_tehnician")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> GetAllUsers()
+        public async Task<ActionResult> GetAllTechnicion()
         {
-
             try
             {
-                var ListOfUsers = await _instance.GetAllUsersAsync();
+                var ListOfUsers = await _instance.RetrieveAllTechincinAsync();
 
                 if (ListOfUsers is null)
-                    return NotFound("Not Found : Data of User Not Found");
+                    return NotFound("Not Found : Data of techincin Not Found");
 
                 return Ok(ListOfUsers);
             }
@@ -31,24 +29,24 @@ namespace CMMS_Api.Controllers.UsersManagment
             }
         }
 
-        [HttpGet("retrieve-one/{id}",Name ="get_one_user")]
+        [HttpGet("retrieve-one/{id}", Name = "get_one_tehnician")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async  Task<ActionResult> GetUserByID(int id)
+        public async Task<ActionResult> GetUserByID(int id)
         {
             if (id < 1) return BadRequest($"Error : Invlid ID ({id})");
 
             try
             {
-                if (!await _instance.IsExistUserAsync(id)) return StatusCode(500, "Server : User Doesn't Exist");
+                //if (!await _instance.IsExistUserAsync(id)) return StatusCode(500, "Server : User Doesn't Exist");
 
-                var FindUser = await _instance.FindUserAsync(id);
+                var FindUser = await _instance.FindAsync(id);
 
-                if (FindUser is not UserDtoResponse)
+                if (FindUser is not TechnicianDtoRepose)
                 {
-                    return NotFound("Not Found : Error Occurred invalid User");
+                    return NotFound("Not Found : Error Occurred invalid techincin");
                 }
 
                 return Ok(FindUser);
@@ -60,27 +58,24 @@ namespace CMMS_Api.Controllers.UsersManagment
             }
         }
 
-        [HttpPost("create",Name = "add_new_user")]
+        [HttpPost("create", Name = "add_new_tehnician")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async  Task<ActionResult> AddNewUser(ProcessAddUserDto resquest)
+        public async Task<ActionResult> AddNewTehnician(ProcessToCreateTechnicianDto resquest)
         {
-            if (resquest is not ProcessAddUserDto)
-            {
-                return BadRequest("Bad Request : Invalid operation");
-            }
-
+            if (resquest is not ProcessToCreateTechnicianDto) return BadRequest("Bad Request : Invalid operation");
+           
             try
             {
-                var IsInseted = await _instance.AddNewUserAsync(resquest);
+                var IsInseted = await _instance.AddNewTehnicianAsync(resquest);
 
                 if (!IsInseted)
                 {
-                    return StatusCode(500, "Server : Error has been occurred ,User Not Saved");
+                    return StatusCode(500, "Server : Error has been occurred ,Technician Not Saved");
                 }
 
-                return Ok($"Add new User id Hass been Successful ");
+                return Ok($"Add new Technician Hass been Successful ");
             }
             catch (Exception ex)
             {
@@ -88,25 +83,25 @@ namespace CMMS_Api.Controllers.UsersManagment
             }
         }
 
-        [HttpPut("edit/{id}", Name = "update_user")]
+        [HttpPut("edit/{id}", Name = "update_tehnician")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> UpdateUser(ProcessUpdateUserDto resquest)
+        public async Task<ActionResult> UpdateTehnician(ProcessToModifyTechnicianDto resquest)
         {
-            if (resquest.UserId < 1 || resquest is not ProcessUpdateUserDto) return BadRequest("Bad a request : Invalid Operation");
+            if (resquest.TechnicianID < 1 || resquest is not ProcessToModifyTechnicianDto) return BadRequest("Bad a request : Invalid Operation");
 
             try
             {
-                var FindUser = await _instance.UpdateUserAsync(resquest);
+                var FindUser = await _instance.UpdateTehnicianAsync(resquest);
 
                 if (!FindUser)
                 {
-                    return StatusCode(500, "Server : Error has been occurred ,User doesn't Save");
+                    return StatusCode(500, "Server : Error has been occurred ,tehnician doesn't Save");
                 }
 
-                return Ok($"Update a user Has been succeed");
+                return Ok($"Update a tehnician Has been succeed");
             }
             catch (Exception ex)
             {
@@ -115,28 +110,28 @@ namespace CMMS_Api.Controllers.UsersManagment
 
         }
 
-        [HttpDelete("omit/{id}", Name = "delete_user")]
+        [HttpDelete("omit/{id}", Name = "delete_tehnician0")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> DeleteUser(int id)
+        public async Task<ActionResult> DeleteTehnician(int id)
         {
-            if (id < 1 ) return BadRequest($"Bad Requst : Invalid operation");
+            if (id < 1) return BadRequest($"Bad Requst : Invalid operation");
 
             try
             {
-                if (!await _instance.IsExistUserAsync(id))
-                {
-                    return NotFound("Not Found : User doesn't find");
-                }
+                //if (!await _instance.IsExistUserAsync(id))
+                //{
+                //    return NotFound("Not Found : User doesn't find");
+                //}
 
-                if (!await _instance.DeleteUserAsync(id))
+                if (!await _instance.DeleteTechincianAsync(id))
                 {
                     return StatusCode(500, "Server : Error has been occurred");
                 }
 
-                return Ok($"Delete user Has been succeed");
+                return Ok($"Delete a tehnician Has been succeed");
             }
             catch (Exception ex)
             {

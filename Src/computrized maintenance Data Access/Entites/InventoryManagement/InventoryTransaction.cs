@@ -10,7 +10,7 @@ namespace computrized_maintenance_Data_Access.Entites.WorkOrderManagement
     {
         public int ID { get; set; }
         public int InventoryItemID { get; set; }
-        public TransactionType Type { get; set; }
+        public En_TransactionType Type { get; set; }
         public short Quntity { get; set; }
         public DateTime TransactionDate { get; set; }
         public string? Reference { get; set; }

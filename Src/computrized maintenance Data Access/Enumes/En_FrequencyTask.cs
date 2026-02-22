@@ -1,6 +1,6 @@
 ﻿namespace computrized_maintenance_Data_Access.Enumes
 {
-    public enum EnFrequencyTask
+    public enum En_FrequencyTask
     {
         Daily = 1,
         Weekly = 2,

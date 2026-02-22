@@ -31,18 +31,18 @@ namespace CMMS_Api.Controllers.UsersManagment
             }
         }
 
-        [HttpGet("retrive-one/{rolename:alpha}",Name ="retrive-role-data")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //[HttpGet("retrive-one/{rolename:alpha}",Name ="retrive-role-data")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        public async Task<ActionResult> GetRoleData(string rolename)
-        {
-            if (string.IsNullOrEmpty(rolename)) return BadRequest("Invalid operation");
+        //public async Task<ActionResult> GetRoleData(string rolename)
+        //{
+        //    if (string.IsNullOrEmpty(rolename)) return BadRequest("Invalid operation");
 
 
-        }
+        //}
 
         [HttpPost("create", Name = "add_new_role")]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -6,7 +6,7 @@ namespace Computerized_maintenance_Logic_layer.Module.DTO.WorkOrderDto
    (
         int ID,
         int WorkOrderID,
-        WorkOrderHistoryActionStatus Action,
+        En_WorkOrderHistoryActionStatus Action,
         DateTime ActionDate,
         int PerformedActionByID
         );

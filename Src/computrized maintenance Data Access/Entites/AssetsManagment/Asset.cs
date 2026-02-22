@@ -21,9 +21,9 @@ namespace computrized_maintenance_Data_Access.Entites.AssetsManagment
         public DateTime? InstallationDate { get; set; } // on site
         public int AssetCategoryID { get; set; }
         public int AssetLocationID { get; set; }
-        public Asset_Status_Type AssetStatus {  get; set; }
-        public MeterReading MeterReading {  get; set; }
-        public Criticality_Rating Criticality { get; set; }
+        public En_Asset_Status_Type AssetStatus {  get; set; }
+        public En_MeterReading MeterReading {  get; set; }
+        public En_Criticality_Rating Criticality { get; set; }
         public DateTime CreateAssetDate { get; set; }
         public DateTime? UpdateAssetDate { get; set; }
         public int CreateByUser {  get; set; }

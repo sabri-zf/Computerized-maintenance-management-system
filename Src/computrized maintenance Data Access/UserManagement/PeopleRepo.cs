@@ -7,14 +7,14 @@ namespace computrized_maintenance_Data_Access.UserManagement
 {
     public sealed class PeopleRepo
     {
-       
+
         // using Deapper to excuted my database result set 
-        
-        public async  Task<PersonDtoResponse?> FindAsync(int PersonID)
+
+        public async Task<PersonDtoResponse?> FindAsync(int PersonID)
         {
             if (PersonID < 1) return null;
 
-           
+
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
                 try
@@ -28,7 +28,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
                     var result = await connection.QueryFirstAsync<PersonDtoResponse>(query, PersonParam, commandType: CommandType.Text);
 
                     if (result is not null) return result;
-                   
+
                 }
                 catch (SqlException e)
                 {
@@ -73,12 +73,12 @@ namespace computrized_maintenance_Data_Access.UserManagement
         public async Task<bool> AddNewPerson(PersonDtoResponse? person)
         {
             if (person == null) return false;
-            if(string.IsNullOrEmpty(person.FirstName)) return false;
-            if(string.IsNullOrEmpty(person.LastName)) return false;
-            if(string.IsNullOrEmpty(person.Phone)) return false;
-            if(string.IsNullOrEmpty(person.Email)) return false;
-            if(string.IsNullOrEmpty(person.Addrees)) return false;
-            
+            if (string.IsNullOrEmpty(person.FirstName)) return false;
+            if (string.IsNullOrEmpty(person.LastName)) return false;
+            if (string.IsNullOrEmpty(person.Phone)) return false;
+            if (string.IsNullOrEmpty(person.Email)) return false;
+            if (string.IsNullOrEmpty(person.Addrees)) return false;
+
 
 
             DynamicParameters parameter = new DynamicParameters();
@@ -114,10 +114,10 @@ namespace computrized_maintenance_Data_Access.UserManagement
             return false;
         }
 
-        public  async Task<bool> UpdatePerson(PersonDtoRequest? person)
+        public async Task<bool> UpdatePerson(PersonDtoRequest? person)
         {
             if (person == null) return false;
-            if (person.PersonID < 1) return false;
+            if (person.PersonId < 1) return false;
             if (string.IsNullOrEmpty(person.FirstName)) return false;
             if (string.IsNullOrEmpty(person.LastName)) return false;
             if (string.IsNullOrEmpty(person.Phone)) return false;
@@ -135,11 +135,11 @@ namespace computrized_maintenance_Data_Access.UserManagement
                     parameter.Add("@Phone", person.Phone);
                     parameter.Add("@BirthDay", person.BirthDay);
                     parameter.Add("@Addrees", person.Addrees);
-                    parameter.Add("@PersonID", person.PersonID);
+                    parameter.Add("@PersonID", person.PersonId);
 
 
                     connection.Open();
-                     var IsUpdate = await connection.ExecuteAsync("Sp_UpdatePeople", parameter, commandType: CommandType.StoredProcedure) > 0;
+                    var IsUpdate = await connection.ExecuteAsync("Sp_UpdatePeople", parameter, commandType: CommandType.StoredProcedure) > 0;
                     connection.Close();
 
                     if (IsUpdate)
@@ -167,7 +167,7 @@ namespace computrized_maintenance_Data_Access.UserManagement
                 try
                 {
                     DynamicParameters DeleteParameter = new DynamicParameters();
-                    DeleteParameter.Add("@PersonID" ,ID);
+                    DeleteParameter.Add("@PersonID", ID);
 
                     connection.Open();
                     IsDelelteSuccessed = await connection.ExecuteAsync("Sp_DeletePeople", DeleteParameter, commandType: CommandType.StoredProcedure) > 0;
@@ -182,9 +182,9 @@ namespace computrized_maintenance_Data_Access.UserManagement
             return IsDelelteSuccessed;
         }
 
-        public async  Task<bool> IsExistPerson(int? ID)
+        public async Task<bool> IsExistPerson(int? ID)
         {
-            if(ID < 1) return false;
+            if (ID < 1) return false;
 
             bool IsExist = false;
 
@@ -203,13 +203,15 @@ namespace computrized_maintenance_Data_Access.UserManagement
                 {
                     Console.WriteLine(ex.Message);
                     return false;
--                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                     return false;
--                }
+                }
             }
             return IsExist;
         }
     }
 }
+

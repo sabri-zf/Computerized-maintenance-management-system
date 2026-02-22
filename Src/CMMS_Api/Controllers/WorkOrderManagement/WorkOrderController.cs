@@ -57,7 +57,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
                 AssetID         = responseDto.AssetID,
                 CreatedByID     = responseDto.CreatedByID,
                 AssignedToID    = responseDto.AssignedToID,
-                Status          = Enum.Parse<workOrderStatus>(responseDto.Status),
+                Status          = Enum.Parse<En_workOrderStatus>(responseDto.Status),
                 CreatedDate     = responseDto.CreatedDate,
                 StartDate       = responseDto.StartDate,
                 DueDate         = responseDto.DueDate,

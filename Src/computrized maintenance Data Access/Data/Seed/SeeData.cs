@@ -2,6 +2,7 @@
 using computrized_maintenance_Data_Access.Entites.DownTimeTracking;
 using computrized_maintenance_Data_Access.Entites.InventoryManagement;
 using computrized_maintenance_Data_Access.Entites.preventiveMaintenanceManagement;
+using computrized_maintenance_Data_Access.Entites.ReportsAndAnalysis;
 using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
 using computrized_maintenance_Data_Access.Enumes;
 using System.Collections.ObjectModel;
@@ -20,7 +21,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 				ID=1,
 				AssetID=3,
 				TaskDescription="Replace air filter in HVAC unit every 3 months.",
-				Frequency=EnFrequencyTask.Quarterly,
+				Frequency=En_FrequencyTask.Quarterly,
 				CreatedDate=new DateTime(2025,1,1),
 				NextDueDate=new DateTime(2025,10,1)
 			},
@@ -28,7 +29,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 				ID=2,
 				AssetID=2,
 				TaskDescription="Inspect safety valves on boiler system every 6 months.",
-				Frequency= EnFrequencyTask.SemiAnnual,
+				Frequency= En_FrequencyTask.SemiAnnual,
 				CreatedDate=new DateTime(2025,3,1),
 				NextDueDate=new DateTime(2025,9,1)
 			}
@@ -46,7 +47,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 			PreventiveMaintenanceID = 1,
 			CreatedByID = 22,
 			AssignedToID = 1,
-			Status = workOrderStatus.Open,
+			Status = En_workOrderStatus.Open,
 			CreatedDate = new DateTime(2025, 10, 1),
 			StartDate = new DateTime(2025, 10, 3),
 			DueDate = new DateTime(2025, 10, 7),
@@ -63,7 +64,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 			PreventiveMaintenanceID = 2,
 			CreatedByID = 5,
 			AssignedToID = 1,
-			Status = workOrderStatus.Completed,
+			Status = En_workOrderStatus.Completed,
 			CreatedDate = new DateTime(2025, 9, 15),
 			StartDate = new DateTime(2025, 9, 17),
 			DueDate = new DateTime(2025, 9, 18),
@@ -78,7 +79,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 			{
 				ID = 1,
 				WO_ID = 1,
-				Action = WorkOrderHistoryActionStatus.Created,
+				Action = En_WorkOrderHistoryActionStatus.Created,
 				ActionDate = new DateTime(2025, 10, 1),
 				PerformedActionByID = 22
 			},
@@ -86,7 +87,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 			{
 				ID = 2,
 				WO_ID = 1,
-				Action = WorkOrderHistoryActionStatus.Assgined,
+				Action = En_WorkOrderHistoryActionStatus.Assgined,
 				ActionDate = new DateTime(2025, 10, 2),
 				PerformedActionByID = 22
 			},
@@ -94,7 +95,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 			{
 				ID = 3,
 				WO_ID = 2,
-				Action = WorkOrderHistoryActionStatus.Created,
+				Action = En_WorkOrderHistoryActionStatus.Created,
 				ActionDate = new DateTime(2025, 9, 15),
 				PerformedActionByID = 5
 			},
@@ -102,7 +103,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 			{
 				ID = 4,
 				WO_ID = 2,
-				Action = WorkOrderHistoryActionStatus.Completed,
+				Action = En_WorkOrderHistoryActionStatus.Completed,
 				ActionDate = new DateTime(2025, 9, 17),
 				PerformedActionByID = 1
 			}
@@ -234,7 +235,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 	{
 		ID = 1,
 		InventoryItemID = 1,
-		Type = TransactionType.In,
+		Type = En_TransactionType.In,
 		Quntity = 100,
 		TransactionDate = new DateTime(2025, 9, 25),
 	},
@@ -242,7 +243,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 	{
 		ID = 2,
 		InventoryItemID = 1,
-		Type = TransactionType.Out,
+		Type = En_TransactionType.Out,
 		Quntity = 20,
 		TransactionDate = new DateTime(2025, 10, 3),
 		Reference = "WO-0001"
@@ -251,7 +252,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 	{
 		ID = 3,
 		InventoryItemID = 2,
-		Type = TransactionType.In,
+		Type = En_TransactionType.In,
 		Quntity = 10,
 		TransactionDate = new DateTime(2025, 9, 15),
 	},
@@ -259,7 +260,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 	{
 		ID = 4,
 		InventoryItemID = 2,
-		Type = TransactionType.Out,
+		Type = En_TransactionType.Out,
 		Quntity = 3,
 		TransactionDate = new DateTime(2025, 10, 6),
 	},
@@ -267,7 +268,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 	{
 		ID = 5,
 		InventoryItemID = 3,
-		Type = TransactionType.Out,
+		Type = En_TransactionType.Out,
 		Quntity = 2,
 		TransactionDate = new DateTime(2025, 10, 12),
 	},
@@ -281,7 +282,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 		ID = 1,
 		AssetID = 1,
 		WO_ID = 1,
-		DownTimeType = EnDownTimeType.Unplanned,
+		DownTimeType = En_DownTimeType.Unplanned,
 		StartDownTimeEvent = new DateTime(2025, 10, 10, 8, 15, 0),
 		EndDownTimeEvent = new DateTime(2025, 10, 10, 10, 45, 0),
 		Reason = "Motor overheating due to lack of lubrication",
@@ -294,7 +295,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 		ID = 2,
 		AssetID = 3,
 		WO_ID = 2,
-		DownTimeType = EnDownTimeType.Planned,
+		DownTimeType = En_DownTimeType.Planned,
 		StartDownTimeEvent = new DateTime(2025, 10, 12, 14, 00, 0),
 		EndDownTimeEvent = new DateTime(2025, 10, 12, 17, 30, 0),
 		Reason = "Scheduled control system upgrade",
@@ -306,7 +307,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 		ID = 3,
 		AssetID = 3,
 		WO_ID = null,
-		DownTimeType = EnDownTimeType.Unplanned,
+		DownTimeType = En_DownTimeType.Unplanned,
 		StartDownTimeEvent = new DateTime(2025, 10, 15, 9, 00, 0),
 		EndDownTimeEvent = new DateTime(2025, 10, 15, 9, 45, 0),
 		Reason = "Unexpected sensor calibration issue",
@@ -315,5 +316,35 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 	}
 		};
 
+		public static Collection<Report> Reports = new Collection<Report>()
+		{
+			new Report
+			{
+				ID = 1,
+				AssetID = 1,
+				StartPeriod = new DateTime(2025, 01, 01),
+				EndPeriod = new DateTime(2025, 01, 31),
+				Interval_Running_machine = 300.5f,
+				MTBF = 12.4f,
+				MTTR = 1.7f,
+				Availability = 0.92f,
+				MDT = 2.5f,
+				CreateAt = new DateTime(2021, 8, 12 ,14,30,0)
+            },
+			new Report
+			{
+				ID = 2,
+				AssetID = 2,
+				StartPeriod = new DateTime(2025, 01, 01),
+				EndPeriod = new DateTime(2025, 01, 31),
+				Interval_Running_machine = 250.0f,
+				MTBF = 15.3f,
+				MTTR = 2.1f,
+				Availability = 0.88f,
+				MDT = 3.4f,
+				CreateAt = new DateTime(2021, 8, 12 ,14,30,0)
+            }
+
+		};
 	}
 }

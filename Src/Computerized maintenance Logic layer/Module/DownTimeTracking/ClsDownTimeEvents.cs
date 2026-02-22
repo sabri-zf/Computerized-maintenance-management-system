@@ -121,7 +121,7 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
                     WO_ID = responseDto.WO_ID,
                     StartDownTimeEvent = responseDto.StartDownTimeEvent,
                     EndDownTimeEvent = responseDto.EndDownTimeEvent,
-                    DownTimeType = (EnDownTimeType)Enum.Parse(typeof(EnDownTimeType), responseDto.DownTimeType),
+                    DownTimeType = (En_DownTimeType)Enum.Parse(typeof(En_DownTimeType), responseDto.DownTimeType),
                     Reason = responseDto.Reason,
                     ActionTaken = responseDto.ActionTaken,
                     PerformedByID = responseDto.PerformedByID,
@@ -176,7 +176,7 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
                                      .SetProperty(x => x.WO_ID, requestDto.WO_ID)
                                      .SetProperty(x => x.StartDownTimeEvent, requestDto.StartDownTimeEvent)
                                      .SetProperty(x => x.EndDownTimeEvent, requestDto.EndDownTimeEvent)
-                                     .SetProperty(x => x.DownTimeType, (EnDownTimeType)Enum.Parse(typeof(EnDownTimeType), requestDto.DownTimeType))
+                                     .SetProperty(x => x.DownTimeType, (En_DownTimeType)Enum.Parse(typeof(En_DownTimeType), requestDto.DownTimeType))
                                      .SetProperty(x => x.Reason, requestDto.Reason)
                                      .SetProperty(x => x.ActionTaken, requestDto.ActionTaken)
                                      .SetProperty(x => x.PerformedByID, requestDto.PerformedByID)

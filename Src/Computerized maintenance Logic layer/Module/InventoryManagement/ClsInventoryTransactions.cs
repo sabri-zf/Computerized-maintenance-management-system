@@ -57,7 +57,7 @@ namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
             {
                 InventoryItemID = responseDto.InventoryItemID,
                 Quntity = responseDto.Quntity,
-                Type = (TransactionType) Enum.Parse(typeof(TransactionType) ,responseDto.Type),
+                Type = (En_TransactionType) Enum.Parse(typeof(En_TransactionType) ,responseDto.Type),
                 TransactionDate = responseDto.TransactionDate,
                 Reference = responseDto.Reference
             };
@@ -85,7 +85,7 @@ namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
                            .Where(x => x.ID == requestDto.ID)
                            .ExecuteUpdateAsync(setting => setting
                            .SetProperty(x => x.InventoryItemID, requestDto.InventoryItemID)
-                           .SetProperty(x => x.Type, (TransactionType)Enum.Parse(typeof(TransactionType), requestDto.Type))
+                           .SetProperty(x => x.Type, (En_TransactionType)Enum.Parse(typeof(En_TransactionType), requestDto.Type))
                            .SetProperty(x => x.Quntity, requestDto.Quntity)
                            .SetProperty(x => x.TransactionDate, requestDto.TransactionDate)
                            .SetProperty(x => x.Reference, requestDto.Reference)

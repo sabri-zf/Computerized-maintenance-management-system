@@ -8,7 +8,7 @@ namespace Computerized_maintenance_Logic_layer.Module.DTO.WorkOrderDto
             string WorkOrderNumber,
             string Description,
             int AssetID,
-            workOrderStatus Status,
+            En_workOrderStatus Status,
             int CreatedByID,
             int AssignedToID,
             DateTime CreatedDate,

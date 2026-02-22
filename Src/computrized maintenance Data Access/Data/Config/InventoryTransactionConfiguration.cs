@@ -25,7 +25,7 @@ namespace computrized_maintenance_Data_Access.Data.Config
             builder.Property(x => x.Type)
                     .HasConversion(
                     s => s.ToString(),
-                    v => (TransactionType)Enum.Parse(typeof(TransactionType), v)
+                    v => (En_TransactionType)Enum.Parse(typeof(En_TransactionType), v)
                     )
                     .IsRequired();
 

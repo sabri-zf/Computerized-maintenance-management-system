@@ -63,21 +63,21 @@ namespace computrized_maintenance_Data_Access.Data.Config
 				.HasConversion
 				(
 				x => x.ToString(),
-				y => Enum.Parse<Asset_Status_Type>(y)
+				y => Enum.Parse<En_Asset_Status_Type>(y)
 				);
 
 			builder.Property(A => A.MeterReading)
 			   .HasConversion
 			   (
 			   x => x.ToString(),
-			   y => Enum.Parse<MeterReading>(y)
+			   y => Enum.Parse<En_MeterReading>(y)
 			   );
 
 			builder.Property(A => A.Criticality)
 			  .HasConversion
 			  (
 			  x => x.ToString(),
-			  y => Enum.Parse<Criticality_Rating>(y)
+			  y => Enum.Parse<En_Criticality_Rating>(y)
 			  );
 
 
@@ -122,9 +122,9 @@ namespace computrized_maintenance_Data_Access.Data.Config
 					  InstallationDate = new DateTime(2022, 4, 1),
 					  AssetCategoryID = 1,  // HVAC Equipment
 					  AssetLocationID = 2, // Floor 3 Mechanical Room
-					  AssetStatus = Asset_Status_Type.Active,
-					  MeterReading = MeterReading.Hours,
-					  Criticality = Criticality_Rating.High,
+					  AssetStatus = En_Asset_Status_Type.Active,
+					  MeterReading = En_MeterReading.Hours,
+					  Criticality = En_Criticality_Rating.High,
 					  CreateAssetDate = new DateTime(2022, 3, 20),
 					  CreateByUser = 1 // UserID
 				},
@@ -142,9 +142,9 @@ namespace computrized_maintenance_Data_Access.Data.Config
 					 InstallationDate = null, // Mobile equipment
 					 AssetCategoryID = 2,  // Vehicles
 					 AssetLocationID = 1, // Warehouse A
-					 AssetStatus = Asset_Status_Type.UnderMaintenance,
-					 MeterReading = MeterReading.Hours,
-					 Criticality = Criticality_Rating.Medium,
+					 AssetStatus = En_Asset_Status_Type.UnderMaintenance,
+					 MeterReading = En_MeterReading.Hours,
+					 Criticality = En_Criticality_Rating.Medium,
 					 CreateAssetDate = new DateTime(2021, 8, 12 ,14,30,0),
 					 UpdateAssetDate = new DateTime(2023, 11, 15,20,12,0),
 					  CreateByUser = 1 // UserID
@@ -162,9 +162,9 @@ namespace computrized_maintenance_Data_Access.Data.Config
 					 InstallationDate = new DateTime(2023, 1, 10),
 					 AssetCategoryID = 3,  // IT Equipment
 					 AssetLocationID = 3, // Data Center
-					 AssetStatus = Asset_Status_Type.Active,
-					 MeterReading = MeterReading.PowerCycles,
-					 Criticality = Criticality_Rating.High,
+					 AssetStatus = En_Asset_Status_Type.Active,
+					 MeterReading = En_MeterReading.PowerCycles,
+					 Criticality = En_Criticality_Rating.High,
 					 CreateAssetDate = new DateTime(2023, 1, 6),
 					 CreateByUser = 1 // UserID
 				  }

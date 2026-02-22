@@ -32,7 +32,7 @@ namespace computrized_maintenance_Data_Access.Data.Config
                     builder.Property(x => x.Action)
                            .HasConversion(
                         s => s.ToString(),
-                        v => (WorkOrderHistoryActionStatus)Enum.Parse(typeof(WorkOrderHistoryActionStatus), v))
+                        v => (En_WorkOrderHistoryActionStatus)Enum.Parse(typeof(En_WorkOrderHistoryActionStatus), v))
                           .IsRequired();
 
 

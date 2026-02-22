@@ -20,7 +20,7 @@ namespace computrized_maintenance_Data_Access.Data.Config
 
             builder.Property(x => x.Frequency)
                 .HasConversion(p => p.ToString(),
-                               p => (Enumes.EnFrequencyTask)Enum.Parse(typeof(Enumes.EnFrequencyTask), p))
+                               p => (Enumes.En_FrequencyTask)Enum.Parse(typeof(Enumes.En_FrequencyTask), p))
                 .IsRequired();
 
             builder.Property(x => x.CreatedDate)

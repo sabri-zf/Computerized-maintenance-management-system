@@ -9,12 +9,10 @@ namespace computrized_maintenance_Data_Access.UserManagement
     public sealed class TechnicianRepo
     {
 
-        public async Task<TechnicianDtoRepose> Find(int? ID, ref TechnicianDtoRequest dto)
+        public async Task<TechnicianDtoRepose?> FindByIDAsync(int ID)
         {
+            if (ID < 1) return null;
 
-            if (ID is null || ID < 1) return false;
-
-            bool IsFound = false;
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
                 try
@@ -24,89 +22,133 @@ namespace computrized_maintenance_Data_Access.UserManagement
                     TechnicianParam.Add("@TechnincianID", ID);
 
                     connection.Open();
-                    var Result = connection.Query<TechnicianDtoRequest>("Sp_FindByTechnicianID", TechnicianParam, commandType: CommandType.StoredProcedure).SingleOrDefault();
-
-                    if (Result != null)
-                    {
-                        IsFound = true;
-                        dto = Result;
-                    }
-
+                    var Result = await connection.QueryFirstAsync<TechnicianDtoRepose>("Sp_FindByTechnicianID", TechnicianParam, commandType: CommandType.StoredProcedure);
+                    connection.Close();
+                    if (Result != null) return Result;
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    throw;
+                    Console.WriteLine(ex.Message);
+                    return null;
                 }
 
             }
 
-            return IsFound;
+            return null;
         }
 
-
-        public static int AddNewTechnician(TechnicianDtoRequest dto)
+        public async Task<bool> AddNewTechnicianAsync(ProcessToCreateTechnicianDto dto)
         {
-            if(dto == null) return -1;
+            if(dto == null) return false;
+            if(string.IsNullOrEmpty(dto.UserName)) return false;
+            if(string.IsNullOrEmpty(dto.Password)) return false;
+            if(string.IsNullOrEmpty(dto.FirstName)) return false;
+            if(string.IsNullOrEmpty(dto.LastName)) return false;
+            if(string.IsNullOrEmpty(dto.Phone)) return false;
+            if(string.IsNullOrEmpty(dto.Address)) return false;
+            if(string.IsNullOrEmpty(dto.Email)) return false;
+            if(string.IsNullOrEmpty(dto.RoleName)) return false;
+            if(string.IsNullOrEmpty(dto.DepartmentName)) return false;
+            if(string.IsNullOrEmpty(dto.ManagedBy)) return false;
+            if(string.IsNullOrEmpty(dto.CreatedBy)) return false;
+            if(dto.permission < 0) return false;
 
-            int TechID = -1;
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
                 try
                 {
                     DynamicParameters TechParam = new DynamicParameters();
-                    TechParam.Add("@UserID",dto.UserID);
-                    TechParam.Add("@DepartmentID",dto.DepartmentID);
-                    TechParam.Add("@ManagedBy",dto.ManagedBy);
-                    TechParam.Add("@CreatedBy",dto.CreatedByAdmin);
+                    TechParam.Add("@UserName",dto.UserName);
+                    TechParam.Add("@Password", dto.Password);
+                    TechParam.Add("@FirstName", dto.FirstName);
+                    TechParam.Add("@LastName", dto.LastName);
+                    TechParam.Add("@Email", dto.Email);
+                    TechParam.Add("@Phone", dto.Phone);
+                    TechParam.Add("@Address", dto.Address);
+                    TechParam.Add("@BirthDay", dto.BirthDay);
+                    TechParam.Add("@RoleName", dto.RoleName);
+                    TechParam.Add("@Permission", dto.permission);
+                    TechParam.Add("@IsActive", dto.IsActive);
+                    TechParam.Add("@CreateAt", dto.createAt);
+                    TechParam.Add("@DepartmentName", dto.DepartmentName);
+                    TechParam.Add("@ManagedBy", dto.ManagedBy);
+                    TechParam.Add("@CreatedBy", dto.CreatedBy);
                     TechParam.Add("@TechnicianID",dbType:DbType.Int32,direction:ParameterDirection.Output);
 
                     connection.Open();
-
-                    connection.Execute("Sp_AddNewTechnician",TechParam, commandType: CommandType.StoredProcedure);
-
-                    TechID = TechParam.Get<int>("@TechnicianID");
+                  var IsAdded = await  connection.ExecuteAsync("Sp_AddNewTechnician",TechParam, commandType: CommandType.StoredProcedure) > 0;
+                    connection.Close();
+                   
+                    if (IsAdded) return true;
 
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    throw;
+                    Console.WriteLine(ex.Message);
+                    return false;
                 }
             }
 
-            return TechID;
+            return false;
         }
 
-        public static bool UpdateTechnician(TechnicianDtoRequest dto)
+        public async  Task<bool> UpdateTechnicianAsync(ProcessToModifyTechnicianDto dto)
         {
             if (dto == null ) return false;
 
-            bool IsUpdateted = false;
+            if(dto.TechnicianID < 1) return false;
+            if (string.IsNullOrEmpty(dto.UserName)) return false;
+            if (string.IsNullOrEmpty(dto.Password)) return false;
+            if (string.IsNullOrEmpty(dto.FirstName)) return false;
+            if (string.IsNullOrEmpty(dto.LastName)) return false;
+            if (string.IsNullOrEmpty(dto.Phone)) return false;
+            if (string.IsNullOrEmpty(dto.Address)) return false;
+            if (string.IsNullOrEmpty(dto.Email)) return false;
+            if (string.IsNullOrEmpty(dto.RoleName)) return false;
+            if (string.IsNullOrEmpty(dto.DepartmentName)) return false;
+            if (string.IsNullOrEmpty(dto.ManagedBy)) return false;
+            if (dto.permission < 0) return false;
+
+        
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
                 try
                 {
                     DynamicParameters TechParam = new DynamicParameters();
                     TechParam.Add("@TechnicianID", dto.TechnicianID);
-                    TechParam.Add("@DepartmentID", dto.DepartmentID);
+                    TechParam.Add("@UserName", dto.UserName);
+                    TechParam.Add("@Password", dto.Password);
+                    TechParam.Add("@FirstName", dto.FirstName);
+                    TechParam.Add("@LastName", dto.LastName);
+                    TechParam.Add("@Email", dto.Email);
+                    TechParam.Add("@Phone", dto.Phone);
+                    TechParam.Add("@Address", dto.Address);
+                    TechParam.Add("@BirthDay", dto.BirthDay);
+                    TechParam.Add("@RoleName", dto.RoleName);
+                    TechParam.Add("@Permission", dto.permission);
+                    TechParam.Add("@IsActive", dto.IsActive);
+                    TechParam.Add("@DepartmentName", dto.DepartmentName);
                     TechParam.Add("@ManagedBy", dto.ManagedBy);
 
-                    IsUpdateted = connection.Execute("Sp_UpdateTechnician", TechParam, commandType: CommandType.StoredProcedure) > 0;
-
+                    connection.Open();
+                     var IsUpdateted = await connection.ExecuteAsync("Sp_UpdateTechnician", TechParam, commandType: CommandType.StoredProcedure) > 0;
+                    connection.Close();
 
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    throw;
+                    Console.WriteLine(ex.Message);
+
+                    return false;
                 }
             }
-            return IsUpdateted;
+            return false;
         }
 
-        public static bool DeleteTechnician(int ID)
+        public async Task<bool> DeleteTechnicianAsync(int ID)
         {
             if(ID< 1) return false;
 
-            bool HasBeenDeleted = false;
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
                 try
@@ -116,45 +158,38 @@ namespace computrized_maintenance_Data_Access.UserManagement
                     TechParam.Add("@TechnicianID", ID);
 
                     connection.Open();
-                    HasBeenDeleted = connection.Execute("Sp_DeleteThechnician", TechParam, commandType: CommandType.StoredProcedure) > 0;
+                 var HasBeenDeleted = await connection.ExecuteAsync("Sp_DeleteThechnician", TechParam, commandType: CommandType.StoredProcedure) > 0;
 
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    throw;
+                    Console.WriteLine(ex.Message);
+                    return false;
                 }
 
-                return HasBeenDeleted;
+                return false;
             }
         }
 
 
-        public static List<TechnicianTableViewDto>? GetAll()
+        public async  Task<IEnumerable<TechnicianTableViewDto>?> RetrieveAllTechnicionAsync()
         {
-
-            IEnumerable<TechnicianTableViewDto>? TechList= new List<TechnicianTableViewDto>();
-
             using (IDbConnection connection = new SqlConnection(ClsUtility.ConnectionString))
             {
-
                 try
                 {
-
-                    var Result = connection.Query<TechnicianTableViewDto>("Sp_GetAllTechnicians", commandType: CommandType.StoredProcedure);
-
-                    if (Result != null)
-                    {
-                        TechList = Result;
-                    }
-
+                    connection.Open();
+                    var Result =  await connection.QueryAsync<TechnicianTableViewDto>("Sp_GetAllTechnicians", commandType: CommandType.StoredProcedure);
+                    connection.Close();
+                    if (Result != null) return Result;
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    throw;
+                    Console.WriteLine(ex.Message);
+                    return null;
                 }
             }
-
-            return TechList.ToList();
+            return null;
         }
     }
 }

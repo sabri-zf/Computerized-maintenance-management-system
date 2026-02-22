@@ -14,9 +14,9 @@ namespace CMMS_Api.DTO
      DateTime? InstallationDate,
      int AssetCategoryID,
      int AssetLocationID,
-     Asset_Status_Type AssetStatus,
-     MeterReading MeterReading,
-     Criticality_Rating Criticality,
+     En_Asset_Status_Type AssetStatus,
+     En_MeterReading MeterReading,
+     En_Criticality_Rating Criticality,
      DateTime CreateAssetDate,
      DateTime? UpdateAssetDate,
      int CreateByUser

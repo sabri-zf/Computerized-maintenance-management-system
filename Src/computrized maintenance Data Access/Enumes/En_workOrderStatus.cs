@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace computrized_maintenance_Data_Access.Enumes
 {
-    public enum workOrderStatus
+    public enum En_workOrderStatus
     {
         Open = 1,       //The work order is created but not yet started or assigned.
         Assigned,       //The work order has been assigned to a technician but work hasn’t started yet.
