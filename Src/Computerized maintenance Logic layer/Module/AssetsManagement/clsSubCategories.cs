@@ -21,7 +21,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         {
             try
             {
-                if(Id < 1) return null;
+                if (Id < 1) return null;
                 var entity = await _Context.Set<SubCategory>()
                                            .AsNoTracking()
                                            .SingleOrDefaultAsync(x => x.ID == Id);
@@ -46,7 +46,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         {
             try
             {
-                if(!_IsDataInputValid(responseDto)) return false;
+                if (!_IsDataInputValid(responseDto)) return false;
 
 
                 var subCategory = new SubCategory
@@ -77,7 +77,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
             try
             {
 
-                if(!_IsDataInputValid(new SubCategoryResponseDto(requestDto.SubCategoryName, requestDto.CategoryID),true,requestDto.ID)) return false;
+                if (!_IsDataInputValid(new SubCategoryResponseDto(requestDto.SubCategoryName, requestDto.CategoryID), true, requestDto.ID)) return false;
                 var result = await _Context.Set<SubCategory>()
                                            .Where(x => x.ID == requestDto.ID)
                                            .ExecuteUpdateAsync(u => u
@@ -102,7 +102,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         {
             try
             {
-                if(Id < 1) return false;
+                if (Id < 1) return false;
 
                 var result = await _Context.Set<SubCategory>()
                                            .Where(x => x.ID == Id)
@@ -118,15 +118,15 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         }
 
 
-       /// <summary>
-       ///  Retrieve whole a record of <see cref="SubCategory"/> entity form data store
-       /// </summary>
-       /// <returns>Data transfer object <see cref="SubCategoryResponseDto"/>, otherwise <see langword="null"/></returns>
+        /// <summary>
+        ///  Retrieve whole a record of <see cref="SubCategory"/> entity form data store
+        /// </summary>
+        /// <returns>Data transfer object <see cref="SubCategoryResponseDto"/>, otherwise <see langword="null"/></returns>
         public async Task<IEnumerable<SubCategoryResponseDto>> GetAllSubCategories()
         {
             var List = await _Context.Set<SubCategory>()
                                  .AsNoTracking()
-                                 .Select( x => new SubCategoryResponseDto(x.Sub_Category_Name,x.CategoryID))
+                                 .Select(x => new SubCategoryResponseDto(x.Sub_Category_Name, x.CategoryID))
                                  .ToListAsync();
 
 
@@ -141,15 +141,15 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         /// <param name="IsRequest"></param>
         /// <param name="Id"></param>
         /// <returns></returns>
-       private bool _IsDataInputValid(SubCategoryResponseDto response,bool IsRequest=false,int Id=0)
+        private bool _IsDataInputValid(SubCategoryResponseDto response, bool IsRequest = false, int Id = 0)
         {
-            if(IsRequest)
+            if (IsRequest)
             {
-                if(Id < 1) return false;
+                if (Id < 1) return false;
             }
 
-            if(string.IsNullOrEmpty(response.SubCategoryName)) return false;
-            if(response.CategoryID < 1) return false;
+            if (string.IsNullOrEmpty(response.SubCategoryName)) return false;
+            if (response.CategoryID < 1) return false;
 
 
             return true;

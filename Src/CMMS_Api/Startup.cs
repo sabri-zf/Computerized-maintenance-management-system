@@ -2,12 +2,14 @@
 using CMMS_Api.Extensions;
 using CMMS_Api.Helper;
 using Computerized_maintenance_Logic_layer.Module.DownTimeTracking;
+using Computerized_maintenance_Logic_layer.Module.PM_SchedulingManagement;
 using Computerized_maintenance_Logic_layer.Module.preventiveMaintenanceManagement;
 using Computerized_maintenance_Logic_layer.Module.ReportsAndAnalysis;
 using Computerized_maintenance_Logic_layer.Module.User_Management;
 using Computerized_maintenance_Logic_layer.Module.User_Management.Extensions;
 using Computerized_maintenance_Logic_layer.Services;
 using computrized_maintenance_Data_Access.Data;
+using computrized_maintenance_Data_Access.Entites.PM_SchedulingManagement;
 using computrized_maintenance_Data_Access.UserManagement;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -34,20 +36,19 @@ namespace CMMS_Api
 
             builder.Services.AddScoped<CalculateService>();
             builder.Services.AddScoped<UserService>();
-
-            builder.Services.AddScoped<ClsReports>();
+            builder.Services.AddScoped<ScheduleService>();
+            builder.Services.AddScoped<LeapYearService>();
+            builder.Services.AddScoped<PreventiveMaintenaceService>();
 
             builder.Services.AddScoped<AdminRepo>();
-            builder.Services.AddScoped<ClsAdmins>();
-
             builder.Services.AddScoped<UserRepo>();
-            builder.Services.AddScoped<ClsUsers>();
-
             builder.Services.AddScoped<RoleRepo>();
-            builder.Services.AddScoped<ClsRoles>();
-            builder.Services.AddScoped<ClsDownTimeEvents>();
-            builder.Services.AddScoped<ClspreventiveMaintenances>();
 
+            builder.Services.AddScoped<ClsRoles>();
+            builder.Services.AddScoped<ClsReports>();
+            builder.Services.AddScoped<ClsAdmins>();
+            builder.Services.AddScoped<ClsUsers>();
+            builder.Services.AddScoped<ClsPMSchedule>();
 
             // Add controller services to the container of DI
             builder.Services.AddControllers();
@@ -85,8 +86,11 @@ namespace CMMS_Api
                 app.UseExceptionHandler("/Erorr");
                 app.UseHsts();
             }
+            else
+            {
+             app.UseDeveloperExceptionPage();
+            }
 
-            app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI();
 

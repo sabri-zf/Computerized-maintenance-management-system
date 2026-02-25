@@ -15,14 +15,14 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
 
         /// <summary>
         /// Inject copule of objects on constractor <see cref="AppDbContext"/> as well as <see cref="CalculateService"/>
-         /// </summary>
+        /// </summary>
         /// <param name="context"></param>
         /// <param name="calculateService"></param>
         /// <exception cref="ArgumentNullException">throw exception if <see cref="AppDbContext"/> is <see langword="null"/>, as well as <see cref="CalculateService"/></exception>
         public ClsDownTimeEvents(AppDbContext context, CalculateService calculateService)
         {
-            if(context is null ) throw new ArgumentNullException("App DbContext doesn't make a instance");
-            if(calculateService is null ) throw new ArgumentNullException("Calculate Service doesn't make a instance");
+            if (context is null) throw new ArgumentNullException("App DbContext doesn't make a instance");
+            if (calculateService is null) throw new ArgumentNullException("Calculate Service doesn't make a instance");
 
             _Context = context;
             _calculateService = calculateService;
@@ -35,13 +35,13 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
         /// <returns>Data transfer Object <see cref="DownTimeEventResponseDto\"/>,otherwise <see langword="null"/></returns>
         public async Task<DownTimeEventResponseDto?> FindById(int Id)
         {
-            if (Id < 1) return null; 
+            if (Id < 1) return null;
 
             var DownTime_object = await _Context.DownTimeEvents
                                                 .AsNoTracking()
                                                 .SingleOrDefaultAsync(x => x.ID == Id);
 
-            if(DownTime_object is not DownTimeEvent) return null;
+            if (DownTime_object is not DownTimeEvent) return null;
 
             var DowntimeDuration = _calculateService.CalculateDownTimePerHour(DownTime_object.StartDownTimeEvent, DownTime_object.EndDownTimeEvent);
 
@@ -100,7 +100,7 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
                 throw new Exception(ex.Message, ex);
             }
         }
-       
+
 
         /// <summary>
         /// Add new a Entity of <see cref="DownTimeEvent"/> on data-set 
@@ -113,7 +113,7 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
             try
             {
 
-                if(!_CheckValidInputData(responseDto)) return false;
+                if (!_CheckValidInputData(responseDto)) return false;
 
                 var DownTimeEntity = new DownTimeEvent()
                 {
@@ -166,7 +166,7 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
                              null
                            );
 
-                if (!_CheckValidInputData(ResponsDto,true,requestDto.ID)) return false;
+                if (!_CheckValidInputData(ResponsDto, true, requestDto.ID)) return false;
 
 
                 return await _Context.DownTimeEvents
@@ -184,7 +184,7 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
             }
             catch (Exception ex)
             {
-               
+
                 return false;
             }
         }
@@ -215,22 +215,22 @@ namespace Computerized_maintenance_Logic_layer.Module.DownTimeTracking
         /// Check if input data were valid or not 
         /// </summary>
         /// <returns><see langword="true"/> if data has been validated, otherwise <see langword="false"/></returns>
-        private bool _CheckValidInputData(DownTimeEventResponseDto responseDto,bool IsRequest = false, int ID = 0)
+        private bool _CheckValidInputData(DownTimeEventResponseDto responseDto, bool IsRequest = false, int ID = 0)
         {
-            if(IsRequest)
+            if (IsRequest)
             {
-                if(ID < 1) return false;
+                if (ID < 1) return false;
             }
 
-            if(responseDto is not DownTimeEventResponseDto) return false;
+            if (responseDto is not DownTimeEventResponseDto) return false;
             if (responseDto.AssetID < 1) return false;
             if (responseDto.WO_ID is not null)
             {
-                if(responseDto.WO_ID < 1) return false;
+                if (responseDto.WO_ID < 1) return false;
             }
-            if(string.IsNullOrEmpty(responseDto.DownTimeType)) return false;
-            if(string.IsNullOrEmpty(responseDto.Reason)) return false;
-            if(string.IsNullOrEmpty(responseDto.ActionTaken)) return false;
+            if (string.IsNullOrEmpty(responseDto.DownTimeType)) return false;
+            if (string.IsNullOrEmpty(responseDto.Reason)) return false;
+            if (string.IsNullOrEmpty(responseDto.ActionTaken)) return false;
             if (responseDto.PerformedByID < 1) return false;
 
             return true;

@@ -90,23 +90,23 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         /// <returns ><see langword="true"/> if Add Entity was successful, otherwise <see langword="false"/> </returns>
         public async Task<bool> AddNewAssetAsync(AssetResponseDto responseDto)
         {
-            if(!_checkOutValidatationOfinputData(responseDto)) return false;
+            if (!_checkOutValidatationOfinputData(responseDto)) return false;
 
             var AssetEntity = new Asset()
             {
                 AssetName = responseDto.AssetName,
                 AssetTagNumber = responseDto.AssetTagNumber,
-                ManufactuerName= responseDto.ManufactuerName,
-                ManufactuerModelNumber= responseDto.ManufactuerModelNumber,
-                PurchaseDate= responseDto.PurchaseDate,
-                PurchaseCost= responseDto.PurchaseCost,
+                ManufactuerName = responseDto.ManufactuerName,
+                ManufactuerModelNumber = responseDto.ManufactuerModelNumber,
+                PurchaseDate = responseDto.PurchaseDate,
+                PurchaseCost = responseDto.PurchaseCost,
                 WarrantyExpiryDate = responseDto.WarrantyExpiryDate,
-                InstallationDate= responseDto.InstallationDate,
+                InstallationDate = responseDto.InstallationDate,
                 AssetCategoryID = responseDto.AssetCategoryID,
                 AssetLocationID = responseDto.AssetLocationID,
-                AssetStatus= responseDto.AssetStatus,
-                MeterReading= responseDto.MeterReading,
-                Criticality= responseDto.Criticality,
+                AssetStatus = responseDto.AssetStatus,
+                MeterReading = responseDto.MeterReading,
+                Criticality = responseDto.Criticality,
                 CreateAssetDate = responseDto.CreateAssetDate,
                 UpdateAssetDate = responseDto.UpdateAssetDate,
                 CreateByUser = responseDto.CreateByUser
@@ -129,7 +129,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
              * High performence to Update entity Without unnecessary Tracking
              */
 
-            var ResponseDto = new AssetResponseDto (
+            var ResponseDto = new AssetResponseDto(
                                             requestDto.AssetName,
                                             requestDto.AssetTagNumber,
                                             requestDto.ManufactuerName,
@@ -147,7 +147,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
                                             requestDto.UpdateAssetDate,
                                             requestDto.CreateByUser
                                       );
-            if (!_checkOutValidatationOfinputData(ResponseDto,true,requestDto.ID)) return false;
+            if (!_checkOutValidatationOfinputData(ResponseDto, true, requestDto.ID)) return false;
 
             return await _Context.Assets
                                  .Where(x => x.ID == requestDto.ID)
@@ -171,7 +171,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
 
         }
 
-       
+
         /// <summary>
         ///  Delete <see cref="Asset"/> into dataset
         /// </summary>

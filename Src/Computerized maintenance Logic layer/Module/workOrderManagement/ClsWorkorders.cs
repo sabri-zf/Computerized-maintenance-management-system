@@ -18,7 +18,7 @@ namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
 
             if (List is null) return null;
 
-            var workOrderDtos = List.Select(workOrder => 
+            var workOrderDtos = List.Select(workOrder =>
                                             new WorkOredrResponseDto
                                          (
                                              workOrder.WorkOrderNumber,
@@ -107,7 +107,7 @@ namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
         {
             if (updatedWorkOrder is not WorkOredrRequestDto) return false;
             return await _context.WorkOrders
-                                 .Where(x => x.ID == updatedWorkOrder.ID )
+                                 .Where(x => x.ID == updatedWorkOrder.ID)
                                  .ExecuteUpdateAsync(setting =>
                                   setting.SetProperty(x => x.WorkOrderNumber, updatedWorkOrder.WorkOrderNumber)
                                      .SetProperty(x => x.Description, updatedWorkOrder.Description)
@@ -124,12 +124,12 @@ namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
         public async Task<bool> DeleteWorkOrder(int workOrderId)
         {
             if (workOrderId < 1) return false;
-            
-            
+
+
             return await _context.WorkOrders
-                                 .Where(x=> x.ID == workOrderId)
-                                 .ExecuteDeleteAsync() > 0 ;
-           
+                                 .Where(x => x.ID == workOrderId)
+                                 .ExecuteDeleteAsync() > 0;
+
         }
     }
 }

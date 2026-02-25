@@ -19,7 +19,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management.Extensions
         /// <returns><see langword="int"/> in case operation has been done, otherwise <see langword="null"/></returns>
         public async Task<int?> GetPersonIdOfUserAsync(int UserID)
         {
-            if(UserID < 1) return null;
+            if (UserID < 1) return null;
 
             return await UserRepo.GetPersonIdAsync(UserID);
         }
@@ -30,7 +30,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management.Extensions
         /// <param name="UserID"> unique identifier of user</param>
         /// <param name="NewPassword">new password to change it</param>
         /// <returns><see langword="true"/> in case operation has been done, otherwise <see langword="false"/></returns>
-        public async Task<bool> Reset_PasswordAsync(int UserID,string NewPassword)
+        public async Task<bool> Reset_PasswordAsync(int UserID, string NewPassword)
         {
             if (UserID > 0 && !string.IsNullOrEmpty(NewPassword))
             {
@@ -51,7 +51,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management.Extensions
         /// <returns><see langword="true"/> in case the operation has been verified, otherwise <see langword="false"/></returns>
         public async Task<bool> Verfiy_User_LoginAsync(string? Username, string? Password)
         {
-          return await Check_Validation_UserName_And_PasswordAsync(Username!, Password!);
+            return await Check_Validation_UserName_And_PasswordAsync(Username!, Password!);
         }
 
         /// <summary>

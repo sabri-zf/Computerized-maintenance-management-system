@@ -24,7 +24,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         /// </summary>
         /// <param name="UserID">unique identifier of user you looking for by it</param>
         /// <returns>data transfer object <see cref="UserDtoResponse"/> in case the operation has been succeed, otherwise <see langword="null"/></returns>
-        public async Task<UserDtoResponse?> FindUserAsync (int UserID)
+        public async Task<UserDtoResponse?> FindUserAsync(int UserID)
         {
             return await _repository.FindByIdAsync(UserID);
         }
@@ -66,10 +66,10 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         /// <returns><see langword="true"/> in case the Update data on database has been done,<see langword="false"/> otherwise</returns>
         public async Task<bool> UpdateUserAsync(ProcessUpdateUserDto UserResquest)
         {
-            if(UserResquest is not ProcessUpdateUserDto) return false;
+            if (UserResquest is not ProcessUpdateUserDto) return false;
             UserResquest.userDto.Password = Security.HashEncrypt(UserResquest.userDto.Password);
 
-            return await _repository.UpdateUserAsync(UserResquest);   
+            return await _repository.UpdateUserAsync(UserResquest);
         }
 
 
@@ -90,7 +90,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         /// </summary>
         /// <param name="Userid">unique identifier of user</param>
         /// <returns><see langword="true"/> in case user exists on database,<see langword="false"/> otherwise</returns>
-        public  async Task<bool> IsExistUserAsync(int UserId)
+        public async Task<bool> IsExistUserAsync(int UserId)
         {
             return await _repository.IsExistUserAsync(UserId);
         }

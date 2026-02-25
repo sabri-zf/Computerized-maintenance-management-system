@@ -1,11 +1,5 @@
 ﻿using computrized_maintenance_Data_Access.DTO;
 using computrized_maintenance_Data_Access.UserManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Computerized_maintenance_Logic_layer.Module.User_Management
 {
@@ -25,7 +19,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         {
             CountryDtoResquest dto = new CountryDtoResquest();
 
-            if(DataAccessCountry.Find(ID,ref dto))
+            if (DataAccessCountry.Find(ID, ref dto))
             {
                 return new ClsCountries(dto);
             }

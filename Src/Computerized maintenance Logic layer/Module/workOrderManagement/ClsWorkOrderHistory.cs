@@ -18,9 +18,9 @@ namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
                 .AsNoTracking()
                 .ToListAsync();
 
-            if(List is null) return null;
+            if (List is null) return null;
 
-            return List.Select(x => new WorkOrderHistoryResponseDto(x.WO_ID,x.Action.ToString(),x.ActionDate,x.PerformedActionByID)
+            return List.Select(x => new WorkOrderHistoryResponseDto(x.WO_ID, x.Action.ToString(), x.ActionDate, x.PerformedActionByID)
             );
         }
 
@@ -31,7 +31,7 @@ namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
             var workOrderHistoryEntity = new computrized_maintenance_Data_Access.Entites.WorkOrderManagement.WorkOrderHistory
             {
                 WO_ID = workOrderHistory.WorkOrderID,
-                Action =  Enum.Parse<En_WorkOrderHistoryActionStatus>(workOrderHistory.Action,true),
+                Action = Enum.Parse<En_WorkOrderHistoryActionStatus>(workOrderHistory.Action, true),
                 ActionDate = workOrderHistory.ActionDate,
                 PerformedActionByID = workOrderHistory.PerformedActionByID
             };

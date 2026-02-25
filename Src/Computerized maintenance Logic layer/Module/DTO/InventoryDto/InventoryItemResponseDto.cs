@@ -14,13 +14,13 @@
     public sealed record InventoryItemResponseDto
         (
             string ItemName,
-            string PartNumber ,
+            string PartNumber,
             string Description,
-            short Quintity ,
-            short ReorderLevel ,
-            decimal UnitCost ,
-            int LocationID ,
-            bool IsActive 
+            short Quintity,
+            short ReorderLevel,
+            decimal UnitCost,
+            int LocationID,
+            bool IsActive
         );
 
 

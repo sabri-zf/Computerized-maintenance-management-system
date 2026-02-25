@@ -1,16 +1,13 @@
 ﻿namespace Computerized_maintenance_Logic_layer.Module.DTO.PreventiveMaintenanceManagement
 {
     /// <summary>
-    /// Data transfer object for Preventive Maintenance Response
+    /// Data transfer object for Preventive Maintenance Request
     /// </summary>
-
-    public sealed record PreventiveMaintenanceRequesteDto
+    public sealed record PreventiveMaintenanceResponseDto
     (
-        int ID,
         int AssetID,
         string TaskDescription,
         string Frequency,
-        DateTime ScheduledDate,
-        DateTime NextScheduleDate
+        DateTime ScheduledDate
     );
 }

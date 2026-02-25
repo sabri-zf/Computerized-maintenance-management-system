@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using computrized_maintenance_Data_Access.Entites.AssetsManagment;
 
 namespace computrized_maintenance_Data_Access.Entites.ReportsAndAnalysis
 {
@@ -17,6 +17,6 @@ namespace computrized_maintenance_Data_Access.Entites.ReportsAndAnalysis
         public DateTime CreateAt { get; set; }
 
 
-        public AssetsManagment.Asset Asset { get; set; }
+        public Asset Asset { get; set; }
     }
 }

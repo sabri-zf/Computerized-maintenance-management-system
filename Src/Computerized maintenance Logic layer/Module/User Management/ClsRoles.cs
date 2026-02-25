@@ -24,7 +24,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         public async Task<IEnumerable<RoleDtoResponse>?> RetriveAllRolesAsync()
         {
             return await _repostory.RetrieveWholeRolesAsync();
-        }      
+        }
 
 
         /// <summary>
@@ -36,22 +36,22 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         {
             return await _repostory.AddNewRoleAsync(Rolename);
         }
-       
-      
+
+
         /// <summary>
         /// Update role record on dataset aysnchronously
         /// </summary>
         /// <param name="OldRoleName">old value of role name already exist on system </param>
         /// <param name="NewRolename">new value of role name made by user</param>
         /// <returns><see langword="true"/> if the operation has been done, otherwise <see langword="false"/></returns>
-        public async Task<bool> UpdateRoleAsync(string OldRoleName ,string NewRolename)
+        public async Task<bool> UpdateRoleAsync(string OldRoleName, string NewRolename)
         {
-            if(NewRolename.Equals(OldRoleName,StringComparison.OrdinalIgnoreCase)) return false;
+            if (NewRolename.Equals(OldRoleName, StringComparison.OrdinalIgnoreCase)) return false;
 
             return await _repostory.UpdateRoleAsync(OldRoleName, NewRolename);
         }
-      
-        
+
+
         /// <summary>
         /// Omitting Role record on dataset asynchronously
         /// </summary>
@@ -62,6 +62,6 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
             return await _repostory.DeleteRoleAsync(rolename);
         }
 
-        
+
     }
 }

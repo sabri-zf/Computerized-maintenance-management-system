@@ -1,7 +1,7 @@
 ﻿using computrized_maintenance_Data_Access.Entites.AssetsManagment;
 using computrized_maintenance_Data_Access.Entites.DownTimeTracking;
 using computrized_maintenance_Data_Access.Entites.InventoryManagement;
-using computrized_maintenance_Data_Access.Entites.preventiveMaintenanceManagement;
+using computrized_maintenance_Data_Access.Entites.PM_SchedulingManagement;
 using computrized_maintenance_Data_Access.Entites.ReportsAndAnalysis;
 using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
 using computrized_maintenance_Data_Access.Enumes;
@@ -15,6 +15,48 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 	internal class SeeData
 	{
 
+
+		public static Collection<PMSchedule> PMSchedules = new Collection<PMSchedule>
+		{
+	new PMSchedule
+	{
+		ScheduleID = 1,
+		PmID = 1,
+		NextDueDate = new DateTime(2026, 3, 1,11,20,0),
+		LastCompletionDate = new DateTime(2026, 2, 22,22,30,10),
+		IsActive = true
+	},
+
+    // Second schedule for PM 1 (because it's 1 - many)
+    new PMSchedule
+	{
+		ScheduleID = 2,
+		PmID = 1,
+		NextDueDate = new DateTime(2026, 3, 10),
+        LastCompletionDate = null,
+		IsActive = true
+	},
+
+    // Schedule for PM 2
+    new PMSchedule
+	{
+		ScheduleID = 3,
+		PmID = 2,
+		NextDueDate = new DateTime(2026, 3, 15),
+		LastCompletionDate = new DateTime(2026, 2, 15),
+		IsActive = true
+	},
+
+    // Inactive schedule for PM 2
+    new PMSchedule
+	{
+		ScheduleID = 4,
+		PmID = 2,
+		NextDueDate = new DateTime(2026, 3, 20),
+		LastCompletionDate = null,
+		IsActive = false
+	}
+		};
 		public static Collection<PreventiveMaintenance> PreventiveMaintenances = new Collection<PreventiveMaintenance>()
 		{
 			new PreventiveMaintenance() {
@@ -23,7 +65,6 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 				TaskDescription="Replace air filter in HVAC unit every 3 months.",
 				Frequency=En_FrequencyTask.Quarterly,
 				CreatedDate=new DateTime(2025,1,1),
-				NextDueDate=new DateTime(2025,10,1)
 			},
 			new PreventiveMaintenance() {
 				ID=2,
@@ -31,14 +72,13 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 				TaskDescription="Inspect safety valves on boiler system every 6 months.",
 				Frequency= En_FrequencyTask.SemiAnnual,
 				CreatedDate=new DateTime(2025,3,1),
-				NextDueDate=new DateTime(2025,9,1)
 			}
 
 		};
 
 		public static Collection<WorkOrder> WorkOrders = new Collection<WorkOrder>()
 		{
-			  new WorkOrder
+		new WorkOrder
 		{
 			ID = 1,
 			WorkOrderNumber = "WO-0001",
@@ -330,7 +370,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 				Availability = 0.92f,
 				MDT = 2.5f,
 				CreateAt = new DateTime(2021, 8, 12 ,14,30,0)
-            },
+			},
 			new Report
 			{
 				ID = 2,
@@ -343,7 +383,7 @@ namespace computrized_maintenance_Data_Access.Data.Seed
 				Availability = 0.88f,
 				MDT = 3.4f,
 				CreateAt = new DateTime(2021, 8, 12 ,14,30,0)
-            }
+			}
 
 		};
 	}

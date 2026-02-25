@@ -15,7 +15,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         /// <returns>Data transfer object <see cref="AssetImageResponseDto"/> record, otherwise <see langword="null"/></returns>
         public async Task<AssetImageResponseDto?> FindAsync(int Id)
         {
-            if(Id < 1) return null;
+            if (Id < 1) return null;
 
             var entity = await _Context.Set<AssetImage>()
                                        .AsNoTracking()
@@ -64,7 +64,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         public async Task<bool> AddNewImageAsync(AssetImageResponseDto responseDto)
         {
 
-            if(!_checkOutValidatationOfinputData(responseDto)) return false;
+            if (!_checkOutValidatationOfinputData(responseDto)) return false;
 
 
             AssetImage image = new()
@@ -108,7 +108,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         /// <returns></returns>
         public async Task<bool> DeleteImageAsync(int Id)
         {
-            if(Id < 1) return false;
+            if (Id < 1) return false;
 
             return await _Context.Set<AssetImage>()
                                  .Where(x => x.ID == Id)
@@ -123,17 +123,17 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         /// <param name="IsRequerd">Check if OnRequset state</param>
         /// <param name="ID">Unique identifier of <see cref="AssetImage"/> entity</param>
         /// <returns><see langword="true"/> if data is valid,otherwise <see langword="false"/></returns>
-        private bool _checkOutValidatationOfinputData(AssetImageResponseDto responseDto,bool IsRequerd =false ,int ID = 0)
+        private bool _checkOutValidatationOfinputData(AssetImageResponseDto responseDto, bool IsRequerd = false, int ID = 0)
         {
-            if(IsRequerd)
+            if (IsRequerd)
             {
-                if(ID <1) return false;
+                if (ID < 1) return false;
             }
 
-            if(string.IsNullOrEmpty(responseDto.ImagePath)) return false;
-            if(responseDto.Imagewidth < 150) return false;
-            if(responseDto.ImageHight < 150) return false;  
-            if(responseDto.AssetID < 1) return false;
+            if (string.IsNullOrEmpty(responseDto.ImagePath)) return false;
+            if (responseDto.Imagewidth < 150) return false;
+            if (responseDto.ImageHight < 150) return false;
+            if (responseDto.AssetID < 1) return false;
 
             return true;
         }

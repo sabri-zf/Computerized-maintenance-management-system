@@ -1,8 +1,4 @@
-﻿using Computerized_maintenance_Logic_layer.Module.User_Management.Enums;
-using computrized_maintenance_Data_Access.DTO;
-using computrized_maintenance_Data_Access.UserManagement;
-
-namespace Computerized_maintenance_Logic_layer.Module.User_Management
+﻿namespace Computerized_maintenance_Logic_layer.Module.User_Management
 {
     public class ClsManagers
     {

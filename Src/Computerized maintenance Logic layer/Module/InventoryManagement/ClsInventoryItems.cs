@@ -1,7 +1,6 @@
 ﻿using Computerized_maintenance_Logic_layer.Module.DTO.InventoryDto;
 using computrized_maintenance_Data_Access.Data;
 using computrized_maintenance_Data_Access.Entites.InventoryManagement;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
@@ -16,7 +15,7 @@ namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
         /// <returns>List of <see cref="IEnumerable<InventoryItemResponseDto>" if find it, otherwise <see cref="Nullable"/>NUll</see> </returns>
         public async Task<IEnumerable<InventoryItemResponseDto>?> GetAllInventoryItems()
         {
-            var List = await _Context.inventoryItems
+            var List = await _Context.InventoryItems
                                      .AsNoTracking()
                                      .ToListAsync();
 
@@ -35,15 +34,15 @@ namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
         {
             if (ID < 1) return null;
 
-            var Result = await _Context.inventoryItems
-                                       .AsNoTracking() 
+            var Result = await _Context.InventoryItems
+                                       .AsNoTracking()
                                        .SingleOrDefaultAsync(x => x.ID == ID);
 
-            if(Result is not InventoryItem) return null;
+            if (Result is not InventoryItem) return null;
 
-            
 
-            return new InventoryItemResponseDto 
+
+            return new InventoryItemResponseDto
                    (
                        Result.ItemName,
                        Result.PartNumber,
@@ -64,7 +63,7 @@ namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
         public async Task<bool> AddNewInventoryItem(InventoryItemResponseDto responseDto)
 
         {
-            if(!CheckOutValidateInput(responseDto)) return false;
+            if (!CheckOutValidateInput(responseDto)) return false;
             //manual mapping
             var ItemEntity = new InventoryItem()
             {
@@ -79,7 +78,7 @@ namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
             };
 
 
-            var Is_Inserted = await _Context.inventoryItems
+            var Is_Inserted = await _Context.InventoryItems
                                             .AddAsync(ItemEntity);
 
             return await _Context.SaveChangesAsync() > 0;
@@ -97,17 +96,17 @@ namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
             var ResponseInventory = new InventoryItemResponseDto(requestDto.ItemName, requestDto.PartNumber, requestDto.Description, requestDto.Quintity, requestDto.ReorderLevel, requestDto.UnitCost, requestDto.LocationID, requestDto.IsActive);
             if (!CheckOutValidateInput(ResponseInventory, true, requestDto.ID)) return false;
 
-            return await _Context.inventoryItems
+            return await _Context.InventoryItems
                                  .Where(x => x.ID == requestDto.ID)
-                                 .ExecuteUpdateAsync(setting =>setting
+                                 .ExecuteUpdateAsync(setting => setting
                                  .SetProperty(x => x.ItemName, requestDto.ItemName)
                                  .SetProperty(x => x.PartNumber, requestDto.PartNumber)
                                  .SetProperty(x => x.Description, requestDto.Description)
-                                 .SetProperty(x => x.Quintity,requestDto.Quintity)
+                                 .SetProperty(x => x.Quintity, requestDto.Quintity)
                                  .SetProperty(x => x.ReorderLevel, requestDto.ReorderLevel)
-                                 .SetProperty(x => x.UnitCost,requestDto.UnitCost)
-                                 .SetProperty(x => x.LocationID,requestDto.LocationID)
-                                 .SetProperty(x => x.IsActive,requestDto.IsActive)) > 0;
+                                 .SetProperty(x => x.UnitCost, requestDto.UnitCost)
+                                 .SetProperty(x => x.LocationID, requestDto.LocationID)
+                                 .SetProperty(x => x.IsActive, requestDto.IsActive)) > 0;
         }
 
         /// <summary>
@@ -117,19 +116,19 @@ namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
         /// <returns><see langword="true"/> if Delete operation has been Done, otherwise return <see langword="false"/> </returns>
         public async Task<bool> DeleteInventoryItem(int Id)
         {
-            if(Id <1) return false;
+            if (Id < 1) return false;
 
-            return await _Context.inventoryItems
+            return await _Context.InventoryItems
                            .Where(x => x.ID == Id)
                            .ExecuteDeleteAsync() > 0;
         }
 
 
-        private  bool CheckOutValidateInput(InventoryItemResponseDto responseDto ,bool IsItRequest= false,int ID =0)
+        private bool CheckOutValidateInput(InventoryItemResponseDto responseDto, bool IsItRequest = false, int ID = 0)
         {
-            if(IsItRequest)
+            if (IsItRequest)
             {
-                if(ID < 1) return false;
+                if (ID < 1) return false;
             }
 
             if (responseDto == null) return false;
@@ -143,7 +142,5 @@ namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
 
             return true;
         }
-
-
     }
 }

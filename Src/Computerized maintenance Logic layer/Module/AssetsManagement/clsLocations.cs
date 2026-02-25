@@ -1,7 +1,6 @@
 ﻿using CMMS_Api.DTO;
 using computrized_maintenance_Data_Access.Data;
 using computrized_maintenance_Data_Access.Entites.AssetsManagment;
-using computrized_maintenance_Data_Access.Misc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
@@ -11,7 +10,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
     /// </summary>
     public sealed class clsLocations(AppDbContext _Context)
     {
-        
+
 
         #region CRUD Operations
 
@@ -24,7 +23,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         {
             try
             {
-                if(Id < 1) return null;
+                if (Id < 1) return null;
 
                 var entity = await _Context.Locations
                                            .AsNoTracking()
@@ -49,7 +48,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         {
             try
             {
-                if(!_IsInputDataValidate(responseDto)) return false;
+                if (!_IsInputDataValidate(responseDto)) return false;
 
                 var location = new Location
                 {
@@ -76,7 +75,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         {
             try
             {
-                if(!_IsInputDataValidate(new LocationResponseDto(requestDto.LocationName), true, requestDto.ID)) 
+                if (!_IsInputDataValidate(new LocationResponseDto(requestDto.LocationName), true, requestDto.ID))
                     return false;
 
                 var result = await _Context.Locations
@@ -124,10 +123,10 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         /// <returns>list of <see cref="IEnumerable{LocationResponseDto}"/>, otherwise <see langword="null"/></returns>
         public async Task<IEnumerable<LocationResponseDto>?> GetAllLocations()
         {
-        var list = await _Context.Locations
-                              .AsNoTracking()
-                              .Select(x => new LocationResponseDto(x.LocationName))
-                              .ToListAsync();
+            var list = await _Context.Locations
+                                  .AsNoTracking()
+                                  .Select(x => new LocationResponseDto(x.LocationName))
+                                  .ToListAsync();
 
             if (list.Count < 0) return null;
 
@@ -138,14 +137,14 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
 
         #region Additional Methods
 
-       
+
         #endregion
 
-       private bool _IsInputDataValidate(LocationResponseDto responseDto,bool IsRequest= false, int Id = 0)
+        private bool _IsInputDataValidate(LocationResponseDto responseDto, bool IsRequest = false, int Id = 0)
         {
             if (IsRequest)
             {
-                if (Id < 1) return false;   
+                if (Id < 1) return false;
             }
             if (string.IsNullOrEmpty(responseDto.LocationName)) return false;
             return true;

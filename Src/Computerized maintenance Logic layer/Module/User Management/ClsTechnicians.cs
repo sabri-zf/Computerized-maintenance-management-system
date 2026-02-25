@@ -24,7 +24,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         /// <returns><see langword="true"/> in case operation has been done, otherwise <see langword="false"/></returns>
         public async Task<bool> AddNewTehnicianAsync(ProcessToCreateTechnicianDto technicianDto)
         {
-            if(technicianDto == null) return false;
+            if (technicianDto == null) return false;
 
             return await _Reop.AddNewTechnicianAsync(technicianDto);
         }
@@ -49,7 +49,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         /// <returns><see langword="true"/> in case operation has been done, otherwise <see langword="false"/></returns>
         public async Task<bool> DeleteTechincianAsync(int ID)
         {
-            if(ID < 1) return false;
+            if (ID < 1) return false;
 
             return await _Reop.DeleteTechnicianAsync(ID);
         }

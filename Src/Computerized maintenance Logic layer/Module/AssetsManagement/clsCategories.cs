@@ -1,7 +1,6 @@
 ﻿using CMMS_Api.DTO;
 using computrized_maintenance_Data_Access.Data;
 using computrized_maintenance_Data_Access.Entites.AssetsManagment;
-using computrized_maintenance_Data_Access.Misc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
@@ -22,15 +21,15 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
         {
             try
             {
-                if(id < 1) return null; 
+                if (id < 1) return null;
 
 
                 var entity = await _Context.Categories
                                            .AsNoTracking()
                                            .SingleOrDefaultAsync(x => x.ID == id);
 
-                return entity is Category ? new CategoryResponseDto(entity.Category_Name): null;
-            } 
+                return entity is Category ? new CategoryResponseDto(entity.Category_Name) : null;
+            }
             catch (Exception ex)
             {
                 // TODO: Add proper logging service here
@@ -49,7 +48,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
             try
             {
 
-                if(!_IsDataInputValidate(responseDto)) return  false;
+                if (!_IsDataInputValidate(responseDto)) return false;
 
                 var category = new Category
                 {
@@ -76,8 +75,8 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
             try
             {
 
-                if(!_IsDataInputValidate(new CategoryResponseDto(requestDto.CategoryName), true, requestDto.ID)) 
-                    return  false;
+                if (!_IsDataInputValidate(new CategoryResponseDto(requestDto.CategoryName), true, requestDto.ID))
+                    return false;
 
 
                 var result = await _Context.Categories
@@ -130,7 +129,7 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
                            .Select(x => new CategoryResponseDto(x.Category_Name))
                            .ToListAsync();
 
-                if(List.Count < 0) return null;
+                if (List.Count < 0) return null;
 
                 return List.AsEnumerable();
             }
@@ -139,8 +138,8 @@ namespace Computerized_maintenance_Logic_layer.Module.AssetsManagement
                 Console.WriteLine(ex.Message);
                 return null;
             }
-           
-                           
+
+
         }
 
         #endregion

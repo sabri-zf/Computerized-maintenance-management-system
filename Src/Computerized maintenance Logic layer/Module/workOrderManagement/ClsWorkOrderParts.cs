@@ -14,11 +14,11 @@ namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
         {
             if (Id < 0) return null;
 
-            var Result = await _context.workOrderParts
+            var Result = await _context.WorkOrderParts
                                        .AsNoTracking()
                                        .SingleOrDefaultAsync(x => x.ID == Id);
 
-            if(Result is not WorkOrderPart) return null;
+            if (Result is not WorkOrderPart) return null;
 
             return new WorkOrderPartResponseDto
                 (
@@ -31,7 +31,7 @@ namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
 
         public async Task<IEnumerable<WorkOrderPartResponseDto>?> GetAllItems()
         {
-            var List = await _context.workOrderParts
+            var List = await _context.WorkOrderParts
                                       .AsNoTracking()
                                       .ToListAsync();
 
@@ -40,9 +40,9 @@ namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
 
         public async Task<bool> AddNewItem(WorkOrderPart WO_part)
         {
-            if(WO_part is not WorkOrderPart) return false;
+            if (WO_part is not WorkOrderPart) return false;
 
-            await _context.workOrderParts.AddAsync(WO_part);
+            await _context.WorkOrderParts.AddAsync(WO_part);
 
             return await _context.SaveChangesAsync() > 0;
         }
@@ -52,7 +52,7 @@ namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
         {
             if (requestDto is not WorkOrderPartRequestDto && requestDto.ID < 1) return false;
 
-            return await _context.workOrderParts
+            return await _context.WorkOrderParts
                                  .Where(x => x.ID == requestDto.ID)
                                  .ExecuteUpdateAsync(setting => setting
                                  .SetProperty(x => x.WO_ID, requestDto.WorkOrderID)
@@ -65,7 +65,7 @@ namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
         {
             if (Id < 1) return false;
 
-            return await _context.workOrderParts
+            return await _context.WorkOrderParts
                                  .Where(x => x.ID == Id)
                                  .ExecuteDeleteAsync() > 0;
         }

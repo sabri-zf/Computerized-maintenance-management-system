@@ -1,9 +1,7 @@
-﻿using computrized_maintenance_Data_Access.Enumes;
-
-namespace Computerized_maintenance_Logic_layer.Module.DTO.WorkOrderDto
+﻿namespace Computerized_maintenance_Logic_layer.Module.DTO.WorkOrderDto
 {
     public sealed record WorkOredrResponseDto
-    
+
         (
             string WorkOrderNumber,
             string Description,
@@ -16,6 +14,6 @@ namespace Computerized_maintenance_Logic_layer.Module.DTO.WorkOrderDto
             DateTime DueDate,
             DateTime? CompeletedDate,
             string? Note
-           
+
         );
 }

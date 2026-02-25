@@ -1,6 +1,6 @@
 ﻿using Computerized_maintenance_Logic_layer.Module.DTO.PreventiveMaintenanceManagement;
 using computrized_maintenance_Data_Access.Data;
-using computrized_maintenance_Data_Access.Entites.preventiveMaintenanceManagement;
+using computrized_maintenance_Data_Access.Entites.PM_SchedulingManagement;
 using computrized_maintenance_Data_Access.Enumes;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,8 +33,8 @@ namespace Computerized_maintenance_Logic_layer.Module.preventiveMaintenanceManag
                                             x.AssetID,
                                             x.TaskDescription,
                                             x.Frequency.ToString(),
-                                            x.CreatedDate,
-                                            x.NextDueDate
+                                            x.CreatedDate
+
                                         )).ToListAsync();
 
                 if (List.Count <= 0) return null;
@@ -70,8 +70,7 @@ namespace Computerized_maintenance_Logic_layer.Module.preventiveMaintenanceManag
                                                x.AssetID,
                                                x.TaskDescription,
                                                x.Frequency.ToString(),
-                                               x.CreatedDate,
-                                               x.NextDueDate
+                                               x.CreatedDate
                                            ))
                                            .SingleOrDefaultAsync();
                 return entity;
@@ -89,26 +88,27 @@ namespace Computerized_maintenance_Logic_layer.Module.preventiveMaintenanceManag
         /// <param name="responseDto">Data transfer object of <see cref="PreventiveMaintenanceRequesteDto"/></param>
         /// <returns><see langword="true"/> if add Preventive Maintenance has been done, otherwise <see langword="false"/> </returns>
         /// <exception cref="Exception">Throw exception if error occorring from Ef core</exception>
-        public async Task<bool> AddPreventiveMaintenanceAsync(PreventiveMaintenanceResponseDto responseDto)
+        public async Task<int> AddPreventiveMaintenanceAsync(PreventiveMaintenanceResponseDto responseDto)
         {
             try
             {
-                if(_IsInputDataValidate(responseDto)) return false;
+                if (_IsInputDataValidate(responseDto)) return -1;
 
-               
+
                 var entity = new PreventiveMaintenance
                 {
-                   AssetID         = responseDto.AssetID,
-                   TaskDescription = responseDto.TaskDescription,
-                   Frequency       = (En_FrequencyTask) Enum.Parse(typeof(En_FrequencyTask), responseDto.Frequency),
-                   CreatedDate     = responseDto.ScheduledDate,
-                   NextDueDate     = responseDto.NextScheduleDate
+                    AssetID = responseDto.AssetID,
+                    TaskDescription = responseDto.TaskDescription,
+                    Frequency = (En_FrequencyTask)Enum.Parse(typeof(En_FrequencyTask), responseDto.Frequency),
+                    CreatedDate = responseDto.ScheduledDate,
                 };
 
                 await _Context.PreventiveMaintenances.AddAsync(entity);
 
 
-                return await _Context.SaveChangesAsync() > 0;
+                await _Context.SaveChangesAsync();
+
+                return entity.AssetID;
             }
             catch (Exception ex)
             {
@@ -132,9 +132,8 @@ namespace Computerized_maintenance_Logic_layer.Module.preventiveMaintenanceManag
                     requestDto.AssetID,
                     requestDto.TaskDescription,
                     requestDto.Frequency,
-                    requestDto.ScheduledDate,
-                    requestDto.NextScheduleDate
-                );  
+                    requestDto.ScheduledDate
+                );
 
                 if (_IsInputDataValidate(ResponseDto, true, requestDto.ID)) return false;
 
@@ -145,7 +144,6 @@ namespace Computerized_maintenance_Logic_layer.Module.preventiveMaintenanceManag
                                         .SetProperty(p => p.TaskDescription, requestDto.TaskDescription)
                                         .SetProperty(p => p.Frequency, (En_FrequencyTask)Enum.Parse(typeof(En_FrequencyTask), requestDto.Frequency))
                                         .SetProperty(p => p.CreatedDate, requestDto.ScheduledDate)
-                                        .SetProperty(p => p.NextDueDate, requestDto.NextScheduleDate)
                                      ) > 0;
 
             }

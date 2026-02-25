@@ -51,13 +51,13 @@ namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
         /// <returns><see langword="true"/> if Add Successfully,otherwise <see  langword="false"/></returns>
         public async Task<bool> AddNewTransaction(InventoryTrasactionsResponseDto responseDto)
         {
-            if(!CheckOutValidationOfInput(responseDto)) return false;
+            if (!CheckOutValidationOfInput(responseDto)) return false;
 
             InventoryTransaction TransactionEntity = new()
             {
                 InventoryItemID = responseDto.InventoryItemID,
                 Quntity = responseDto.Quntity,
-                Type = (En_TransactionType) Enum.Parse(typeof(En_TransactionType) ,responseDto.Type),
+                Type = (En_TransactionType)Enum.Parse(typeof(En_TransactionType), responseDto.Type),
                 TransactionDate = responseDto.TransactionDate,
                 Reference = responseDto.Reference
             };
@@ -99,7 +99,7 @@ namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
         /// <returns><see langword="true"/> If delete has been succeed, otherwise <see langword="false"/></returns>
         public async Task<bool> DeleteTransaction(int Id)
         {
-            if(Id < 1) return false;
+            if (Id < 1) return false;
 
             return await _context.InventoryTransactions
                                  .Where(x => x.ID == Id)
@@ -113,23 +113,23 @@ namespace Computerized_maintenance_Logic_layer.Module.InventoryManagement
         /// <param name="IsRequset">check-in if the state is OnRequest or No</param>
         /// <param name="Id">Unique identifier of <see cref="InventoryTransaction"/></param>
         /// <returns><see langword="true"/> If data is valid, otherwise <see langword="false"/></returns>
-        private bool CheckOutValidationOfInput(InventoryTrasactionsResponseDto responseDto,bool IsRequset = false,int Id = 0)
+        private bool CheckOutValidationOfInput(InventoryTrasactionsResponseDto responseDto, bool IsRequset = false, int Id = 0)
         {
 
-            if(IsRequset)
+            if (IsRequset)
             {
-                if(Id < 1) return false;
+                if (Id < 1) return false;
             }
 
-            if(responseDto is not InventoryTrasactionsResponseDto) return false;
-            if(responseDto.InventoryItemID < 1) return false;
-            if(responseDto.Quntity < 0) return false;
-            if(!DateTime.TryParse(responseDto.TransactionDate.ToShortDateString(),out var value)) return false;
-            if(string.IsNullOrEmpty(responseDto.Reference)) return false;
+            if (responseDto is not InventoryTrasactionsResponseDto) return false;
+            if (responseDto.InventoryItemID < 1) return false;
+            if (responseDto.Quntity < 0) return false;
+            if (!DateTime.TryParse(responseDto.TransactionDate.ToShortDateString(), out var value)) return false;
+            if (string.IsNullOrEmpty(responseDto.Reference)) return false;
 
             return true;
         }
 
-        
+
     }
 }

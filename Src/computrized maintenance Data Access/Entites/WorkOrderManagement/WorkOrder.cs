@@ -1,5 +1,5 @@
 ﻿using computrized_maintenance_Data_Access.Entites.AssetsManagment;
-using computrized_maintenance_Data_Access.Entites.preventiveMaintenanceManagement;
+using computrized_maintenance_Data_Access.Entites.PM_SchedulingManagement;
 using computrized_maintenance_Data_Access.Enumes;
 
 namespace computrized_maintenance_Data_Access.Entites.WorkOrderManagement
@@ -23,9 +23,10 @@ namespace computrized_maintenance_Data_Access.Entites.WorkOrderManagement
         public string Description { get; set; } = null!;
         public int PreventiveMaintenanceID { get; set; }
         public int AssetID { get; set; }
-        public int CreatedByID { get; set; }  
+        public int CreatedByID { get; set; }
         public int AssignedToID { get; set; }
         public En_workOrderStatus Status { get; set; }
+        public En_MaintenaceType Type { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime StartDate { get; set; }
 
@@ -34,7 +35,7 @@ namespace computrized_maintenance_Data_Access.Entites.WorkOrderManagement
         /// </summary>
         public DateTime DueDate { get; set; }
         public DateTime? CompeletedDate { get; set; }
-        public string? Note {  get; set; }
+        public string? Note { get; set; }
 
 
 

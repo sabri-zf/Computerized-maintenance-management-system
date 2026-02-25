@@ -7,7 +7,7 @@ namespace Computerized_maintenance_Logic_layer.Module.Tools
     {
         public static string HashEncrypt(string Plant)
         {
-            using(SHA256 sha = SHA256.Create())
+            using (SHA256 sha = SHA256.Create())
             {
 
                 byte[] bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(Plant));

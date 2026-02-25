@@ -46,7 +46,7 @@ namespace CMMS_Api.Controllers.PreventiveMaintenanceManagement
             if (responseDto is not PreventiveMaintenanceResponseDto) return BadRequest("Invalid operation");
             var IsAdded = await _Instance.AddPreventiveMaintenanceAsync(responseDto);
 
-            return IsAdded ? Ok("Add New Preventive Maintenance has been Done")
+            return IsAdded > 0 ? Ok("Add New Preventive Maintenance has been Done")
                            : StatusCode(500, "Error Occurred on System");
         }
 

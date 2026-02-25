@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using computrized_maintenance_Data_Access.Data;
 
@@ -11,9 +12,11 @@ using computrized_maintenance_Data_Access.Data;
 namespace computrized_maintenance_Data_Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260223134804_made_new_entity_Schedule_pm")]
+    partial class made_new_entity_Schedule_pm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -671,16 +674,8 @@ namespace computrized_maintenance_Data_Access.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScheduleID"));
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastCompletionDate")
                         .HasColumnType("datetime");
@@ -710,9 +705,7 @@ namespace computrized_maintenance_Data_Access.Migrations
                         new
                         {
                             ScheduleID = 1,
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
-                            IsDeleted = false,
                             LastCompletionDate = new DateTime(2026, 2, 22, 22, 30, 10, 0, DateTimeKind.Unspecified),
                             NextDueDate = new DateTime(2026, 3, 1, 11, 20, 0, 0, DateTimeKind.Unspecified),
                             PmID = 1
@@ -720,18 +713,14 @@ namespace computrized_maintenance_Data_Access.Migrations
                         new
                         {
                             ScheduleID = 2,
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
-                            IsDeleted = false,
                             NextDueDate = new DateTime(2026, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PmID = 1
                         },
                         new
                         {
                             ScheduleID = 3,
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
-                            IsDeleted = false,
                             LastCompletionDate = new DateTime(2026, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             NextDueDate = new DateTime(2026, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PmID = 2
@@ -739,9 +728,7 @@ namespace computrized_maintenance_Data_Access.Migrations
                         new
                         {
                             ScheduleID = 4,
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = false,
-                            IsDeleted = false,
                             NextDueDate = new DateTime(2026, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PmID = 2
                         });
@@ -766,9 +753,7 @@ namespace computrized_maintenance_Data_Access.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<string>("TaskDescription")
                         .IsRequired()

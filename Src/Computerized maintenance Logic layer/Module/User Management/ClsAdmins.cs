@@ -1,5 +1,4 @@
-﻿using Computerized_maintenance_Logic_layer.Module.User_Management.Interface;
-using computrized_maintenance_Data_Access.DTO;
+﻿using computrized_maintenance_Data_Access.DTO;
 using computrized_maintenance_Data_Access.UserManagement;
 
 namespace Computerized_maintenance_Logic_layer.Module.User_Management
@@ -25,7 +24,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         /// <returns><see langword="true"/> if an operation has been done, otherwise <see langword="false"/></returns>
         public async Task<bool> AddNewAsync(ProcessAddUserDto adminRequest)
         {
-           if(adminRequest is not ProcessAddUserDto) return false;
+            if (adminRequest is not ProcessAddUserDto) return false;
 
             return await _Repo.AddNewAdminAsync(adminRequest) > 0;
         }
@@ -37,7 +36,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         /// <returns><see langword="true"/> if an operation has been done, otherwise <see langword="false"/></returns>
         public async Task<bool> UpdateAsync(ProcessUpdateAdminDto adminRequest)
         {
-            if(adminRequest is not ProcessUpdateAdminDto) return false;
+            if (adminRequest is not ProcessUpdateAdminDto) return false;
             return await _Repo.UpdateAdminAsync(adminRequest);
         }
 
@@ -48,7 +47,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         /// <returns><see langword="true"/> if an operation has been done, otherwise <see langword="false"/></returns>
         public async Task<bool> DeleteAsync(int Id)
         {
-            if(Id < 1) return false;
+            if (Id < 1) return false;
             return await _Repo.DeleteAdminAsync(Id);
         }
 
@@ -59,7 +58,7 @@ namespace Computerized_maintenance_Logic_layer.Module.User_Management
         /// <returns><see langword="true"/> if an operation has been done, otherwise <see langword="false"/></returns>
         public async Task<bool> IsExistAsync(int Id)
         {
-            if(Id < 1) return false;
+            if (Id < 1) return false;
             return await _Repo.IsExistAdminAsync(Id);
         }
 

@@ -18,15 +18,15 @@ namespace Computerized_maintenance_Logic_layer.Module.ReportsAndAnalysis
 
             try
             {
-               var FindOut = await _context.Reports
-                        .AsNoTracking()
-                        .SingleOrDefaultAsync(x => x.AssetID == AssetID);
+                var FindOut = await _context.Reports
+                         .AsNoTracking()
+                         .SingleOrDefaultAsync(x => x.AssetID == AssetID);
 
                 if (FindOut == null) return null;
 
-                return new ReportEquipmentDto(FindOut.AssetID,FindOut.StartPeriod,FindOut.EndPeriod
-                                              ,FindOut.MTTR,FindOut.MTBF,FindOut.MDT,FindOut.Availability
-                                              ,FindOut.Interval_Running_machine,DateTime.Now);
+                return new ReportEquipmentDto(FindOut.AssetID, FindOut.StartPeriod, FindOut.EndPeriod
+                                              , FindOut.MTTR, FindOut.MTBF, FindOut.MDT, FindOut.Availability
+                                              , FindOut.Interval_Running_machine, DateTime.Now);
             }
             catch (Exception ex)
             {
