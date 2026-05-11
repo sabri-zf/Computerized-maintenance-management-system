@@ -72,9 +72,18 @@ namespace computrized_maintenance_Data_Access.Data.Config
                             )
                             .IsRequired();
 
-                     builder.Property(x => x.PreventiveMaintenanceID)
+                     builder.Property(x => x.Priority)
+                          .HasConversion(
+                                 s => s.ToString(),
+                                 v => (En_Priority)Enum.Parse(typeof(En_Priority), v)
+                          )
+                          .IsRequired();
+
+            builder.Property(x => x.PreventiveMaintenanceID)
                             .HasColumnType("int")
                             .IsRequired();
+
+            builder.HasQueryFilter(x => !x.IsDeleted);
 
 
                      // here we make relationchip with workeordes and asset (1(A)-M(Wo))

@@ -1,7 +1,10 @@
 ﻿using Computerized_maintenance_Logic_layer.Module.DTO.WorkOrderDto;
 using computrized_maintenance_Data_Access.Data;
 using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Data.Common;
 
 namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
 {
@@ -14,27 +17,86 @@ namespace Computerized_maintenance_Logic_layer.Module.workOrderManagement
         {
             var List = await _context.WorkOrders
                 .AsNoTracking()
-                .ToListAsync();
+                .Select(workOrder =>
+                        new WorkOredrResponseDto
+                     (
+                         workOrder.WorkOrderNumber,
+                         workOrder.Description,
+                         workOrder.AssetID,
+                         workOrder.Status.ToString(),
+                         workOrder.CreatedByID,
+                         workOrder.AssignedToID,
+                         workOrder.CreatedDate,
+                         workOrder.StartDate,
+                         workOrder.DueDate,
+                         workOrder.CompeletedDate,
+                         workOrder.Note
+                     )).ToListAsync();
+                
 
             if (List is null) return null;
 
-            var workOrderDtos = List.Select(workOrder =>
-                                            new WorkOredrResponseDto
-                                         (
-                                             workOrder.WorkOrderNumber,
-                                             workOrder.Description,
-                                             workOrder.AssetID,
-                                             workOrder.Status.ToString(),
-                                             workOrder.CreatedByID,
-                                             workOrder.AssignedToID,
-                                             workOrder.CreatedDate,
-                                             workOrder.StartDate,
-                                             workOrder.DueDate,
-                                             workOrder.CompeletedDate,
-                                             workOrder.Note
-                                         ));
-            return workOrderDtos;
+
+            return List;
         }
+
+
+        
+        public async Task<IEnumerable<WorkOredrList_view>?> GetByPage(short page)
+        {
+
+            ICollection<WorkOredrList_view>? list = new List<WorkOredrList_view>();
+           
+            var connection = _context.Database.GetDbConnection();
+            try
+            {
+
+                await connection.OpenAsync();
+
+                var query = "exec sp_Retrieve_workOrders @PageNumber";
+                //var PageNumParam = new DbParameter();
+
+                var command = connection.CreateCommand();
+
+                command.CommandText = query;
+                var PageNumParam = command.CreateParameter();
+                PageNumParam.Value = page;
+                PageNumParam.DbType = DbType.Int16;
+                PageNumParam.ParameterName = "@PageNumber";
+                command.Parameters.Add(PageNumParam);
+
+                var reader = await command.ExecuteReaderAsync();
+
+
+                while ( await reader.ReadAsync())
+                {
+                   var value = new WorkOredrList_view(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)
+                       , reader.GetString(5), reader.GetString(6), reader.GetDateTime(7), reader.GetDateTime(8), reader.GetString(9));
+
+                    list.Add(value);
+                }
+
+            } catch (SqlException sqlex) {
+                Console.WriteLine(sqlex.Message);
+            }
+            catch( Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+
+           
+
+            return list;    
+        }
+
+
+
         public async Task<WorkOredrResponseDto?> FindByID(int workOrderId)
         {
             if (workOrderId < 1) return null;

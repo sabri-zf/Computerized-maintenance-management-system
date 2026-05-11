@@ -1,5 +1,6 @@
 ﻿using Computerized_maintenance_Logic_layer.Module.DTO.WorkOrderDto;
 using Computerized_maintenance_Logic_layer.Module.workOrderManagement;
+using computrized_maintenance_Data_Access.Entites.WorkOrderManagement;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMMS_Api.Controllers.WorkOrderManagement
@@ -14,7 +15,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<WorkOredrResponseDto>>> GetAllWorkOrderHistories()
+        public async Task<ActionResult<IEnumerable<WorkOrderHistoryResponseDto>>> GetAllWorkOrderHistories()
         {
             var WorkOrders_List = await _workOrderHistory.GetAllHistory();
             if (WorkOrders_List is null || !WorkOrders_List.Any()) return NotFound("Data Doesn't find");
@@ -28,7 +29,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
 
-        public async Task<ActionResult<WorkOrderHistoryResponseDto>> GetByID([FromRoute] int Id)
+        public async Task<ActionResult<WorkOredrList_view>> GetByID([FromRoute] int Id)
         {
             if (Id < 1) return BadRequest("Invalid Operation");
 

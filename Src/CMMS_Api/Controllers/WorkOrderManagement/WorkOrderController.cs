@@ -16,12 +16,33 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async  Task<ActionResult<IEnumerable<WorkOredrResponseDto>>> GetAllWorkOrders()
+        public async  Task<ActionResult<IEnumerable<WorkOredrList_view>>> GetAllWorkOrders()
         {
             var WorkOrders_List = await _workorder.GetAllWorkOrders();
             if (WorkOrders_List is null || !WorkOrders_List.Any()) return NotFound("Data Doesn't find");
 
             return Ok(WorkOrders_List);
+        }
+
+
+        // add fetch data with pagenation
+
+
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IEnumerable<WorkOredrList_view>?>> GetWorkOrderByPage([FromQuery]short PageNumber = 1)
+        {
+            if(PageNumber <= 0) return BadRequest("Invalid input");
+
+            var GetSegment = await _workorder.GetByPage(PageNumber);
+
+            if (GetSegment is null || GetSegment.Count() <= 0) return NotFound("Bad Request: Data don't found");
+
+
+            return Ok(GetSegment);
         }
 
         [HttpGet("retrieve-one/{Id}", Name ="get-Work-order")]
@@ -30,7 +51,7 @@ namespace CMMS_Api.Controllers.WorkOrderManagement
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
 
-        public async Task<ActionResult<WorkOredrResponseDto>> GetByID([FromRoute]int Id)
+        public async Task<ActionResult<WorkOredrList_view>> GetByID([FromRoute]int Id)
         {
             if (Id < 1) return BadRequest("Invalid Operation");
 

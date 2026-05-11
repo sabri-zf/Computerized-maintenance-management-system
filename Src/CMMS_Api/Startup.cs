@@ -57,6 +57,16 @@ namespace CMMS_Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://127.0.0.1:3000")
+                              .AllowAnyMethod();
+                    });
+            });
+
             // builder.Services.AddAuthentication("Bearer")
             //     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, option =>
             //     {
@@ -94,10 +104,12 @@ namespace CMMS_Api
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            app.UseCors("AllowFrontend");
+
             app.UseHttpsRedirection();
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
             app.MapControllers();
 
             app.Run();

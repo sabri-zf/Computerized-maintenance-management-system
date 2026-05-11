@@ -27,8 +27,11 @@ namespace computrized_maintenance_Data_Access.Entites.WorkOrderManagement
         public int AssignedToID { get; set; }
         public En_workOrderStatus Status { get; set; }
         public En_MaintenaceType Type { get; set; }
+        public En_Priority Priority { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime StartDate { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         /// <summary>
         /// target completion date for a work order
